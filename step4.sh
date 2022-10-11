@@ -44,4 +44,4 @@ mv virt_MO_2.tmp virt_MO.tmp
 rm -rf trans_st_2.tmp trans_st_2_1.tmp
 mv trans_st.tmp trans_st.out
 
-#two files as output from this script
+#two files as output from this script (virt_MO.tmp, trans_st.out)

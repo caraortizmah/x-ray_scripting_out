@@ -78,4 +78,4 @@ sed -i '/^$/d' resB_mo_3.tmp
 echo " " >> resB_mo_3.tmp
 mv resB_mo_3.tmp resB_mo.out
 
-#one file as output from this script
+#one file as output from this script (resB_mo.out)

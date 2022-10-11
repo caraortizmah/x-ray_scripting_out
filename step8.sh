@@ -57,7 +57,10 @@ done
 
 mv corevirtMO_matrix.tmp corevirtMO_matrix.out
 mv corevirtMO_matrix_ts_probability.tmp corevirtMO_matrix_ts_probability.out
+sed -r 's/\s+/,/g' corevirtMO_matrix.out > corevirtMO_matrix.csv
+sed -r 's/\s+/,/g' corevirtMO_matrix_ts_probability.out > corevirtMO_matrix_ts_probability.csv
 
 rm exc_states.tmp exc_states.tmp2
 
-#two files as outputs from this script
+#four files as outputs from this script (corevirtMO_matrix.out, corevirtMO_matrix_ts_probability.out,
+# corevirtMO_matrix.csv, corevirtMO_matrix_ts_probability.csv)

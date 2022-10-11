@@ -128,5 +128,4 @@ done
 
 sed -r 's/,/ /g' resB_MOcore.csv > resB_MOcore.out
 
-
-#two files as output from this script
+#three files as output from this script (resB_atomslist.out, resB_MOcore.out, resB_MOcore.csv)

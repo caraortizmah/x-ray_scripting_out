@@ -118,4 +118,6 @@ rm -rf res_tmp.tmp
 mv tmp1 resA_atomslist.out
 mv resA_MOcore.tmp resA_MOcore.out
 
-#three files as output from this script
+sed -r 's/\s+/,/g' resA_MOcore.out > resA_MOcore.csv
+
+#four files as output from this script (resA_popMO.tmp, resA_atomslist.out, resA_MOcore.out, resA_MOcore.csv)

@@ -59,4 +59,4 @@ rm -rf resA_mo_2.tmp resA_mo_2_1.tmp resA_mo.tmp
 sed -i '/^$/d' resA_mo_3.tmp
 mv resA_mo_3.tmp resA_mo.out
 
-#one file as output from this script
+#one file as output from this script (resA_mo.out)

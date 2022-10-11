@@ -47,4 +47,4 @@ done
 rm -rf resB_collapsed"${option}"_*.tmp
 mv resB_collapsedMO.tmp resB_collapsedMO.out
 
-#one file as output from this script
+#one file as output from this script (resB_collapsedMO.out)

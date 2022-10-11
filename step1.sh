@@ -29,4 +29,4 @@ awk -v x=$popul_ini -v y=$popul_fin 'NR==x, NR==y {printf "%s\n", $0}' $out_file
 sed -n "/  $MO_ini  /,/  $MO_fin  /p" popul_mo.out > resA_mo.out
 sed -n "/  $MO_fin  /,/^$/p" popul_mo.out >> resA_mo.out
 
-#two files as output from this script
+#three files as output from this script (exc_states_transitions.out, popul_mo.out, resA_mo.out)

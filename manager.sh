@@ -51,13 +51,5 @@ out1_step7="resB_collapsedMO.out"
 
 ./step8.sh $out2_step1
 
-out1_step7="resA_MOcore.out"
-out2_step7="resB_MOcore.out"
-out1_step8="corevirtMO_matrix.out"
-out2_step8="corevirtMO_matrix_ts_probability.out"
-#./step9.sh $out1_step7 $out2_step7 $out1_step8
-./step9.sh $out1_step7 $out1_step8 $out2_step8
-
-
-./step10.sh $out2_step1 $out_file
+./step9.sh $out2_step1 $out_file
 
