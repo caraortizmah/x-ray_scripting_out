@@ -1,0 +1,4 @@
+# ignore all .csv
+*.csv
+# ignore .out.absq.dat
+*.out.absq.dat
