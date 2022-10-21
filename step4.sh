@@ -38,7 +38,7 @@ do
 
 done
 
-cat virt_MO.tmp | sort -u | uniq > virt_MO_2.tmp #saving the unique elements
+cat virt_MO.tmp | sort -u -n | uniq > virt_MO_2.tmp #saving the unique elements
 mv virt_MO_2.tmp virt_MO.tmp
 
 rm -rf trans_st_2.tmp trans_st_2_1.tmp
