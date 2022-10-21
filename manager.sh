@@ -53,3 +53,8 @@ out1_step7="resB_collapsedMO.out"
 
 ./step9.sh $out2_step1 $out_file
 
+mkdir -p ${out_file}_out
+mv *.out ${out_file}_out/
+mv *.tmp ${out_file}_out/
+mv *.csv ${out_file}_out/
+
