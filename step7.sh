@@ -36,7 +36,8 @@ for ii in $uniq_atm
 do
       
       #getting line number when atom target is placed in $out_file5
-      same_atm="$(grep -n "${ii}" $out_file5 | cut -d':' -f1)"
+      #same_atm="$(grep -n "${ii}" $out_file5 | cut -d':' -f1)"
+      same_atm="$(grep -n "${ii}" $out_file5 | awk -v x=$ii -F'[\t :]' '{if($2==x){print$1}}')" #avoiding wrong matches
       #creating the zeroes row
       pop_val="$(awk -v y=${dMO} 'BEGIN { while (c++<=y) s=s " 0.0 "; print s}')"
       pop_val="$(echo "${ii} atom lvlMO ${pop_val}")"
