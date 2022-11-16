@@ -39,14 +39,13 @@ do
 		list_ts_p="$(grep -n "${jj}->${ii}" exc_states.tmp2 | awk '{print $4}')"
 		
 		if (( $ts_num > 0)); then
-			ts_p="$(echo $list_ts_p | awk -v x=0 -v y=$ts_num '{while (c++<=NR) x=x+$c; print x/y}')"
+			#ts_p="$(echo $list_ts_p | awk -v x=0 -v y=$ts_num '{while (c++<=NR) x=x+$c; print x/y}')"
+			ts_p="$(echo $list_ts_p | awk -v x=0 -v y=0 '{while (c++<=NF){ x=x+($c*$c); y=y+$c}; print x/y}')"
 		else
 			ts_p=0
 		fi
 		
 		pos_val_ts="$(echo "$pos_val_ts $ts_p")"
-		#pop_val="$(echo "$pop_val" | awk -v x=$pos -v y=$aux '{ c=$x; $x=y+c; print $0}')"
-
 		#="$(echo corevirtMO_matrix.tmp | awk -v ii="$ii" -v jj="$jj" 'a[$1]==ii{for (c=1;c<=NF;c++) { if ($c == jj) { print c } }}')"
 
 	done
