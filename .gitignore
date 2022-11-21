@@ -1,5 +1,5 @@
 # ignore all .csv (pipeline outputs)
-*.csv
+#*.csv
 # ignore all .out (ORCA and pipeline outputs)
 *.out
 # ignore all .out.absq.dat (ORCA output plots)
