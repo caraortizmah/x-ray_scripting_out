@@ -16,6 +16,7 @@ B_fin="$4" #last atom number for residue B
 MO_ini="$5" #first 1s core MO
 MO_fin="$6" #last 1s core MO
 out_file="$7" #orca output
+exc_range="$8" #excited states range using two numbers joint by '-'
 
 #extracting information from the output
 
@@ -49,9 +50,9 @@ out1_step6="resB_mo.out"
 out1_step7="resB_collapsedMO.out"
 ./step7.sh $out1_step4 $out1_step7
 
-./step8.sh $out2_step1
+./step8.sh $out2_step1 $exc_range
 
-./step9.sh $out2_step1 $out_file
+./step9.sh exc_states.tmp $out_file
 
 mkdir -p ${out_file}_out
 mv *.out ${out_file}_out/
