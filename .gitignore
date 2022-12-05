@@ -6,3 +6,5 @@
 *.out.absq.dat
 # all temporary files
 *.tmp
+# all svg images
+*.svg
