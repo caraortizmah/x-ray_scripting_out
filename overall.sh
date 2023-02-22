@@ -6,5 +6,5 @@ for ii in `ls ../outs/*.out`
 do
 	job="$(echo "$ii" | cut -d'/' -f3)"
 	cp $ii .
-	./manager.sh 1 23 24 47 7 24 $job
+	./manager.sh 0 22 23 46 7 24 $job
 done
