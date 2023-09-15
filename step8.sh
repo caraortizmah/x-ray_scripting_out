@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Creating core/virt MO matrix as a function of the total transition state ocurrences
+# Creating core/virt MO matrix as a function of the total transition state ocurrences
 
 out2_file1="$1" # exc_states_transitions.out
 arg="$2"
