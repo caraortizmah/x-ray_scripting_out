@@ -53,10 +53,10 @@ where:
 ### Example:
 
 Using as molecule a pair of amino acids: phenylalanine (F) and tyrosine (Y) face-to-face separated by 4.0\AA.
-The F is in the atom range 0 to 22 and Y in the atom range 23 to 46 and th core MOs for C 1s are in the range of 7 to 24.
-The information presented in matritial form wil come from the ouput `FY_output.out` in the excited-state range number of 1 to 17.
+The F is in the atom range 0 to 22 and Y in the atom range 23 to 46 and the core MOs for C 1s are in the range of 7 to 24.
+The information presented in matricial form will come from the ouput `FY_output.out` in the excited-state range number of 1 to 17.
 
-./manager.sh 0 22 23 46 7 24 FY_output.out 1-17
+     $ ./manager.sh 0 22 23 46 7 24 FY_output.out 1-17
 
 More information about the running in `example/readme.md`
 
