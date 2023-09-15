@@ -42,12 +42,12 @@ do
 	for jj in $lst_coremo
 	do
 		#transition ocurrence number
-		ts_num="$(grep -n "${jj}->${ii}" exc_states.tmp2 | wc -l)"
+		ts_num="$(grep -n " ${jj}->${ii} " exc_states.tmp2 | wc -l)"
 
 		pos_val="$(echo "$pos_val $ts_num")"
 
 		#total transition ocurrence states probability`
-		list_ts_p="$(grep -n "${jj}->${ii}" exc_states.tmp2 | awk '{print $4}')"
+		list_ts_p="$(grep -n " ${jj}->${ii} " exc_states.tmp2 | awk '{print $4}')"
 		
 		if (( $ts_num > 0)); then
 			#ts_p="$(echo $list_ts_p | awk -v x=0 -v y=$ts_num '{while (c++<=NR) x=x+$c; print x/y}')"
