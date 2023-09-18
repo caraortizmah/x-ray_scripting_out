@@ -127,11 +127,11 @@ So in this case you will repeat the pipeline the same number of times as number 
 
 The only condition to run using `overall.sh` is to save all the ORCA outputs in another folder.
 
-     $ .overall.sh $DIR
+     $ ./overall.sh $DIR
 
 where:
      
-     $DIR is the path where the list of ORCA outputs are placed (only ORCA output files!)
+     $DIR is the absolute path where the list of ORCA outputs are placed (only ORCA output files!)
 
 ### Example:
 
