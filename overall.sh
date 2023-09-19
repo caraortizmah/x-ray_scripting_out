@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# workdir is the absolute path where you have placed all the ORCA output files
+# this path should be a folder having exclusively the .out files
 
 workdir="$1"
 
