@@ -3,10 +3,18 @@
 out2_file1="$1" #excited states output from step1.sh (exc_states_transitions.out)
 out1_file3="$2" #res-A core-MO population matrix (resA_MOcore.out)
 out2_file3="$3" #core-MO population of res-A C-atoms, greater than 5% (resA_popMO.tmp)
+arg_exc="$4" #excited states range
 
-#Creating the MO matrix using resA_mo.out (out_file)
+# cleaning transition states file by a defined range of excited states
+if (($arg_exc=="none")); then
+        sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
+else
+	ex_ini="$(echo $arg_exc | cut -d'-' -f1)"
+	ex_fin="$(echo $arg_exc | cut -d'-' -f2)"
+	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+fi
 
-state_line="$(grep -n "STATE " $out2_file1 | cut -d':' -f1)" #getting position lines having info
+state_line="$(grep -n "STATE " exc_states.tmp | cut -d':' -f1)" #getting position lines having info
 
 #getting the excited state number involved in each field having transitions information
 #same excited state number can be involved in several transitions from different fields,
@@ -22,14 +30,16 @@ rm -rf trans_st.out virt_MO.tmp trans_st.tmp trans_st_2.tmp trans_st_2_1.tmp vir
 
 for ii in $state_line
 do
-      sed -n "${ii},/^$/p" $out2_file1 > trans_st_2.tmp #copying from specific line up to the first blank line
+
+      sed -n "${ii},/^$/p" exc_states.tmp > trans_st_2.tmp #copying from specific line up to the first blank line
 
       for jj in $uniq_MO
       do
             sed -n "/  ${jj}->/p" trans_st_2.tmp > trans_st_2_1.tmp
 	    #if there is not a match looking for $jj (core MO) skip that excited state
 	    if (( $(wc -l trans_st_2_1.tmp | cut -d' ' -f1) > 0 )); then
-                    sed -n "${ii}p" $out2_file1 >> trans_st.tmp #copying head of that state
+
+		    sed -n "${ii}p" exc_states.tmp >> trans_st.tmp #copying head of that state
                     awk '{printf "%s\n", $0}' trans_st_2_1.tmp >> trans_st.tmp
 	    fi
 	    sed -n "/  ${jj}->/p" trans_st_2.tmp | cut -d'>' -f2 | cut -d':' -f1 | cut -d' ' -f1 >> virt_MO.tmp
