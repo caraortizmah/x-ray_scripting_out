@@ -20,8 +20,20 @@ else
 	# copy excited states list range (sed command) using as variables
 	# the word 'STATE' combined with (specifically numerical format)
 	# the excited state number (initial and final)
+	# this command operates under three conditions: 
 	if (( $opt_soc==0 )); then
 		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+	elif (( $opt_soc==1 )); then
+		out2_file12="exc_states2_transitions.out"
+		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file12 > exc_states2.tmp
+	else # restricted (for now) for additive option
+		# SOC option is done including default and higher multiplicity options
+		out2_file12="exc_states2_transitions.out"
+		out2_file13="exc_states3_transitions.out"
+		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file12 > exc_states2.tmp
+		sed -ne "/$(echo State $ex_ini | awk '{printf("%s %d: ",$1,$2)}')/,/$(echo State $ex_fin | awk '{printf("%s %d:",$1,$2+1)}')/p" $out2_file13 > exc_states3.tmp
 	fi
 
 fi
@@ -35,7 +47,17 @@ atm_lst="$(awk '$2=="C"{ printf "%d\n", $1 }' $out1_file3)" #getting target atom
 # creating a list of unique MOs numerically ordered
 uniq_MO="$(cat $out2_file3 | sort -nu | uniq)"
 
+# the previous list (uniq_MO) now is listed in file to be read
+# line by line in the following loop
 echo $uniq_MO | awk -F" " '{for (i=1; i<=NF; i++) print $i}' > mo2_line.tmp
+# Each line in mo2_line.tmp corresponds to the core MOs
+
+# zero is the default option S'=S
+# Default option is done regardless of the previous selection
+# higher multiplicity is an additive option to the default one
+# SOC is an additive option to the default one
+
+## default option: S'=S
 if (( $opt_soc==0 )); then
 
         # getting position lines having info
