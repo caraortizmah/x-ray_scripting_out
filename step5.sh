@@ -48,12 +48,24 @@ done
 # of the file
 echo "$(wc -l resB_mo3.tmp | cut -d" " -f1)" >> vmo_line.tmp
 uniq_vmo_l="$(cat vmo_line.tmp | sort -nu | uniq)"
+
+# the previous list (uniq_vmol_l) now is organized by tuples
+# where the first position of the tuple is the initial linenumber of the 
+# MO-atom-list section and the second position of the tuple is the last
+# linenumber of that MO-atom-list section
 echo $uniq_vmo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > vmo_line.tmp
+
+# Each line in vmo_line.tmp corresponds to a range linenumber of virtual
+# MO-atom-list section.
+# All the virtual MO-atom-list sections were copied (no redundancies)
+# previously in the temporary file resB_mo3.tmp
+
 # for each virtual MO-atom-list section, do:
 while read -r line # virtual MOs
 do
       row1="$(echo $line | awk '{print $1}')" #initial position
       row2="$(echo $line | awk '{print $2}')" #final position
+
       #virt_mo="$(awk '{printf "%s ", $0}' $out1_file4)"
       
       for jj in $( seq $B_ini 1 $B_fin ) #screening in the atom range
@@ -66,7 +78,12 @@ do
 	    # is done (1st awk command) and print it just if contains 9 fields (2nd awk command)
 	    # as in the original out file
 	    sed -n ''"$row1"','"$row2"'p' resB_mo3.tmp | grep -n "${jj} " | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resB_mo_2_1.tmp
+	    # print $head as first line and after the line pattern found in the temporary
+	    # file resB_mo_2_1.tmp
 	    awk -v x="${head}" '{printf "num-1 sym lvl %s\n%s\n\n", x, $0}' resB_mo_2_1.tmp >> resB_mo_2.tmp
+
+            # last command: awk -v x=${jj} '{if($1==x) print $0}' is to avoid wrong string
+	    # matches e.g. '8  C' and '78  C'
 
 	    # separating, even for the same atom number, by MO level (s,p,d)
 	    #if (( $(wc -l resB_mo_2_1.tmp | cut -d' ' -f1) > 1)); then
@@ -81,6 +98,7 @@ do
 
 done < vmo_line.tmp
 
+# removing duplicates and throwing away stderr
 awk '!seen[$0]++' resB_mo_2.tmp > resB_mo_3.tmp 2> /dev/null
 
 #removing empty lines
