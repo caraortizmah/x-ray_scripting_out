@@ -19,7 +19,8 @@ out1_file4="$4" # virt_MO.tmp core MO population obtained from step1.sh
 #deleting tmp if necessary
 rm -rf resB_mo_3.tmp resB_mo_2.tmp resB_mo_2_1.tmp resB_mo.tmp
 
-virt_mo="$(echo "$(<$out1_file4)" | awk '{printf "%s ", $0}')"
+# instancing unique virtual MOs in one variable
+virt_mo="$(cat $out1_file4 | sort -nu | uniq)" 
 
 for ii in $virt_mo
 do
