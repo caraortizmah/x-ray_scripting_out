@@ -15,11 +15,11 @@ B_ini="$3" #first atom number for residue B
 B_fin="$4" #last atom number for residue B
 MO_ini="$5" #first 1s core MO
 MO_fin="$6" #last 1s core MO
-out_file="$7" #orca output
-exc_range="$8" #excited states range using two numbers joint by '-'
+opt_soc="$7" #SOC option, off is 0, on is 1
+out_file="$8" #orca output
+exc_range="$9" #excited states range using two numbers joint by '-'
 
 # defining zero as default option: S'=S
-opt_soc=$((0))
 if (( $opt_soc!=1 && $opt_soc!=2 )); then
 	opt_soc=$((0))
 fi
