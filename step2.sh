@@ -29,6 +29,13 @@ do
       sed -n "/  $ii  /,/^$/p" $out_file >> resA_mo2.tmp
 done
 
+# there are until 6 MOs placed in the same numberline in step1.sh output
+# it means that sections having a MO and its atom list contribution can be 
+# repeated up to 6 times. There may be redundancies.
+# Removing duplicates, and preserving unique  
+# and throwing away stderr
+awk '!seen[$0]++' resA_mo2.tmp > resA_mo3.tmp 2> /dev/null 
+
 # creating mo_line.tmp as temporary file with a list of numberline position
 # of the MO list
 for ii in $( seq $MO_ini 1 $MO_fin )
@@ -36,8 +43,16 @@ do
       # getting position lines having redundancies
       echo "$(grep -n "  $ii  " resA_mo3.tmp | cut -d':' -f1)" >> mo_line.tmp 
 done
+
+# creating a list of uniq linenumber positions including the last linenumber
+# of the file
 echo "$(wc -l resA_mo3.tmp | cut -d" " -f1)" >> mo_line.tmp
 uniq_mo_l="$(cat mo_line.tmp | sort -nu | uniq)"
+
+# the previous list (uniq_mol_l) now is organized by tuples
+# where the first position of the tuple is the initial linenumber of the 
+# MO-atom-list section and the second position of the tuple is the last
+# linenumber of that MO-atom-list section
 echo $uniq_mo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > mo_line.tmp
       for jj in $( seq $A_ini 1 $A_fin ) #screening in the atom range
       do
