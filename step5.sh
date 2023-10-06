@@ -49,10 +49,9 @@ do
             head="$(sed -n '1p' resB_mo.tmp)" #MO number list (usually 6 MOs)
             #echo "num-1 sym lvl ${head}" >> resB_mo_2.tmp
             #copying section having atom number target
-            sed -n "/  $ii  /,/^$/p" $out1_file > resB_mo.tmp 
 	    # to avoid an incorrect match, number of columns is added as search filter
-	    grep -n "${jj} " resB_mo.tmp | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resB_mo_2_1.tmp
             # last command: awk -v x=${jj} '{if($1==x) print $0}', is to avoid wrong string matches e.g. '8  C' and '78  C'
+	    sed -n ''"$row1"','"$row2"'p' resB_mo3.tmp | grep -n "${jj} " | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resB_mo_2_1.tmp
 	    awk -v x="${head}" '{printf "num-1 sym lvl %s\n%s\n\n", x, $0}' resB_mo_2_1.tmp >> resB_mo_2.tmp
 
 	    # separating, even for the same atom number, by MO level (s,p,d)
