@@ -46,7 +46,7 @@ do
       for jj in $( seq $B_ini 1 $B_fin ) #screening in the atom range
       do
             #copying section having MO target up to find a blank line
-            head="$(sed -n '1p' resB_mo.tmp)" #MO number list (usually 6 MOs)
+            head="$(sed -n ''"$row1"'p' resB_mo3.tmp)"
             #echo "num-1 sym lvl ${head}" >> resB_mo_2.tmp
             #copying section having atom number target
 	    # to avoid an incorrect match, number of columns is added as search filter
