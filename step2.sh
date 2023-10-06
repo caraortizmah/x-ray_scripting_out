@@ -13,11 +13,17 @@ MO_ini="$3" #first 1s core MO
 MO_fin="$4" #last 1s core MO
 out_file="$5" #core MO population obtained from step1.sh
 
-#selecting just the core MOs that represents the residue of interest (res A) atoms
+# selecting just the core MOs that represents the target atoms
+# here called as the residue A (res A) because of the interest of studying
+# amino acids on proteins.
 
-#deleting tmp if necessary
-rm -rf resA_mo_3.tmp resA_mo_2.tmp resA_mo_2_1.tmp resA_mo.tmp
+# deleting tmp if necessary
+rm -rf resA_mo_3.tmp resA_mo_2.tmp resA_mo_2_1.tmp resA_mo2.tmp resA_mo3.tmp mo_line.tmp
 
+# copying from the linenumber, where the MO target is, to the first blank
+# line is found
+# in this temporary file, MOs are copied with a subsequent list of atoms 
+# that correspond to their population contributions to that MO
 for ii in $( seq $MO_ini 1 $MO_fin )
 do
 
