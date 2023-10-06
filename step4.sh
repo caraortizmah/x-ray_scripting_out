@@ -26,9 +26,6 @@ else
 
 fi
 
-state_line="$(grep -n "STATE " exc_states.tmp | cut -d':' -f1)" #getting position lines having info
-
-
 # getting the excited state number involved in each field having transitions information
 # same excited state number can be involved in several transitions from different fields,
 # so repeated information is collected
