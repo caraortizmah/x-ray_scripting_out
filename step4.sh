@@ -85,32 +85,4 @@ if (( $opt_soc==0 )); then
         mv trans_st.tmp trans_st.out
 fi
 
-rm -rf trans_st.out virt_MO.tmp trans_st.tmp trans_st_2.tmp trans_st_2_1.tmp virt_MO.tmp
-
-#for ii in $state_line
-#do
-#
-#      sed -n "${ii},/^$/p" exc_states.tmp > trans_st_2.tmp #copying from specific line up to the first blank line
-#
-#      for jj in $uniq_MO
-#      do
-#            sed -n "/  ${jj}->/p" trans_st_2.tmp > trans_st_2_1.tmp
-#	    #if there is not a match looking for $jj (core MO) skip that excited state
-#	    if (( $(wc -l trans_st_2_1.tmp | cut -d' ' -f1) > 0 )); then
-#
-#                    sed -n "${ii}p" exc_states.tmp >> trans_st.tmp #copying head of that state
-#                    awk '{printf "%s\n", $0}' trans_st_2_1.tmp >> trans_st.tmp
-#	    fi
-#	    sed -n "/  ${jj}->/p" trans_st_2.tmp | cut -d'>' -f2 | cut -d':' -f1 | cut -d' ' -f1 >> virt_MO.tmp
-#      done
-#      #echo " " | awk '{printf "\n"}' >> trans_st.tmp
-#
-#done
-
-cat virt_MO.tmp | sort -u -n | uniq > virt_MO_2.tmp #saving the unique elements
-mv virt_MO_2.tmp virt_MO.tmp
-
-rm -rf trans_st_2.tmp trans_st_2_1.tmp
-mv trans_st.tmp trans_st.out
-
 #two files as output from this script (virt_MO.tmp, trans_st.out)
