@@ -54,6 +54,12 @@ uniq_mo_l="$(cat mo_line.tmp | sort -nu | uniq)"
 # MO-atom-list section and the second position of the tuple is the last
 # linenumber of that MO-atom-list section
 echo $uniq_mo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > mo_line.tmp
+# for each MO-atom-list section, do:
+while read -r line
+do
+      row1="$(echo $line | awk '{print $1}')" #initial position
+      row2="$(echo $line | awk '{print $2}')" #final position
+
       for jj in $( seq $A_ini 1 $A_fin ) #screening in the atom range
       do
 	    #copying section having MO target up to find a blank line
@@ -67,6 +73,7 @@ echo $uniq_mo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > mo_line.t
 
       done
 
+done < mo_line.tmp
       #copying number lines where target atom is found
       #atm_line="$(grep -n "${jj} C  s" resA_mo_2.tmp | cut -d':' -f1)"
 
