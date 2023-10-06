@@ -19,13 +19,14 @@ out_file="$7" #orca output
 exc_range="$8" #excited states range using two numbers joint by '-'
 
 # defining zero as default option: S'=S
+opt_soc=$((0))
 if (( $opt_soc!=1 && $opt_soc!=2 )); then
 	opt_soc=$((0))
 fi
 
 # extracting information from the output
 
-./step1.sh $MO_ini $MO_fin $out_file #obtaining excited states and 1s core MOs
+./step1.sh $MO_ini $MO_fin $opt_soc $out_file #obtaining excited states and 1s core MOs
 
 out1_step1="popul_mo.out" #popul_mo.out comes from step1.sh
 ./step2.sh $A_ini $A_fin $MO_ini $MO_fin $out1_step1 #obtaining core MOs from residue A 
