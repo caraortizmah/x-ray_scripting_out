@@ -45,12 +45,13 @@ do
       
       for jj in $( seq $B_ini 1 $B_fin ) #screening in the atom range
       do
-            #copying section having MO target up to find a blank line
+	    # getting MO number list (usually 6 MOs) in that specified position line
             head="$(sed -n ''"$row1"'p' resB_mo3.tmp)"
-            #echo "num-1 sym lvl ${head}" >> resB_mo_2.tmp
-            #copying section having atom number target
-	    # to avoid an incorrect match, number of columns is added as search filter
-            # last command: awk -v x=${jj} '{if($1==x) print $0}', is to avoid wrong string matches e.g. '8  C' and '78  C'
+	    # looking for a specific atom ($jj), with some specific pattern (grep command), in
+	    # a specific range linenumber (sed command) in the file resB_mo3.tmp. 
+	    # After cutting it and taking the second field (cut command). The numerical match
+	    # is done (1st awk command) and print it just if contains 9 fields (2nd awk command)
+	    # as in the original out file
 	    sed -n ''"$row1"','"$row2"'p' resB_mo3.tmp | grep -n "${jj} " | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resB_mo_2_1.tmp
 	    awk -v x="${head}" '{printf "num-1 sym lvl %s\n%s\n\n", x, $0}' resB_mo_2_1.tmp >> resB_mo_2.tmp
 
@@ -66,36 +67,15 @@ do
       done
 
 done < vmo_line.tmp
-      #copying number lines where target atom is found
-      #atm_line="$(grep -n "${jj} " resB_mo_2.tmp | cut -d':' -f1)"
-
-      #atm_line="$(grep -n "num-1 sym lvl " resB_mo_2.tmp | cut -d':' -f1)"
-
-      #for ii in $atm_line
-      #do
-      #      #to check if the following line is a blank line
-      #      nn=$(($ii+1))
-      #      if [ "$(sed -n "${nn}p" resB_mo_2.tmp)" != "" ]; then
-      #  	     #extracting lines pair having MO number (1st line) and
-      #               #population distribution (2nd line)  
-      #               #kk=$(($ii-1))
-      #               #sed -n "${kk},${ii}p" resB_mo_2.tmp >> resB_mo_3.tmp
-      #               sed -n "${ii},/^$/p" resB_mo_2.tmp >> resB_mo_3.tmp
-      #      fi
-      #done
-      #find the way to remove duplicates considering that now you have groups
-      #awk '!seen[$0]++' resB_mo_2.tmp > resB_mo_3.tmp 2> /dev/null #removing duplicates and throwing away stderr
-      #rm -rf resB_mo_3.tmp
-      #cat resB_mo_3.tmp >> resB_mo_4.tmp #adding to the output
-
-done
 
 awk '!seen[$0]++' resB_mo_2.tmp > resB_mo_3.tmp 2> /dev/null
-#comment the following line to check the writing-on-disk process
-rm -rf resB_mo_2.tmp resB_mo_2_1.tmp resB_mo.tmp
+
 #removing empty lines
 sed -i '/^$/d' resB_mo_3.tmp
 echo " " >> resB_mo_3.tmp
 mv resB_mo_3.tmp resB_mo.out
+
+#comment the following line to check the writing-on-disk process
+rm -rf resB_mo_2.tmp resB_mo_2_1.tmp resB_mo.tmp
 
 #one file as output from this script (resB_mo.out)
