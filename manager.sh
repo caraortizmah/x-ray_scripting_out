@@ -41,7 +41,7 @@ out1_step3="resA_MOcore.out" #resA_MOcore.out comes from step3.sh
 out2_step3="resA_popMO.tmp" #resA_popMO.tmp comes from step3.sh
 # generating transitions list just for the atoms involved in resA and the list of virtual
 #  MO involved in these transitions
-./step4.sh $out2_step1 $out1_step3 $out2_step3 $exc_range
+./step4.sh $out2_step1 $out1_step3 $out2_step3 $opt_soc $exc_range
 
 out1_step4="virt_MO.tmp"
 ./step5.sh $B_ini $B_fin $out1_step1 $out1_step4
