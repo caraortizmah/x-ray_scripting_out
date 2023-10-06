@@ -3,7 +3,8 @@
 out2_file1="$1" #excited states output from step1.sh (exc_states_transitions.out)
 out1_file3="$2" #res-A core-MO population matrix (resA_MOcore.out)
 out2_file3="$3" #core-MO population of res-A C-atoms, greater than 5% (resA_popMO.tmp)
-arg_exc="$4" #excited states range
+opt_soc="$4" #multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1) and 2 (SOC) 
+arg_exc="$5" #excited states range
 
 # cleaning transition states file by a defined range of excited states
 if (($arg_exc=="none")); then
@@ -14,7 +15,15 @@ else
 	# copying a range of excited states specified in $arg_exc
 	ex_ini="$(echo $arg_exc | cut -d'-' -f1)" # initial excited state
 	ex_fin="$(echo $arg_exc | cut -d'-' -f2)" # final excited state
-	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+
+	# The following command 'sed -ne "(...)" $out2_file1 > file' does: 
+	# copy excited states list range (sed command) using as variables
+	# the word 'STATE' combined with (specifically numerical format)
+	# the excited state number (initial and final)
+	if (( $opt_soc==0 )); then
+		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+	fi
+
 fi
 
 state_line="$(grep -n "STATE " exc_states.tmp | cut -d':' -f1)" #getting position lines having info
