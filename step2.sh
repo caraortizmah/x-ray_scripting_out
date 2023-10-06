@@ -70,19 +70,27 @@ do
       do
 	    # getting MO number list (usually 6 MOs) in that specified position line
             head="$(sed -n ''"$row1"'p' resA_mo3.tmp)"
+	    # looking for a specific atom ($jj), with some specific pattern (grep command), in
+	    # a specific range linenumber (sed command) in the file resA_mo3.tmp. 
+	    # After cutting it and taking the second field (cut command). The numerical match
+	    # is done (1st awk command) and print it just if contains 9 fields (2nd awk command)
+	    # as in the original out file
 	    sed -n ''"$row1"','"$row2"'p' resA_mo3.tmp | grep -n "${jj} C  s" | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resA_mo_2_1.tmp
+	    # print $head as first line and after the line pattern found in the temporary
+	    # file resA_mo_2_1.tmp
 	    awk -v x="${head}" '{printf "num-1 sym lvl %s\n%s\n\n", x, $0}' resA_mo_2_1.tmp >> resA_mo_2.tmp
       done
 
 done < mo_line.tmp
 
 # removing duplicates and throwing away stderr
-awk '!seen[$0]++' resA_mo_2.tmp > resA_mo_3.tmp 2> /dev/null 
+awk '!seen[$0]++' resA_mo_2.tmp > resA_mo_3.tmp 2> /dev/null
 
-#comment the following line to check the writing-on-disk process
-rm -rf resA_mo_2.tmp resA_mo_2_1.tmp resA_mo.tmp
 #removing empty lines
 sed -i '/^$/d' resA_mo_3.tmp
 mv resA_mo_3.tmp resA_mo.out
+
+#comment the following line to check the writing-on-disk process
+rm -rf resA_mo_2.tmp resA_mo_2_1.tmp mo_line.tmp resA_mo2.tmp resA_mo3.tmp
 
 #one file as output from this script (resA_mo.out)
