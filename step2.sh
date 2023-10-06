@@ -68,9 +68,10 @@ do
 
       for jj in $( seq $A_ini 1 $A_fin ) #screening in the atom range
       do
+	    # getting MO number list (usually 6 MOs) in that specified position line
+            head="$(sed -n ''"$row1"'p' resA_mo3.tmp)"
 	    #copying section having MO target up to find a blank line
             sed -n "/  $ii  /,/^$/p" $out_file > resA_mo.tmp 
-	    head="$(sed -n '1p' resA_mo.tmp)" #MO number list (usually 6 MOs)
 	    #copying section having atom number target
 	    grep -n "${jj} C  s" resA_mo.tmp | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resA_mo_2_1.tmp
 	    # last command: awk -v x=${jj} '{if($1==x) print $0}', is to avoid wrong string matches e.g. '8  C' and '78  C'
