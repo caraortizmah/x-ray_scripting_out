@@ -35,6 +35,11 @@ done
 echo "$(wc -l resB_mo3.tmp | cut -d" " -f1)" >> vmo_line.tmp
 uniq_vmo_l="$(cat vmo_line.tmp | sort -nu | uniq)"
 echo $uniq_vmo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > vmo_line.tmp
+# for each virtual MO-atom-list section, do:
+while read -r line # virtual MOs
+do
+      row1="$(echo $line | awk '{print $1}')" #initial position
+      row2="$(echo $line | awk '{print $2}')" #final position
       #virt_mo="$(awk '{printf "%s ", $0}' $out1_file4)"
       
       for jj in $( seq $B_ini 1 $B_fin ) #screening in the atom range
@@ -60,6 +65,7 @@ echo $uniq_vmo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > vmo_line
 	    #$"(grep -n "${jj} " resB_mo.tmp)" resB_mo_2.tmp
       done
 
+done < vmo_line.tmp
       #copying number lines where target atom is found
       #atm_line="$(grep -n "${jj} " resB_mo_2.tmp | cut -d':' -f1)"
 
