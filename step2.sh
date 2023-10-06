@@ -26,7 +26,19 @@ rm -rf resA_mo_3.tmp resA_mo_2.tmp resA_mo_2_1.tmp resA_mo2.tmp resA_mo3.tmp mo_
 # that correspond to their population contributions to that MO
 for ii in $( seq $MO_ini 1 $MO_fin )
 do
+      sed -n "/  $ii  /,/^$/p" $out_file >> resA_mo2.tmp
+done
 
+# creating mo_line.tmp as temporary file with a list of numberline position
+# of the MO list
+for ii in $( seq $MO_ini 1 $MO_fin )
+do
+      # getting position lines having redundancies
+      echo "$(grep -n "  $ii  " resA_mo3.tmp | cut -d':' -f1)" >> mo_line.tmp 
+done
+echo "$(wc -l resA_mo3.tmp | cut -d" " -f1)" >> mo_line.tmp
+uniq_mo_l="$(cat mo_line.tmp | sort -nu | uniq)"
+echo $uniq_mo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > mo_line.tmp
       for jj in $( seq $A_ini 1 $A_fin ) #screening in the atom range
       do
 	    #copying section having MO target up to find a blank line
