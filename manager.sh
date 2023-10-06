@@ -35,6 +35,8 @@ out_step2="resA_mo.out" #resA_mo.out comes from step2.sh
 ./step3.sh $MO_ini $MO_fin $out_step2 #generating res-A core-MO population matrix 
 
 out2_step1="exc_states_transitions.out" # exc_states_transitions.out comes from step1.sh
+out3_step1="exc_states2_transitions.out" # exc_states2_transitions.out comes from step1.sh
+out4_step1="exc_energies_list.out" # energys list with root ans spin number (from step1.sh)
 out1_step3="resA_MOcore.out" #resA_MOcore.out comes from step3.sh
 out2_step3="resA_popMO.tmp" #resA_popMO.tmp comes from step3.sh
 # generating transitions list just for the atoms involved in resA and the list of virtual
