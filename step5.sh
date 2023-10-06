@@ -16,16 +16,26 @@ out1_file4="$4" # virt_MO.tmp core MO population obtained from step1.sh
 # here called as the residue B (res B) because of the interest of studying
 # amino acids on proteins.
 
-#deleting tmp if necessary
-rm -rf resB_mo_3.tmp resB_mo_2.tmp resB_mo_2_1.tmp resB_mo.tmp
+# delete tmp if necessary
+rm -rf resB_mo_3.tmp resB_mo_2.tmp resB_mo_2_1.tmp resB_mo.tmp vmo_line.tmp
 
 # instancing unique virtual MOs in one variable
 virt_mo="$(cat $out1_file4 | sort -nu | uniq)" 
 
+# copying from the linenumber, where the MO target is, to the first blank
+# line is found
+# in this temporary file, MOs are copied with a subsequent list of atoms 
+# that correspond to their population contributions to that MO
 for ii in $virt_mo
 do
       sed -n "/  $ii  /,/^$/p" $out1_file >> resB_mo2.tmp
 done
+
+# there are until 6 MOs placed in the same numberline in step1.sh output
+# it means that sections having a MO and its atom list contribution can be 
+# repeated up to 6 times. There may be redundancies.
+# Removing duplicates, and preserving unique  
+# and throwing away stderr
 awk '!seen[$0]++' resB_mo2.tmp > resB_mo3.tmp 2> /dev/null 
 
 for ii in $virt_mo # screening in the virtual MOs range
@@ -33,6 +43,9 @@ do
 	# getting position lines having redundancies
 	echo "$(grep -n "  $ii  " resB_mo3.tmp | cut -d':' -f1)" >> vmo_line.tmp
 done
+
+# creating a list of uniq linenumber positions including the last linenumber
+# of the file
 echo "$(wc -l resB_mo3.tmp | cut -d" " -f1)" >> vmo_line.tmp
 uniq_vmo_l="$(cat vmo_line.tmp | sort -nu | uniq)"
 echo $uniq_vmo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > vmo_line.tmp
