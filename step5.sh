@@ -32,6 +32,9 @@ do
 	# getting position lines having redundancies
 	echo "$(grep -n "  $ii  " resB_mo3.tmp | cut -d':' -f1)" >> vmo_line.tmp
 done
+echo "$(wc -l resB_mo3.tmp | cut -d" " -f1)" >> vmo_line.tmp
+uniq_vmo_l="$(cat vmo_line.tmp | sort -nu | uniq)"
+echo $uniq_vmo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > vmo_line.tmp
       #virt_mo="$(awk '{printf "%s ", $0}' $out1_file4)"
       
       for jj in $( seq $B_ini 1 $B_fin ) #screening in the atom range
