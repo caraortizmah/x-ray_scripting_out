@@ -18,7 +18,12 @@ MO_fin="$6" #last 1s core MO
 out_file="$7" #orca output
 exc_range="$8" #excited states range using two numbers joint by '-'
 
-#extracting information from the output
+# defining zero as default option: S'=S
+if (( $opt_soc!=1 && $opt_soc!=2 )); then
+	opt_soc=$((0))
+fi
+
+# extracting information from the output
 
 ./step1.sh $MO_ini $MO_fin $out_file #obtaining excited states and 1s core MOs
 
@@ -33,7 +38,7 @@ out1_step3="resA_MOcore.out" #resA_MOcore.out comes from step3.sh
 out2_step3="resA_popMO.tmp" #resA_popMO.tmp comes from step3.sh
 # generating transitions list just for the atoms involved in resA and the list of virtual
 #  MO involved in these transitions
-./step4.sh $out2_step1 $out1_step3 $out2_step3
+./step4.sh $out2_step1 $out1_step3 $out2_step3 $exc_range
 
 out1_step4="virt_MO.tmp"
 ./step5.sh $B_ini $B_fin $out1_step1 $out1_step4
