@@ -54,6 +54,12 @@ uniq_mo_l="$(cat mo_line.tmp | sort -nu | uniq)"
 # MO-atom-list section and the second position of the tuple is the last
 # linenumber of that MO-atom-list section
 echo $uniq_mo_l | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)}' > mo_line.tmp
+
+# Each line in mo_line.tmp corresponds to a range linenumber of MO-atom-list
+# section.
+# All the MO-atom-list sections were copied (no redundancies) previously in
+# the temporary file resA_mo3.tmp
+
 # for each MO-atom-list section, do:
 while read -r line
 do
@@ -74,24 +80,9 @@ do
       done
 
 done < mo_line.tmp
-      #copying number lines where target atom is found
-      #atm_line="$(grep -n "${jj} C  s" resA_mo_2.tmp | cut -d':' -f1)"
 
-      #for ii in $atm_line
-      #do
-      #      #extracting lines pair having MO number (1st line) and
-      #      #population distribution (2nd line)  
-      #      kk=$(($ii-1))
-      #      sed -n "${kk},${ii}p" resA_mo_2.tmp >> resA_mo_3.tmp
-      #done
-done
-      #awk '!seen[$0]++' resA_mo_3.tmp > resA_mo_4.tmp 2> /dev/null #removing duplicates and throwing away stderr
-awk '!seen[$0]++' resA_mo_2.tmp > resA_mo_3.tmp 2> /dev/null #removing duplicates and throwing away stderr
-      #rm -rf resA_mo_3.tmp
-      #cat resA_mo_4.tmp >> resA_mo_5.tmp #adding to the output
-      #cat resA_mo_3.tmp >> resA_mo_4.tmp #adding to the output
-
-#done
+# removing duplicates and throwing away stderr
+awk '!seen[$0]++' resA_mo_2.tmp > resA_mo_3.tmp 2> /dev/null 
 
 #comment the following line to check the writing-on-disk process
 rm -rf resA_mo_2.tmp resA_mo_2_1.tmp resA_mo.tmp
