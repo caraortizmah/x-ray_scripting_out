@@ -70,14 +70,10 @@ do
       do
 	    # getting MO number list (usually 6 MOs) in that specified position line
             head="$(sed -n ''"$row1"'p' resA_mo3.tmp)"
-	    #copying section having MO target up to find a blank line
-            sed -n "/  $ii  /,/^$/p" $out_file > resA_mo.tmp 
+	    sed -n ''"$row1"','"$row2"'p' resA_mo3.tmp | grep -n "${jj} C  s" | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resA_mo_2_1.tmp
 	    #copying section having atom number target
 	    grep -n "${jj} C  s" resA_mo.tmp | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resA_mo_2_1.tmp
-	    # last command: awk -v x=${jj} '{if($1==x) print $0}', is to avoid wrong string matches e.g. '8  C' and '78  C'
-
 	    awk -v x="${head}" '{printf "num-1 sym lvl %s\n%s\n\n", x, $0}' resA_mo_2_1.tmp >> resA_mo_2.tmp
-
       done
 
 done < mo_line.tmp
