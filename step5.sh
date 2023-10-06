@@ -10,9 +10,11 @@ B_fin="$2" #last  atom number for residue B
 #MO_ini="$3" #first 1s core MO
 #MO_fin="$4" #last 1s core MO
 out1_file="$3" # core MO population obtained from step1.sh
-out1_file4="$4" # virt_MO.tmp  core MO population obtained from step1.sh
+out1_file4="$4" # virt_MO.tmp core MO population obtained from step1.sh
 
-#selecting just the core MOs that represents the residue of interest (res A) atoms
+# selecting just the virtual MOs that represents the target atoms
+# here called as the residue B (res B) because of the interest of studying
+# amino acids on proteins.
 
 #deleting tmp if necessary
 rm -rf resB_mo_3.tmp resB_mo_2.tmp resB_mo_2_1.tmp resB_mo.tmp
@@ -21,6 +23,15 @@ virt_mo="$(echo "$(<$out1_file4)" | awk '{printf "%s ", $0}')"
 
 for ii in $virt_mo
 do
+      sed -n "/  $ii  /,/^$/p" $out1_file >> resB_mo2.tmp
+done
+awk '!seen[$0]++' resB_mo2.tmp > resB_mo3.tmp 2> /dev/null 
+
+for ii in $virt_mo # screening in the virtual MOs range
+do
+	# getting position lines having redundancies
+	echo "$(grep -n "  $ii  " resB_mo3.tmp | cut -d':' -f1)" >> vmo_line.tmp
+done
       #virt_mo="$(awk '{printf "%s ", $0}' $out1_file4)"
       
       for jj in $( seq $B_ini 1 $B_fin ) #screening in the atom range
