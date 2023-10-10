@@ -184,7 +184,7 @@ else
 	      # root number will always have an unique spin number e.g.:
               #    root   spin  Ms         |  root   spin   Ms
 	      #     9      1    -1   [OK]  |   9      0      0   [X]
-	      #     9      1     1   [OK}  |   9      1      1   [X]
+	      #     9      1     1   [OK]  |   9      1      1   [X]
 	      #    21      0     0   [OK]  |  21      0      0   [OK]
 	      # assigning variables to target columns ($1, $5, $6), if $5 is equal to the next $5 then
 	      # $1 and the next are summed. When there is not a match between $5 and next $5, then
