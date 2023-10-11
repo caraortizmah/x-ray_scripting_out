@@ -51,4 +51,53 @@ done < tmp.tmp.tmp
 
 rm tmp.tmp.tmp exc_states_soc.tmp
 
+# Using the same algorithm for option S'=S
+# In the future, this section of code should be a new script
+# to be called for option 0 and 1
+
+### copied code from step4.sh ###
+
+# getting position lines having info
+state_line="$(grep -n "STATE " exc_states_soc_transitions.out | cut -d':' -f1)" 
+
+# the previous list (state_line) now is organized by tuples
+# where the first position of the tuple is the initial linenumber of the 
+# excited-state-list section and the second position of the tuple is the 
+# last linenumber of that excited-state-list section
+echo $state_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state3_line.tmp  
+
+# virt_MO.tmp is already printed for S'=S. now will be for SOC evaluation
+rm -rf virt_MO.tmp trans_st.tmp
+
+# for each excited-state-position-line in list, do:
+while read -r line
+do
+      row="$(echo $line | awk '{print $1}')" # position line of excited state 
+      row2="$(echo $line | awk '{print $2}')" # final position
+      
+      # getting the information of that line ($row) to use as head
+      head_state="$(sed -n "${row}p" exc_states_soc_transitions.out)"
+      row1=$(($row+1)) # initial position
+
+      # creating a temporary file with a specific range linenumber
+      echo "$(sed -n ''"$row1"','"$row2"'p' exc_states_soc_transitions.out)" > state_tmp.tmp
+      # idea: to find a way of "read-in-line" this previous sed command in the
+      # following awk command to be faster running
+
+      # Looking elements from the unique column of file1 in the first column of
+      # the file2.
+      # file1 is the list of core MOs (mo2_line.tmp) and file2 is the excited-
+      # state information with their MO coupling (state_tmp.tmp) using the
+      # format '->' to separate MOs. Then, separator used here is '-' and the
+      # conditional statement has the two elements from the both columns with a
+      # trivial sum of zero in order to ensure the nummerical comparison and not
+      # the string comparison, e.g. 19 == 9 can be true if both elements are strings 
+      awk -v x="$head_state" -F'[-]' 'NR==FNR{a[$0]=1; next} {for(i in a) if($1+0 == i+0){printf "%s\n%s\n",x,$0}}' mo2_line.tmp state_tmp.tmp >> trans_st.tmp
+
+done < state3_line.tmp
+
+# exctracting from trans_st.tmp file the virtual MOs, ordering them numerically
+# and listing it in a file
+sed -n "/->/p" trans_st.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO.tmp
+
 # One file as output from this script (exc_states_soc_transitions.out)
