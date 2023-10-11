@@ -7,7 +7,7 @@
 
 MO_ini="$1" # first 1s core MO
 MO_fin="$2" # last 1s core MO
-opt_soc="$3" # multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1) and 2 (SOC) 
+opt_soc="$3" # multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1 including SOC) 
 out_file="$4" # orca output
 
 #extracting information from the output
@@ -18,32 +18,26 @@ popul_ini="$(grep -n "LOEWDIN REDUCED ORBITAL POPULATIONS PER MO" $out_file | cu
 popul_fin="$(grep -n "MAYER POPULATION ANALYSIS" $out_file | cut -d':' -f1)"
 
 #zero: default option S'=S
+exc_ini="$(grep -n "Eigenvectors of ROCIS calculation:" $out_file | cut -d':' -f1)"
+
 if (( $opt_soc==0 )); then
-	exc_ini="$(grep -n "Eigenvectors of ROCIS calculation:" $out_file | cut -d':' -f1)"
 	exc_fin="$(grep -n "Calculating transition densities   ...Done" $out_file | cut -d':' -f1)"
         
 	awk -v x=$exc_ini -v y=$exc_fin 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states_transitions.out
 #one: higher multiplicity S'=S+1	
-elif (( $opt_soc==1 )); then
-	exc_ini="$(grep -n "Eigenvectors of ROCIS calculation:" $out_file | cut -d':' -f1)"
+else # $opt_soc==1
+	
 	exc_fin="$(grep -n "HIGHER MULTIPLICITY CI" $out_file | cut -d':' -f1)"
 	exc_ini2="$(grep -n "Eigenvectors of ROCIS calculation with S'=S+1:" $out_file | cut -d':' -f1)"
 	exc_fin2="$(grep -n "Calculating transition densities   ...Done" $out_file | cut -d':' -f1)"
 
 	awk -v x=$exc_ini -v y=$exc_fin 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states_transitions.out
 	awk -v x=$exc_ini2 -v y=$exc_fin2 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states2_transitions.out
-#two: spin-orbit coupling SOC
-else
-	exc_ini="$(grep -n "Eigenvectors of ROCIS calculation:" $out_file | cut -d':' -f1)"
-	exc_fin="$(grep -n "HIGHER MULTIPLICITY CI" $out_file | cut -d':' -f1)"
-	exc_ini2="$(grep -n "Eigenvectors of ROCIS calculation with S'=S+1:" $out_file | cut -d':' -f1)"
-	exc_fin2="$(grep -n "Calculating transition densities   ...Done" $out_file | cut -d':' -f1)"
+#bonus: spin-orbit coupling (SOC)
 	exc_ini3="$(grep -n "Eigenvectors of SOC calculation:" $out_file | cut -d':' -f1)"
 	exc_fin3="$(grep -n "Excitation energies (after SOC)" $out_file | cut -d':' -f1)"
 	exc_ini4="$(grep -n "Excitation energies" $out_file | awk '{if(FNR==1) print $0}' | cut -d':' -f1)"
 	exc_fin4="$(grep -n "ROCIS-EXCITATION SPECTRA" $out_file | awk '{if(FNR==1) print $0}' | cut -d':' -f1)"
-	awk -v x=$exc_ini -v y=$exc_fin 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states_transitions.out
-	awk -v x=$exc_ini2 -v y=$exc_fin2 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states2_transitions.out
 	awk -v x=$exc_ini3 -v y=$exc_fin3 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states3_transitions.out
 	awk -v x=$exc_ini4 -v y=$exc_fin4 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_energies_list.out
 
