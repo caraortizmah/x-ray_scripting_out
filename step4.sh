@@ -3,7 +3,7 @@
 out2_file1="$1" #excited states output from step1.sh (exc_states_transitions.out)
 out1_file3="$2" #res-A core-MO population matrix (resA_MOcore.out)
 out2_file3="$3" #core-MO population of res-A C-atoms, greater than 5% (resA_popMO.tmp)
-opt_soc="$4" #multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1) and 2 (SOC) 
+opt_soc="$4" #multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1, including SOC) 
 arg_exc="$5" #excited states range
 
 # cleaning transition states file by a defined range of excited states
@@ -27,12 +27,10 @@ else
 	if (( $opt_soc==1 )); then
 		out2_file12="exc_states2_transitions.out"
 		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file12 > exc_states2.tmp
-#	else # restricted (for now) for additive option
-#		# SOC option is done including default and higher multiplicity options
-#		out2_file12="exc_states2_transitions.out"
-#		out2_file13="exc_states3_transitions.out"
-#		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file12 > exc_states2.tmp
-#		sed -ne "/$(echo State $ex_ini | awk '{printf("%s %d: ",$1,$2)}')/,/$(echo State $ex_fin | awk '{printf("%s %d:",$1,$2+1)}')/p" $out2_file13 > exc_states3.tmp
+		
+		# SOC option is implicit performed in the higher multiplicity
+		out2_file13="exc_states3_transitions.out"
+		sed -ne "/$(echo State $ex_ini | awk '{printf("%s %d: ",$1,$2)}')/,/$(echo State $ex_fin | awk '{printf("%s %d:",$1,$2+1)}')/p" $out2_file13 > exc_states3.tmp
 	fi
 
 fi
@@ -109,9 +107,9 @@ mv trans_st.tmp trans_st.out
 
 
 if (( $opt_soc==1 )); then
-	# commands explanation in the default case
-	# same commands and order such as previous case 
-	# but for the higher multiplicity
+	# Commands explanation in the default case
+	#  same commands and order such as previous case 
+	#  but for the higher multiplicity
         state2_line="$(grep -n "STATE " exc_states2.tmp | cut -d':' -f1)" 
         
         echo $state2_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state2_line.tmp  
@@ -138,77 +136,82 @@ if (( $opt_soc==1 )); then
         mv trans_st.tmp trans_st.out
         mv trans_st2.tmp trans_st2.out
 
-## two: spin-orbit coupling SOC
-#else
-#        # to overwrite an existing report
-#	rm -rf err_report_step4_min.out
-#	# commands explanation in the first case
-#	# same commands such as previous case but adding
-#	# a copy of them for the SOC case
-#        state3_line="$(grep -n "State " exc_states3.tmp | cut -d':' -f1)" 
-#        
-#        echo $state3_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state3_line.tmp  
-#	
-#	rm -rf virt_MO3.tmp trans_st3.tmp
-#
-#	echo "Eigenvectors of SOC calculation" > trans_st3.out
-#	echo "Number of state: Exc. Energy cm**-1   Exc. Energy cm**-1" >> trans_st3.out
-#	echo "Weight  Root  Spin " >> trans_st3.out
-#	
-#	while read -r line # SOC
-#        do
-#              row="$(echo $line | awk '{print $1}')" # position line of excited state 
-#              row2="$(echo $line | awk '{print $2}')" # final position
-#              
-#              head_state="$(sed -n "${row}p" exc_states3.tmp)"
-#              row1=$(($row+1)) # initial position
-#        
-#	      # Threshold in the weighted list 0.2%
-#	      echo "$(sed -n ''"$row1"','"$row2"'p' exc_states3.tmp)" | awk '{if($1>0.02) printf "%s\n",$0}' > tobe_collapsed.tmp
-#	      
-#	      # collapsing rows in one by summing the first column (weight) when they have 
-#	      # the same root number (column 5th)
-#	      # root number will always have an unique spin number e.g.:
-#              #    root   spin  Ms         |  root   spin   Ms
-#	      #     9      1    -1   [OK]  |   9      0      0   [X]
-#	      #     9      1     1   [OK]  |   9      1      1   [X]
-#	      #    21      0     0   [OK]  |  21      0      0   [OK]
-#	      # assigning variables to target columns ($1, $5, $6), if $5 is equal to the next $5 then
-#	      # $1 and the next are summed. When there is not a match between $5 and next $5, then
-#	      # the values from the current FNR are printed.
-#              awk '{a=$1; b=$5; m=$6; if(FNR>1){if(b==d){auxa=auxa+a}else{ \
-#		      print auxa,d,n; auxa=a; auxb=b; auxm=m}}else{auxa=a; auxb=b; auxm=m} c=$1; d=$5; n=$6} \
-#		      END{print auxa,auxb,auxm}' tobe_collapsed.tmp > collapsed.tmp
-#
-#	      # in some cases the target "State" just contains one single root,
-#	      # which should have a weight aproximately to 1.0 (>=0.98).
-#	      # In the opposite case, only one root in only one "State" lower or 
-#	      # equal than 0.98 of weight implies that something is missing in 
-#	      # that spin representation and should require manual analysis 
-#	      if (( $(cat collapsed.tmp | wc -l)>1 )); then
-#		      # Adding "State" head for each new line (either collapsed or not)
-#		      awk -v x="$head_state" '{printf "%s\n%s\n",x,$0}' \
-#			      collapsed.tmp >> trans_st3.tmp
-#	      else
-#		      # Adding "State" head for the only line rounding up 1.0 the
-#		      # weight ($1) if that's greater or equal than 0.98.
-#		      # If not, the weight will be forced to take 1.0 as value
-#		      # and that incident will be report. A '*' will be added to
-#		      # make that notorious in the output 
-#		      awk -v x="$head_state" '{if($1>=0.98){\
-#			      printf "%s\n%.1f %s %s\n",x,$1,$2,$3}else{ \
-#		              printf "%s\n1.0 %s %s *\n",x,$2,$3}}' \
-#			      collapsed.tmp >> trans_st3.tmp
-#		      
-#		      awk -v x="$head_state" '{if($1<0.98)\
-#        printf "In the SOC state: \n%s the root %s has a weight lower than expected (>=0.98): %s\n(original info): %s\n",x,$1,$2,$0}' \
-#	                              collapsed.tmp >> err_report_step4_min.out
-#
-#	      fi
-#
-#        done < state3_line.tmp
-#        
-#        cat trans_st3.tmp >> trans_st3.out
+
+#####      SOC evaluation     #####
+
+
+        # To overwrite an existing report
+	rm -rf err_report_step4_min.out
+	# Commands explanation in the first case
+	#  same commands and order such as previous case
+	#  but for the SOC case
+        state3_line="$(grep -n "State " exc_states3.tmp | cut -d':' -f1)" 
+        
+        echo $state3_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state3_line.tmp  
+	
+	rm -rf virt_MO3.tmp trans_st3.tmp
+ 
+	# The following three lines are for clarification of the trans_st3.out file
+	#  because it has different format 
+	echo "Eigenvectors of SOC calculation" > trans_st3.out
+	echo "Number of state: Exc. Energy cm**-1   Exc. Energy cm**-1" >> trans_st3.out
+	echo "Weight  Root  Spin " >> trans_st3.out
+	
+	while read -r line # SOC
+        do
+              row="$(echo $line | awk '{print $1}')" # position line of excited state 
+              row2="$(echo $line | awk '{print $2}')" # final position
+              
+              head_state="$(sed -n "${row}p" exc_states3.tmp)"
+              row1=$(($row+1)) # initial position
+        
+	      # Threshold in the weighted list 0.2%
+	      echo "$(sed -n ''"$row1"','"$row2"'p' exc_states3.tmp)" | awk '{if($1>0.02) printf "%s\n",$0}' > tobe_collapsed.tmp
+	      
+	      # Collapsing rows in one by summing the first column (weight) when they have 
+	      #  the same root number (column 5th)
+	      #  root number will always have an unique spin number e.g.:
+              #    root   spin  Ms         |  root   spin   Ms
+	      #     9      1    -1   [OK]  |   9      0      0   [X]
+	      #     9      1     1   [OK]  |   9      1      1   [X]
+	      #    21      0     0   [OK]  |  21      0      0   [OK]
+	      # Assigning variables to target columns ($1, $5, $6), if $5 is equal to 
+	      #  the next $5 then $1 and the next are summed.
+	      # When there is not a match between $5 and next $5, then the values
+	      #  from the current FNR are printed.
+              awk '{a=$1; b=$5; m=$6; if(FNR>1){if(b==d){auxa=auxa+a}else{ \
+		      print auxa,d,n; auxa=a; auxb=b; auxm=m}}else{auxa=a; auxb=b; auxm=m} c=$1; d=$5; n=$6} \
+		      END{print auxa,auxb,auxm}' tobe_collapsed.tmp > collapsed.tmp
+
+	      # In some cases the target "State" just contains one single root,
+	      #  which should have a weight aproximately to 1.0 (>=0.98).
+	      # In the opposite case, only one root in only one "State" lower or 
+	      #  equal than 0.98 of weight implies that something is missing in 
+	      #  that spin representation and should require manual analysis 
+	      if (( $(cat collapsed.tmp | wc -l)>1 )); then
+		      # Adding "State" head for each new line (either collapsed or not)
+		      awk -v x="$head_state" '{printf "%s\n%s\n",x,$0}' \
+			      collapsed.tmp >> trans_st3.tmp
+	      else
+		      # Adding "State" head for the only line rounding up 1.0 the
+		      #  weight ($1) if that's greater or equal than 0.98.
+		      # If not, the weight will be forced to take 1.0 as value
+		      #  and that incident will be report. A '*' will be added to
+		      #  make that notorious in the output 
+		      awk -v x="$head_state" '{if($1>=0.98){\
+			      printf "%s\n%.1f %s %s\n",x,$1,$2,$3}else{ \
+		              printf "%s\n1.0 %s %s *\n",x,$2,$3}}' \
+			      collapsed.tmp >> trans_st3.tmp
+		      
+		      awk -v x="$head_state" '{if($1<0.98)\
+        printf "In the SOC state: \n%s the root %s has a weight lower than expected (>=0.98): %s\n(original info): %s\n",x,$1,$2,$0}' \
+	                              collapsed.tmp >> err_report_step4_min.out
+
+	      fi
+
+        done < state3_line.tmp
+        
+        cat trans_st3.tmp >> trans_st3.out
 
 fi
 
