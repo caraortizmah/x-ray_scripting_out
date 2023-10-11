@@ -55,10 +55,13 @@ rm tmp.tmp.tmp exc_states_soc.tmp
 # In the future, this section of code should be a new script
 # to be called for option 0 and 1
 
+cp exc_states_soc_transitions.out exc_states_soc_tr.tmp
+echo "STATE " >> exc_states_soc_tr.tmp
+
 ### copied code from step4.sh ###
 
 # getting position lines having info
-state_line="$(grep -n "STATE " exc_states_soc_transitions.out | cut -d':' -f1)" 
+state_line="$(grep -n "STATE " exc_states_soc_tr.tmp | cut -d':' -f1)" 
 
 # the previous list (state_line) now is organized by tuples
 # where the first position of the tuple is the initial linenumber of the 
@@ -76,11 +79,11 @@ do
       row2="$(echo $line | awk '{print $2}')" # final position
       
       # getting the information of that line ($row) to use as head
-      head_state="$(sed -n "${row}p" exc_states_soc_transitions.out)"
+      head_state="$(sed -n "${row}p" exc_states_soc_tr.tmp)"
       row1=$(($row+1)) # initial position
 
       # creating a temporary file with a specific range linenumber
-      echo "$(sed -n ''"$row1"','"$row2"'p' exc_states_soc_transitions.out)" > state_tmp.tmp
+      echo "$(sed -n ''"$row1"','"$row2"'p' exc_states_soc_tr.tmp)" > state_tmp.tmp
       # idea: to find a way of "read-in-line" this previous sed command in the
       # following awk command to be faster running
 
@@ -96,8 +99,10 @@ do
 
 done < state3_line.tmp
 
+rm -rf exc_states_soc_tr.tmp
+
 # exctracting from trans_st.tmp file the virtual MOs, ordering them numerically
 # and listing it in a file
 sed -n "/->/p" trans_st.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO.tmp
 
-# One file as output from this script (exc_states_soc_transitions.out)
+# Two files as outputs from this script (exc_states_soc_transitions.out, virt_MO.tmp)
