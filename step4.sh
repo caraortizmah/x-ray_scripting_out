@@ -166,7 +166,11 @@ else
         
         echo $state3_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state3_line.tmp  
 	
-	rm -rf trans_st3.out virt_MO3.tmp trans_st3.tmp
+	rm -rf virt_MO3.tmp trans_st3.tmp
+
+	echo "Eigenvectors of SOC calculation" > trans_st3.out
+	echo "Number of state: Exc. Energy cm**-1   Exc. Energy cm**-1" >> trans_st3.out
+	echo "Weight  Root  Spin " >> trans_st3.out
 	
 	while read -r line # SOC
         do
@@ -221,7 +225,7 @@ else
 
         done < state3_line.tmp
         
-        mv trans_st3.tmp trans_st3.out
+        cat trans_st3.tmp >> trans_st3.out
 
 fi
 
