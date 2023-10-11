@@ -19,12 +19,12 @@ opt_soc="$7" #SOC option, off is 0, on is 1
 out_file="$8" #orca output
 exc_range="$9" #excited states range using two numbers joint by '-'
 
-# defining zero as default option: S'=S
-if (( $opt_soc!=1 && $opt_soc!=2 )); then
+# Defining zero as default option: S'=S
+if (( $opt_soc!=1 )); then
 	opt_soc=$((0))
 fi
 
-# extracting information from the output
+# Extracting information from the output
 
 ./step1.sh $MO_ini $MO_fin $opt_soc $out_file #obtaining excited states and 1s core MOs
 
