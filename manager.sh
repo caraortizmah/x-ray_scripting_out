@@ -34,17 +34,20 @@ out1_step1="popul_mo.out" #popul_mo.out comes from step1.sh
 out_step2="resA_mo.out" #resA_mo.out comes from step2.sh
 ./step3.sh $MO_ini $MO_fin $out_step2 #generating res-A core-MO population matrix 
 
-out2_step1="exc_states_transitions.out" # exc_states_transitions.out comes from step1.sh
-out3_step1="exc_states2_transitions.out" # exc_states2_transitions.out comes from step1.sh
-out4_step1="exc_energies_list.out" # energys list with root ans spin number (from step1.sh)
-out1_step3="resA_MOcore.out" #resA_MOcore.out comes from step3.sh
-out2_step3="resA_popMO.tmp" #resA_popMO.tmp comes from step3.sh
-# generating transitions list just for the atoms involved in resA and the list of virtual
+out2_step1="exc_states_transitions.out" # exc_states_transitions.out (from step1.sh)
+out3_step1="exc_states2_transitions.out" # exc_states2_transitions.out (from step1.sh)
+out4_step1="exc_energies_list.out" # Energies list with root and spin number (from step1.sh)
+out1_step3="resA_MOcore.out" # resA_MOcore.out (from step3.sh)
+out2_step3="resA_popMO.tmp" # resA_popMO.tmp (from step3.sh)
+# Generating transitions list just for the atoms involved in resA and the list of virtual
 #  MO involved in these transitions
 ./step4.sh $out2_step1 $out1_step3 $out2_step3 $opt_soc $exc_range
 
+# Additional step only for the SOC evaluation
 if (( $opt_soc==1 )); then
-	./step4_soc.sh
+	# Intermediate file (1 line below) with weight, root and spin numbers (from step4.sh)
+	out1_step4="trans_st3.out"
+	./step4_soc.sh $out1_step4 $out2_step1 $out3_step1 $out4_step1
 fi
 
 out1_step4="virt_MO.tmp"
