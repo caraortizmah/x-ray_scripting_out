@@ -130,10 +130,8 @@ if (( $opt_soc==1 )); then
         
         done < state2_line.tmp
         
-        sed -n "/->/p" trans_st.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO.tmp
         sed -n "/->/p" trans_st2.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO2.tmp
         
-        mv trans_st.tmp trans_st.out
         mv trans_st2.tmp trans_st2.out
 
 
