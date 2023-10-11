@@ -5,13 +5,13 @@
 # when the output includes SOC. This script redo the list for the
 # following steps
 
-out4_file3="$1" # excited states output from step4.sh (trans_st3.out)
+out4_file3="$1" # excited states output from step4.sh (trans_st3.tmp)
 out1_file1="$2" # excited states output from step1.sh (exc_states_transitions.out)
 out1_file2="$3" # excited states output from step1.sh (exc_states2_transitions.out)
 out1_file3="$4" # excited states list from step1.sh (exc_energies_list.out)
 
-# listing the line after finding the word "State " in trans_st3.out
-# The file trans_st3.out has, as format, for each state a subsequent line
+# listing the line after finding the word "State " in trans_st3.tmp
+# The file trans_st3.tmp has, as format, for each state a subsequent line
 # having weight, root number and multiplicity type.
 grep -n "State " $out4_file3 | cut -d':' -f1 | awk '{print $0+1}' >  tmp.tmp.tmp
 
