@@ -5,7 +5,7 @@
 out2_file1="$1" # exc_states_transitions.out
 arg="$2"
 
-#cleaning transition states file by a defined range of excited states
+# Cleaning transition states file by a defined range of excited states
 if (($arg=="none")); then
         sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
 else
