@@ -50,6 +50,8 @@ if (( $opt_soc==1 )); then
 	./step4_soc.sh $out1_step4 $out2_step1 $out3_step1 $out4_step1
 fi
 
+out2_step4="trans_st.out" # modified in step4_soc
+
 out1_step4="virt_MO.tmp"
 ./step5.sh $B_ini $B_fin $out1_step1 $out1_step4
 
@@ -65,7 +67,9 @@ out1_step6="resB_mo.out"
 out1_step7="resB_collapsedMO.out"
 ./step7.sh $out1_step4 $out1_step7
 
-./step8.sh $out2_step1 $exc_range
+#./step8.sh $out2_step1 $exc_range
+
+./step8.sh $out2_step4 $exc_range
 
 ./step9.sh exc_states.tmp $out_file
 
