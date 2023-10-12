@@ -11,19 +11,18 @@ if (($arg=="none")); then
 else
 	ex_ini="$(echo $arg | cut -d'-' -f1)"
 	ex_fin="$(echo $arg | cut -d'-' -f2)"
-	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" exc_states_transitions.out  > exc_states.tmp
+	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
 fi
 
 #sed -ne "/STATE   1 /,/$(echo $var1 $var3 | awk '{printf("%s%4d",$1,$2+1)}')/p" exc_states_transitions.out  > exc_states.tmp
 
-#sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
-#extracting just rows containing core to virtual MO transitions
+# Extracting just rows containing core to virtual MO transitions
 awk 'NF { if ( $1 != "STATE" && $1 != "Calculating"){ print $0 } }' exc_states.tmp > exc_states.tmp2
 
 #ordered list of core MO involved from all states
-lst_coremo="$(awk '{print $1}' exc_states.tmp2 | cut -d'-' -f1 | sort -u -n | uniq)"
+lst_coremo="$(awk '{print $1}' exc_states.tmp2 | cut -d'-' -f1 | sort -nu | uniq)"
 #ordered list of virtual MO involved from all states
-lst_virtmo="$(awk '{print $1}' exc_states.tmp2 | cut -d'>' -f2 | sort -u -n | uniq)"
+lst_virtmo="$(awk '{print $1}' exc_states.tmp2 | cut -d'>' -f2 | sort -nu | uniq)"
 
 #cols_n="$(echo $lst_coremo | wc -w)" #number of columns in a "file"
 
@@ -41,16 +40,18 @@ do
 
 	for jj in $lst_coremo
 	do
-		#transition ocurrence number
+		# Transition ocurrence number
 		ts_num="$(grep -n " ${jj}->${ii} " exc_states.tmp2 | wc -l)"
 
 		pos_val="$(echo "$pos_val $ts_num")"
 
-		#total transition ocurrence states probability`
+		# Total transition ocurrence states probability
 		list_ts_p="$(grep -n " ${jj}->${ii} " exc_states.tmp2 | awk '{print $4}')"
 		
 		if (( $ts_num > 0)); then
+			# Average
 			#ts_p="$(echo $list_ts_p | awk -v x=0 -v y=$ts_num '{while (c++<=NR) x=x+$c; print x/y}')"
+			# Weighted average
 			ts_p="$(echo $list_ts_p | awk -v x=0 -v y=0 '{while (c++<=NF){ x=x+($c*$c); y=y+$c}; print x/y}')"
 		else
 			ts_p=0
