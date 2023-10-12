@@ -69,7 +69,7 @@ state_line="$(grep -n "STATE " exc_states_soc_tr.tmp | cut -d':' -f1)"
 # last linenumber of that excited-state-list section
 echo $state_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state3_line.tmp  
 
-# virt_MO.tmp is already printed for S'=S. now will be for SOC evaluation
+# virt_MO.tmp is already printed for S'=S, now will be rewritten for SOC evaluation
 rm -rf virt_MO.tmp trans_st.tmp
 
 # for each excited-state-position-line in list, do:
@@ -101,8 +101,11 @@ done < state3_line.tmp
 
 rm -rf exc_states_soc_tr.tmp
 
-# exctracting from trans_st.tmp file the virtual MOs, ordering them numerically
-# and listing it in a file
+# Exctracting from trans_st.tmp file the virtual MOs, ordering them numerically
+#  and listing it in a file
 sed -n "/->/p" trans_st.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO.tmp
+
+# Rewriting trans_st.out now with the information at the end of the SOC evaluation
+mv trans_st.tmp trans_st.out
 
 # Two files as outputs from this script (exc_states_soc_transitions.out, virt_MO.tmp)
