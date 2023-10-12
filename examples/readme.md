@@ -133,7 +133,11 @@ where:
      
      $DIR is the absolute path where the list of ORCA outputs are placed (only ORCA output files!)
 
-### Example:
+### Examples:
+
+1. `AB_4.0A.out` for S'=S (option `0`)
+2. `AB_4.1A.out` for S'=S+1 and SOC evaluation (option `1`).
+
 
 `AB_4.0A.out` is an ORCA output that represents a system of two amino acids, face-to-face oriented by the side aromatic chain.
 Phenylalanine (F) and tyrosine (Y) pair has a stacking distance of 4.0\AA.
@@ -151,3 +155,10 @@ If you want to take all the excited states from `AB_4.0A.out` then $8 should be 
      $ ./manager.sh 0 22 23 46 7 24 AB_4.0A.out none
 
 
+`AB_4.1A.out` is the same ORCA calculation for a face-to-face oriented by the side aromatic chain like in `AB_4.0A.out`.
+Even, the pair interaction has a stacking of 4.0\AA also.
+The **only difference** is that calculation includes higher multiplicity and spin-orbit coupling (SOC) evaluation.
+
+Due to calculation has two options: `0` for S'=S and `1` S'=S+1 and SOC evaluation.
+I used the same name of file just changing the last number.
+Then: `AB_4.0A.out` of option `0` S'=S and `AB_4.1A.out` of option `1` S'=S+1 and SOC evaluation.
