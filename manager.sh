@@ -69,7 +69,7 @@ out1_step7="resB_collapsedMO.out"
 
 #./step8.sh $out2_step1 $exc_range
 
-./step8.sh $out2_step4 $exc_range
+./step8.sh $out2_step4 $exc_range $opt_soc
 
 ./step9.sh exc_states.tmp $out_file
 
