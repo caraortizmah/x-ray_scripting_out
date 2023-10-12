@@ -88,7 +88,7 @@ do
 	
 	    awk -v x="${head}" '{printf "num-1 sym lvl %s\n%s\n\n", x, $0}' resB_mo_2_1.tmp >> resB_mo_2.tmp
 
-	    # NOT REMOVE THIS COMMENTED CODE 
+	    # DO NOT REMOVE THIS COMMENTED CODE 
 	    # separating, even for the same atom number, by MO level (s,p,d)
 	    #if (( $(wc -l resB_mo_2_1.tmp | cut -d' ' -f1) > 1)); then
 		    #echo "here" $head
