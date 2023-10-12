@@ -1,10 +1,15 @@
 #!/bin/bash
 
-#collecting data from excited states
+# Collecting data from excited states
 
-out_file1="$1" # exc_states_transitions.out
+out_file1="$1" # trans_st.out
 out1_file1="$2" # original ORCA output
 
+## Task: to decide which final intensities to take:
+# S'=S
+## COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)
+# SOC
+## SOC CORRECTED COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)
 opt1="ABSORPTION SPECTRUM VIA TRANSITION ELECTRIC DIPOLE MOMENTS" 
 opt2="ABSORPTION SPECTRUM VIA TRANSITION VELOCITY DIPOLE MOMENTS" 
 
@@ -27,10 +32,10 @@ do
 	mv states_ts_fosc.tmp temp_states_ts.tmp
 done
 
-#ordered list of core MO involved from all states
-lst_coremo="$(awk '$2!="coreMO->virtMO"{print $2}' temp_states_ts.tmp | cut -d'-' -f1 | sort -u -n | uniq)"
-#ordered list of virtual MO involved from all states
-lst_virtmo="$(awk '$2!="coreMO->virtMO"{print $2}' temp_states_ts.tmp | cut -d'>' -f2 | sort -u -n | uniq)"
+# Ordered list of core MO involved from all states
+lst_coremo="$(awk '$2!="coreMO->virtMO"{print $2}' temp_states_ts.tmp | cut -d'-' -f1 | sort -nu | uniq)"
+# Ordered list of virtual MO involved from all states
+lst_virtmo="$(awk '$2!="coreMO->virtMO"{print $2}' temp_states_ts.tmp | cut -d'>' -f2 | sort -nu | uniq)"
 
 echo "virt\core " $lst_coremo > corevirt_fosc_e_matrix.tmp
 echo "virt\core " $lst_coremo > corevirt_fosc_v_matrix.tmp
