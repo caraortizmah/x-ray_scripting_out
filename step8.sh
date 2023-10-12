@@ -4,20 +4,9 @@
 
 out2_file1="$1" # trans_st.out
 arg="$2" # Excited states range
-
-# Cleaning transition states file by a defined range of excited states
-#if (($arg=="none")); then
-#        sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
-#else
-#	ex_ini="$(echo $arg | cut -d'-' -f1)"
-#	ex_fin="$(echo $arg | cut -d'-' -f2)"
-#	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
-#fi
-
-#sed -ne "/STATE   1 /,/$(echo $var1 $var3 | awk '{printf("%s%4d",$1,$2+1)}')/p" exc_states_transitions.out  > exc_states.tmp
+opt_soc="$3" # SOC option
 
 # Extracting just rows containing core to virtual MO transitions
-#awk 'NF { if ( $1 != "STATE" && $1 != "Calculating"){ print $0 } }' exc_states.tmp > exc_states.tmp2
 awk 'NF { if ( $1 != "STATE" && $1 != "Calculating"){ print $0 } }' $out2_file1 > exc_states.tmp2
 
 #ordered list of core MO involved from all states
@@ -47,7 +36,14 @@ do
 		pos_val="$(echo "$pos_val $ts_num")"
 
 		# Total transition ocurrence states probability
-		list_ts_p="$(grep -n " ${jj}->${ii} " exc_states.tmp2 | awk '{print $4}')"
+                if (( $opt_soc!=1 )); then
+			# There is just one weight when option is S'=S
+			list_ts_p="$(grep -n " ${jj}->${ii} " exc_states.tmp2 | awk '{print $4}')"
+		else
+			# Multiplication by $6 (an additional weight) that corresponds to
+			#  the weight from the SOC evaluation
+			list_ts_p="$(grep -n " ${jj}->${ii} " exc_states.tmp2 | awk '{print $4*$6}')"
+                fi
 		
 		if (( $ts_num > 0)); then
 			# Average
