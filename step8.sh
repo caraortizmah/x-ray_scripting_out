@@ -71,5 +71,6 @@ sed -r 's/\s+/,/g' corevirtMO_matrix_ts_probability.out > corevirtMO_matrix_ts_p
 rm exc_states.tmp2
 head -n -1 exc_states.tmp > test2
 mv test2 exc_states.tmp
-#four files as outputs from this script (corevirtMO_matrix.out, corevirtMO_matrix_ts_probability.out,
-# corevirtMO_matrix.csv, corevirtMO_matrix_ts_probability.csv)
+
+# Four files as outputs from this script (corevirtMO_matrix.out, corevirtMO_matrix_ts_probability.out,
+#  corevirtMO_matrix.csv, corevirtMO_matrix_ts_probability.csv)
