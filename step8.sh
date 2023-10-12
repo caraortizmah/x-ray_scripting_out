@@ -2,22 +2,23 @@
 
 # Creating core/virt MO matrix as a function of the total transition state ocurrences
 
-out2_file1="$1" # exc_states_transitions.out
-arg="$2"
+out2_file1="$1" # trans_st.out
+arg="$2" # Excited states range
 
 # Cleaning transition states file by a defined range of excited states
-if (($arg=="none")); then
-        sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
-else
-	ex_ini="$(echo $arg | cut -d'-' -f1)"
-	ex_fin="$(echo $arg | cut -d'-' -f2)"
-	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
-fi
+#if (($arg=="none")); then
+#        sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
+#else
+#	ex_ini="$(echo $arg | cut -d'-' -f1)"
+#	ex_fin="$(echo $arg | cut -d'-' -f2)"
+#	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+#fi
 
 #sed -ne "/STATE   1 /,/$(echo $var1 $var3 | awk '{printf("%s%4d",$1,$2+1)}')/p" exc_states_transitions.out  > exc_states.tmp
 
 # Extracting just rows containing core to virtual MO transitions
-awk 'NF { if ( $1 != "STATE" && $1 != "Calculating"){ print $0 } }' exc_states.tmp > exc_states.tmp2
+#awk 'NF { if ( $1 != "STATE" && $1 != "Calculating"){ print $0 } }' exc_states.tmp > exc_states.tmp2
+awk 'NF { if ( $1 != "STATE" && $1 != "Calculating"){ print $0 } }' $out2_file1 > exc_states.tmp2
 
 #ordered list of core MO involved from all states
 lst_coremo="$(awk '{print $1}' exc_states.tmp2 | cut -d'-' -f1 | sort -nu | uniq)"
