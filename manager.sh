@@ -19,10 +19,22 @@ opt_soc="$7" #SOC option, off is 0, on is 1
 out_file="$8" #orca output
 exc_range="$9" #excited states range using two numbers joint by '-'
 
+# Spectra lecture option, 1 for no corrected spectra 
+if [[ ! -n ${10} ]]; then
+    spectra=$((0)) #default option (corrected spectra)
+else
+    spectra="${10}" # default (0) corrected spectra
+    if (( $spectra!=1 )); then
+	 spectra=$((0))
+    fi
+fi
+
 # Defining zero as default option: S'=S
 if (( $opt_soc!=1 )); then
 	opt_soc=$((0))
 fi
+
+echo "option "$spectra
 
 # Extracting information from the output
 
@@ -70,6 +82,7 @@ out1_step7="resB_collapsedMO.out"
 #./step8.sh $out2_step1 $exc_range
 
 ./step8.sh $out2_step4 $exc_range $opt_soc
+
 
 ./step9.sh $out2_step4 $out_file $opt_soc
 #./step9.sh exc_states.tmp $out_file
