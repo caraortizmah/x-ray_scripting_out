@@ -49,8 +49,8 @@ do
 	fosc_corr="$(awk -v st=$ii -v c=$col '{if($1==st) print $(c)}' exc_fosc_corrected.tmp)" 
 	#fosc_edm
 	#fosc_vdm="$(awk -v st=$ii '{if($1==st) print $4}' exc_fosc_velocity_dm.tmp)"
-	awk -v ed=$fosc_corr -v vd=$fosc_vdm -v st=$ii \
-		'{if($1==st && $1!="STATE"){ $5=ed; $6=vd; print $0} else{ print $0}}' temp_states_ts.tmp > states_ts_fosc.tmp
+	awk -v fsc=$fosc_corr -v st=$ii \
+		'{if($1==st && $1!="STATE"){ $5=fsc; print $0} else{ print $0}}' temp_states_ts.tmp > states_ts_fosc.tmp
 	mv states_ts_fosc.tmp temp_states_ts.tmp
 done
 
