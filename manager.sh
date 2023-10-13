@@ -34,8 +34,6 @@ if (( $opt_soc!=1 )); then
 	opt_soc=$((0))
 fi
 
-echo "option "$spectra
-
 # Extracting information from the output
 
 ./step1.sh $MO_ini $MO_fin $opt_soc $out_file #obtaining excited states and 1s core MOs
@@ -83,8 +81,16 @@ out1_step7="resB_collapsedMO.out"
 
 ./step8.sh $out2_step4 $exc_range $opt_soc
 
+# Additional step to differentiate which 9th spet to perform
+if (( $spectra==0 )); then
+	# Updated step9 version which only works with corrected spectra version
+        ./step9_soc.sh $out2_step4 $out_file $opt_soc
+else
+	# Original step9 version which only works with 
+	# velocity and electric dipole moment spectrum
+        ./step9.sh $out2_step4 $out_file
+fi
 
-./step9.sh $out2_step4 $out_file $opt_soc
 #./step9.sh exc_states.tmp $out_file
 
 mkdir -p ${out_file}_out
