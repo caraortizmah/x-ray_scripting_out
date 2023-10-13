@@ -11,7 +11,7 @@ if (( $opt_soc == 1)); then
 	# S'=S+1 and SOC evaluation option
 	opt1="SOC CORRECTED COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)"
         # Creating heads of temp_states_ts.tmp
-	echo "STATE coreMO->virtMO trans_probability ampt_coeff. fosc_soc_(D2+m2+Q2)" > temp_states_ts.tmp
+	echo "STATE(root) coreMO->virtMO trans_probability ampt_coeff. fosc_soc_(D2+m2+Q2)" > temp_states_ts.tmp
 else
 	# S'=S
 	opt1="COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)"
@@ -28,10 +28,10 @@ st="0"
 # opt_soc options generates the same trans_st.out but some format changes
 if (( $opt_soc == 1)); then
         # Excited state is in position 2 (either from S'=S or S'=S+1) and 
-	#  position 3 (that matches with the final corrected spectra)
-	# The folowing awk has $3 (weight from either from S'=S or S'=S+1)
+	#  position 8 (that matches with the final target root from corrected spectra)
+	# The folowing awk command has $3 (weight from either from S'=S or S'=S+1)
 	#  and $6 (weight from SOC evaluation) both are multiplied
-	awk -v st=$st '{if($1=="STATE") st=$3; else printf(" %s %s %s %s 0.0 0.0\n", st, $1, $3*$6, $4)}' ${out_file1} \
+	awk -v st=$st '{if($1=="STATE") st=$8; else printf(" %s %s %s %s 0.0 0.0\n", st, $1, $3*$6, $4)}' ${out_file1} \
 		| awk 'NF==6{if ($1>0 && $2!="Calculating") print $0}' >> temp_states_ts.tmp
 else # Excited state is in position 2 from S'=S
 	# awk command only has $3 (weight from S'=S)
