@@ -16,7 +16,7 @@ else
 fi
 
 # Cleaning transition states file
-sed -ne "/$opt1/,/^$/p" $out1_file1 > exc_fosc_corrected.tmp #exc_fosc_electronic_dm.tmp
+sed -ne "/$opt1/,/^$/p" $out1_file1 > exc_fosc_corrected.tmp
 
 st="0"
 
@@ -59,19 +59,15 @@ lst_coremo="$(awk '$2!="coreMO->virtMO"{print $2}' temp_states_ts.tmp | cut -d'-
 # Ordered list of virtual MO involved from all states
 lst_virtmo="$(awk '$2!="coreMO->virtMO"{print $2}' temp_states_ts.tmp | cut -d'>' -f2 | sort -nu | uniq)"
 
-echo "virt\core " $lst_coremo > corevirt_fosc_e_matrix.tmp
-echo "virt\core " $lst_coremo > corevirt_fosc_v_matrix.tmp
-echo "virt\core " $lst_coremo > corevirt_fosc_we_matrix.tmp
-echo "virt\core " $lst_coremo > corevirt_fosc_wv_matrix.tmp
+echo "virt\core " $lst_coremo > corevirt_fosc_corr_matrix.tmp
+echo "virt\core " $lst_coremo > corevirt_fosc_corr_matrix.tmp
 
 for ii in $lst_virtmo
 do
 
 	row_val=$ii
 	pos_val_e=""
-	pos_val_v=""
 	pos_val_we=""
-	pos_val_wv=""
 
 	for jj in $lst_coremo
 	do
@@ -80,48 +76,33 @@ do
 
 		#average weighted fosc electronic dipole moment (ts_dipole_moment*fosc_elec_dm)
 		ls_fosc_edm="$(grep -n "${jj}->${ii}" temp_states_ts.tmp | awk '{print $3*$5}')"
-		#average weighted fosc velocity dipole moment (ts_dipole_moment*fosc_vel_dm)
-		ls_fosc_vdm="$(grep -n "${jj}->${ii}" temp_states_ts.tmp | awk '{print $3*$6}')"
 		#sum of weights
 		wij="$(grep -n "${jj}->${ii}" temp_states_ts.tmp | awk -v x=0 '{x=x+$3}END{print x}')" #sum of weights
 		
 		if (( $ts_num > 0)); then
 			fs_e="$(echo $ls_fosc_edm | awk -v x=0 '{while (c++<=NF) x=x+$c; print x}')" #weighted sum
-			fs_v="$(echo $ls_fosc_vdm | awk -v x=0 '{while (c++<=NF) x=x+$c; print x}')" #weighted sum
 			fs_we="$(echo $ls_fosc_edm | awk -v x=0 -v y=$wij '{while (c++<=NF) x=x+$c; print x/y}')" #weighted sum
-			fs_wv="$(echo $ls_fosc_vdm | awk -v x=0 -v y=$wij '{while (c++<=NF) x=x+$c; print x/y}')" #weighted sum
 		else
 			fs_e=0
-			fs_v=0
 			fs_we=0
-			fs_wv=0
 		fi
 		
 		pos_val_e="$(echo "$pos_val_e $fs_e")"
-		pos_val_v="$(echo "$pos_val_v $fs_v")"
 		pos_val_we="$(echo "$pos_val_we $fs_we")"
-		pos_val_wv="$(echo "$pos_val_wv $fs_wv")"
 		
 	done
 
 	echo "$row_val $pos_val_e" >> corevirt_fosc_e_matrix.tmp
-	echo "$row_val $pos_val_v" >> corevirt_fosc_v_matrix.tmp
 	echo "$row_val $pos_val_we" >> corevirt_fosc_we_matrix.tmp
-	echo "$row_val $pos_val_wv" >> corevirt_fosc_wv_matrix.tmp
 done
 
-mv exc_fosc_electronic_dm.tmp exc_fosc_elecdm.out
-mv exc_fosc_velocity_dm.tmp exc_fosc_veldm.out
+mv exc_fosc_corrected.tmp exc_fosc_corrected.out
 mv corevirt_fosc_e_matrix.tmp corevirt_fosc_e_matrix.out
-mv corevirt_fosc_v_matrix.tmp corevirt_fosc_v_matrix.out
 mv corevirt_fosc_we_matrix.tmp corevirt_fosc_we_matrix.out
-mv corevirt_fosc_wv_matrix.tmp corevirt_fosc_wv_matrix.out
 mv temp_states_ts.tmp states_corevirtMO_fosc_table.out
 
 sed -r 's/\s+/,/g' corevirt_fosc_e_matrix.out > corevirt_fosc_e_matrix.csv
-sed -r 's/\s+/,/g' corevirt_fosc_v_matrix.out > corevirt_fosc_v_matrix.csv
 sed -r 's/\s+/,/g' corevirt_fosc_we_matrix.out > corevirt_fosc_we_matrix.csv
-sed -r 's/\s+/,/g' corevirt_fosc_wv_matrix.out > corevirt_fosc_wv_matrix.csv
 
 #seven files as outputs from this script:
 # (exc_fosc_elecdm.out, exc_fosc_veldm.out, corevirt_fosc_e_matrix.out, corevirt_fosc_v_matrix.out,
