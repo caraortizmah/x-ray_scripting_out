@@ -16,7 +16,7 @@ else
 	# S'=S
 	opt1="COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)"
         # Creating heads of temp_states_ts.tmp
-	echo "STATE coreMO->virtMO trans_probability ampt_coeff. fosc_(D2+m2+Q2)" > temp_states_ts.tmp
+	echo "STATE(root) coreMO->virtMO trans_probability ampt_coeff. fosc_(D2+m2+Q2)" > temp_states_ts.tmp
 fi
 
 # Cleaning transition states file
@@ -35,21 +35,24 @@ if (( $opt_soc == 1)); then
 		| awk 'NF==6{if ($1>0 && $2!="Calculating") print $0}' >> temp_states_ts.tmp
 else # Excited state is in position 2 from S'=S
 	# awk command only has $3 (weight from S'=S)
-	awk -v st=$st '{if($1=="STATE") st=$2; else printf(" %s %s %s %s 0.0 0.0\n", st, $1, $3, $4)}' ${out_file1} \
+	awk -v st=$st '{if($1=="STATE") st=$8; else printf(" %s %s %s %s 0.0 0.0\n", st, $1, $3, $4)}' ${out_file1} \
 		| awk 'NF==6{if ($1>0 && $2!="Calculating") print $0}' >> temp_states_ts.tmp
 fi
 
 # External variable as passing argument to the awk command line;
 #  depending on the soc_option, the column target is different
+#  $col for the fosc_D2+m2+Q2 and $col_st for the State 
 if (( $opt_soc == 1)); then
 	col=$((8))
+        col_st=$((2))
 else
 	col=$((7))
+	col_st=$((1))
 fi
 
-for ii in $(awk '{print $1}' temp_states_ts.tmp | sort -u -n | uniq)
+for ii in $(awk '{print $1}' temp_states_ts.tmp | sort -nu | uniq)
 do
-	fosc_corr="$(awk -v st=$ii -v c=$col '{if($1==st) print $(c)}' exc_fosc_corrected.tmp)" 
+	fosc_corr="$(awk -v st=$ii -v c=$col -v cs=$col_st '{if($(cs)==st) print $(c)}' exc_fosc_corrected.tmp)" 
 	#fosc_edm
 	#fosc_vdm="$(awk -v st=$ii '{if($1==st) print $4}' exc_fosc_velocity_dm.tmp)"
 	awk -v fsc=$fosc_corr -v st=$ii \
