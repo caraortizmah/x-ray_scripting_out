@@ -5,15 +5,10 @@
 out_file1="$1" # trans_st.out
 out1_file1="$2" # original ORCA output
 
-## Task: to decide which final intensities to take:
-# S'=S
-## COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)
-# SOC
-## SOC CORRECTED COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)
 opt1="ABSORPTION SPECTRUM VIA TRANSITION ELECTRIC DIPOLE MOMENTS" 
 opt2="ABSORPTION SPECTRUM VIA TRANSITION VELOCITY DIPOLE MOMENTS" 
 
-#cleaning transition states file
+# Cleaning transition states file
 sed -ne "/$opt1/,/^$/p" $out1_file1 > exc_fosc_electronic_dm.tmp
 sed -ne "/$opt2/,/^$/p" $out1_file1 > exc_fosc_velocity_dm.tmp
 
@@ -53,15 +48,15 @@ do
 
 	for jj in $lst_coremo
 	do
-		#transition ocurrence number
+		# Transition ocurrence number
 		ts_num="$(grep -n "${jj}->${ii}" temp_states_ts.tmp | wc -l)"
 
-		#average weighted fosc electronic dipole moment (ts_dipole_moment*fosc_elec_dm)
+		# Average weighted fosc electronic dipole moment (ts_dipole_moment*fosc_elec_dm)
 		ls_fosc_edm="$(grep -n "${jj}->${ii}" temp_states_ts.tmp | awk '{print $3*$5}')"
-		#average weighted fosc velocity dipole moment (ts_dipole_moment*fosc_vel_dm)
+		# Average weighted fosc velocity dipole moment (ts_dipole_moment*fosc_vel_dm)
 		ls_fosc_vdm="$(grep -n "${jj}->${ii}" temp_states_ts.tmp | awk '{print $3*$6}')"
-		#sum of weights
-		wij="$(grep -n "${jj}->${ii}" temp_states_ts.tmp | awk -v x=0 '{x=x+$3}END{print x}')" #sum of weights
+		# Sum of weights
+		wij="$(grep -n "${jj}->${ii}" temp_states_ts.tmp | awk -v x=0 '{x=x+$3}END{print x}')"
 		
 		if (( $ts_num > 0)); then
 			fs_e="$(echo $ls_fosc_edm | awk -v x=0 '{while (c++<=NF) x=x+$c; print x}')" #weighted sum
@@ -101,6 +96,6 @@ sed -r 's/\s+/,/g' corevirt_fosc_v_matrix.out > corevirt_fosc_v_matrix.csv
 sed -r 's/\s+/,/g' corevirt_fosc_we_matrix.out > corevirt_fosc_we_matrix.csv
 sed -r 's/\s+/,/g' corevirt_fosc_wv_matrix.out > corevirt_fosc_wv_matrix.csv
 
-#seven files as outputs from this script:
-# (exc_fosc_elecdm.out, exc_fosc_veldm.out, corevirt_fosc_e_matrix.out, corevirt_fosc_v_matrix.out,
-# states_corevirtMO_fosc_table.out, corevirt_fosc_e_matrix.csv, corevirt_fosc_v_matrix.csv)
+# Seven files as outputs from this script:
+#  (exc_fosc_elecdm.out, exc_fosc_veldm.out, corevirt_fosc_e_matrix.out, corevirt_fosc_v_matrix.out,
+#  states_corevirtMO_fosc_table.out, corevirt_fosc_e_matrix.csv, corevirt_fosc_v_matrix.csv)
