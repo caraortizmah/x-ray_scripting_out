@@ -43,8 +43,10 @@ do
 		      > exc_states_soc.tmp
       fi
 
-      # Adding the target weight to each pair MO coupling 
-      awk -v x=$target_weight '{if ($1!="STATE" && NF!=0){print $0, x}else{print $0}}'\
+      # Adding the target weight to each pair MO coupling and
+      # the target root that will used in step9_soc.sh
+      awk -v x=$target_weight -v y=$target_root \
+	      'NF!=0{if ($1!="STATE"){print $0, x}else{print $0, y}}'\
 	      exc_states_soc.tmp >> exc_states_soc_transitions.out
 
 done < tmp.tmp.tmp
