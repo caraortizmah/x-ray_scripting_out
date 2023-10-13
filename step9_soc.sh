@@ -16,8 +16,8 @@ else
 fi
 
 # Cleaning transition states file
-sed -ne "/$opt1/,/^$/p" $out1_file1 > exc_fosc_corrected.tmp
-#exc_fosc_electronic_dm.tmp
+sed -ne "/$opt1/,/^$/p" $out1_file1 > exc_fosc_corrected.tmp #exc_fosc_electronic_dm.tmp
+
 st="0"
 
 echo "STATE coreMO->virtMO trans_probability ampt_coeff. fosc_elec_dm fosc_vel_dm" > temp_states_ts.tmp
