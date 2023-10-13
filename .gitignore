@@ -8,3 +8,7 @@
 *.tmp
 # all svg images
 *.svg
+# all xls files
+*.xls*
+# all txt files
+*.txt
