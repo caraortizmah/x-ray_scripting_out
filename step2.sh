@@ -12,6 +12,8 @@ A_fin="$2" #last  atom number for residue A
 MO_ini="$3" #first 1s core MO
 MO_fin="$4" #last 1s core MO
 out_file="$5" #core MO population obtained from step1.sh
+atmcore="$6" #atom type from the core space (C, N, S)
+wavef="$7" #core orbital type (s,p)
 
 # selecting just the core MOs that represents the target atoms
 # here called as the residue A (res A) because of the interest of studying
@@ -75,7 +77,8 @@ do
 	    # After cutting it and taking the second field (cut command). The numerical match
 	    # is done (1st awk command) and print it just if contains 9 fields (2nd awk command)
 	    # as in the original out file
-	    sed -n ''"$row1"','"$row2"'p' resA_mo3.tmp | grep -n "${jj} C  s" | cut -d':' -f2 | awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resA_mo_2_1.tmp
+	    sed -n ''"$row1"','"$row2"'p' resA_mo3.tmp | grep -n "${jj} ${atmcore}  ${wavef}" | cut -d':' -f2 |\
+		    awk -v x=${jj} '{if($1==x) print $0}' | awk '{if(NF==9) print $0}' > resA_mo_2_1.tmp
 	    # print $head as first line and after the line pattern found in the temporary
 	    # file resA_mo_2_1.tmp
 	    awk -v x="${head}" '{printf "num-1 sym lvl %s\n%s\n\n", x, $0}' resA_mo_2_1.tmp >> resA_mo_2.tmp
