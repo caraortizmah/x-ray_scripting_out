@@ -81,7 +81,7 @@ out1_step7="resB_collapsedMO.out"
 
 ./step8.sh $out2_step4 $exc_range $opt_soc
 
-# Additional step to differentiate which 9th spet to perform
+# Additional step to differentiate which 9th step to perform
 if (( $spectra==0 )); then
 	# Updated step9 version which only works with corrected spectra version
         ./step9_soc.sh $out2_step4 $out_file $opt_soc
