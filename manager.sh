@@ -43,10 +43,10 @@ fi
 # Molecular orbital from the core space lecture option, e.g.:
 # s, p. s is the default option 
 if [[ ! -n ${12} ]]; then
-    atmcore="s" #default option (s core orbital)
+    wavef="s" #default option (s core orbital)
 else
-    atmcore="${12}" # default (s)
-    if [[ $atmcore!="s" ]]; then
+    wavef="${12}" # default (s)
+    if [[ $wavef!="s" ]]; then
 	 echo "Warning: you are not selecting core orbital s."
     fi
 fi
@@ -61,7 +61,8 @@ fi
 ./step1.sh $MO_ini $MO_fin $opt_soc $out_file #obtaining excited states and 1s core MOs
 
 out1_step1="popul_mo.out" #popul_mo.out comes from step1.sh
-./step2.sh $A_ini $A_fin $MO_ini $MO_fin $out1_step1 #obtaining core MOs from residue A 
+#./step2.sh $A_ini $A_fin $MO_ini $MO_fin $out1_step1 #obtaining core MOs from residue A 
+./step2.sh $A_ini $A_fin $MO_ini $MO_fin $out1_step1 $atmcore $wavef #obtaining core MOs from residue A 
 
 out_step2="resA_mo.out" #resA_mo.out comes from step2.sh
 ./step3.sh $MO_ini $MO_fin $out_step2 #generating res-A core-MO population matrix 
