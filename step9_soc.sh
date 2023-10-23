@@ -29,9 +29,9 @@ st="0"
 if (( $opt_soc == 1)); then
         # Excited state is in position 2 (either from S'=S or S'=S+1) and 
 	#  position 8 (that matches with the final target root from corrected spectra)
-	# The folowing awk command has $3 (weight from either from S'=S or S'=S+1)
-	#  and $6 (weight from SOC evaluation) both are multiplied
-	awk -v st=$st '{if($1=="STATE") st=$8; else printf(" %s %s %s %s 0.0 0.0\n", st, $1, $3*$6, $4)}' ${out_file1} \
+	# The following awk command has $3 (weight from either from S'=S or S'=S+1)
+	#  and $5 (weight from SOC evaluation) both are multiplied
+	awk -v st=$st '{if($1=="STATE") st=$8; else printf(" %s %s %s %s 0.0 0.0\n", st, $1, $3*$5, $4)}' ${out_file1} \
 		| awk 'NF==6{if ($1>0 && $2!="Calculating") print $0}' >> temp_states_ts.tmp
 else # Excited state is in position 2 from S'=S
 	# awk command only has $3 (weight from S'=S)
