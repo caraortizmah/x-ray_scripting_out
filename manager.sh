@@ -35,7 +35,7 @@ if [[ ! -n ${11} ]]; then
     atmcore="C" #default option (Carbon atom)
 else
     atmcore="${11}" # default (C)
-    if [[ $atmcore!="C" || $atmcore!="N" || $atmcore!="O" || $atmcore!="S" ]]; then
+    if [[ "${atmcore}" != "C" && "${atmcore}" != "N" && "${atmcore}" != "O" && "${atmcore}" != "S" ]]; then
 	 echo "Warning: you will use an atom different as C, N, O or S."
     fi
 fi
@@ -46,7 +46,7 @@ if [[ ! -n ${12} ]]; then
     wavef="s" #default option (s core orbital)
 else
     wavef="${12}" # default (s)
-    if [[ $wavef!="s" ]]; then
+    if [[ "${wavef}" != "s" ]]; then
 	 echo "Warning: you are not selecting core orbital s."
     fi
 fi
@@ -65,7 +65,7 @@ out1_step1="popul_mo.out" #popul_mo.out comes from step1.sh
 ./step2.sh $A_ini $A_fin $MO_ini $MO_fin $out1_step1 $atmcore $wavef #obtaining core MOs from residue A 
 
 out_step2="resA_mo.out" #resA_mo.out comes from step2.sh
-./step3.sh $MO_ini $MO_fin $out_step2 #generating res-A core-MO population matrix 
+./step3.sh $MO_ini $MO_fin $out_step2 $atmcore $wavef #generating res-A core-MO population matrix 
 
 out2_step1="exc_states_transitions.out" # exc_states_transitions.out (from step1.sh)
 out3_step1="exc_states2_transitions.out" # exc_states2_transitions.out (from step1.sh)
