@@ -29,6 +29,28 @@ else
     fi
 fi
 
+# Atom from the core space lecture option, e.g.:
+# C, N, O, S, P. C is the default option 
+if [[ ! -n ${11} ]]; then
+    atmcore="C" #default option (Carbon atom)
+else
+    atmcore="${11}" # default (C)
+    if [[ $atmcore!="C" || $atmcore!="N" || $atmcore!="O" || $atmcore!="S" ]]; then
+	 echo "Warning: you will use an atom different as C, N, O or S."
+    fi
+fi
+
+# Molecular orbital from the core space lecture option, e.g.:
+# s, p. s is the default option 
+if [[ ! -n ${12} ]]; then
+    atmcore="s" #default option (s core orbital)
+else
+    atmcore="${12}" # default (s)
+    if [[ $atmcore!="s" ]]; then
+	 echo "Warning: you are not selecting core orbital s."
+    fi
+fi
+
 # Defining zero as default option: S'=S
 if (( $opt_soc!=1 )); then
 	opt_soc=$((0))
