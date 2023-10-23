@@ -8,6 +8,8 @@
 MO_ini="$1" #first 1s core MO
 MO_fin="$2" #last 1s core MO
 out_file="$3" #residue A core MO population obtained from step2.sh
+atmcore="$4" #atom type from the core space (C, N, S)
+wavef="$5" #core orbital type (s,p)
 
 #Creating the MO matrix using resA_mo.out (out_file)
 
@@ -56,7 +58,7 @@ do
 
       #creating the zeroes row
       pop_val="$(awk -v y=${dMO} 'BEGIN { while (c++<=y) s=s " 0.0 "; print s}')"
-      pop_val="$(echo "${ii} C  s  ${pop_val}")"
+      pop_val="$(echo "${ii} ${atmcore}  ${wavef}  ${pop_val}")"
      
       #creating the matrix in order, atom by atom (sorted) and including repetitions
       for iii in $same_atm
