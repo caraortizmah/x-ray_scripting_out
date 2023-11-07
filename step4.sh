@@ -5,6 +5,7 @@ out1_file3="$2" #res-A core-MO population matrix (resA_MOcore.out)
 out2_file3="$3" #core-MO population of res-A C-atoms, greater than 5% (resA_popMO.tmp)
 opt_soc="$4" #multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1, including SOC) 
 arg_exc="$5" #excited states range
+atmcore="$6" #atom type from the core space (C, N, S)
 
 # cleaning transition states file by a defined range of excited states
 if (($arg_exc=="none")); then
@@ -38,7 +39,8 @@ fi
 # getting the excited state number involved in each field having transitions information
 # same excited state number can be involved in several transitions from different fields,
 # so repeated information is collected
-atm_lst="$(awk '$2=="C"{ printf "%d\n", $1 }' $out1_file3)" #getting target atoms list
+# check this: atm_lst is not called
+atm_lst="$(awk -v x="${atmcore}" '$2==x{ printf "%d\n", $1 }' $out1_file3)" #getting target atoms list
 #trans_line="$(grep -n " C s" $out_file3 | cut -d':' -f1)" #getting position lines having info
 
 # creating a list of unique MOs numerically ordered
