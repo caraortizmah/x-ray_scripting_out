@@ -10,7 +10,7 @@ B_fin="$2" #last  atom number for residue B
 #MO_ini="$3" #first 1s core MO
 #MO_fin="$4" #last 1s core MO
 out1_file="$3" # core MO population obtained from step1.sh
-out1_file4="$4" # virt_MO.tmp core MO population obtained from step1.sh
+out1_file4="$4" # virt_MO.tmp core MO population obtained from step4.sh
 
 # Selecting just the virtual MOs that represents the target atoms
 #  here called as the residue B (res B) because of the interest of studying
