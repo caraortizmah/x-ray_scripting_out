@@ -21,6 +21,7 @@ atm_line="$(grep -n "num-1 sym lvl" $out_file | cut -d':' -f1)" #getting positio
 #same atom number can be involved in several MO from different fields generating
 # atom number repetition
 
+
 #for ii in $atm_line #(necessary inefficient step)
 #do
 #      ii=$((ii+1))
@@ -29,7 +30,7 @@ atm_line="$(grep -n "num-1 sym lvl" $out_file | cut -d':' -f1)" #getting positio
 #comment the for above
 
 awk '{if ($1 != "num-1") print $1}' $out_file > tmp1
-uniq_atm="$(cat tmp1 | sort -u | uniq)" 
+uniq_atm="$(cat tmp1 | sort -nu | uniq)" 
 ######check
 #getting the unique elements (atom numbers)
 
@@ -49,7 +50,7 @@ for ii in $uniq_atm
 do
       
       #getting line number when atom target is placed in resA_mo.out
-      grep -n "${ii} C" $out_file > res_tmp.tmp
+      grep -n "${ii} ${atmcore}" $out_file > res_tmp.tmp
       sed -i 's/:/ /g' res_tmp.tmp # removing : to get 
       same_atm="$(awk -v x=${ii} '{if($2==x) print $1}' res_tmp.tmp)"
 
