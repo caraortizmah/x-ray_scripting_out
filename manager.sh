@@ -121,3 +121,22 @@ mv *.out ${out_file}_out/
 mv *.tmp ${out_file}_out/
 mv *.csv ${out_file}_out/
 
+suff=".out"
+pop_name=${out_file/%$suff}
+
+mkdir -p pop_matrices
+#cp ${out_file}_out/resA_MOcore.csv pop_matrices/resA_MOcore_${pop_name}.csv
+#cp ${out_file}_out/resB_MOcore.csv pop_matrices/resB_MOvirt_${pop_name}.csv
+#cp ${out_file}_out/corevirtMO_matrix.csv pop_matrices/corevirtMO_matrix_${pop_name}.csv
+#cp ${out_file}_out/corevirtMO_matrix_ts_probability.csv pop_matrices/corevirtMO_matrix_tspb_${pop_name}.csv
+#
+## Additional step only for the SOC evaluation
+#if (( $opt_soc==0 )); then
+#	cp ${out_file}_out/corevirt_fosc_e_matrix.csv pop_matrices/corevirt_fosce_${pop_name}.csv
+#	cp ${out_file}_out/corevirt_fosc_w_matrix.csv pop_matrices/corevirt_foscw_${pop_name}.csv
+#else
+#	cp ${out_file}_out/corevirt_fosc_corr_matrix.csv pop_matrices/corevirt_fosc_corr_${pop_name}.csv
+#	cp ${out_file}_out/corevirt_foscw_corr_matrix.csv pop_matrices/corevirt_foscw_corr_${pop_name}.csv
+#fi
+
+
