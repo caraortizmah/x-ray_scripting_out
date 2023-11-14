@@ -26,8 +26,8 @@ else
 	
 	# In the if statement condition the same command is used over different files
 	if (( $opt_soc==1 )); then
-		out2_file12="exc_states2_transitions.out"
-		sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file12 > exc_states2.tmp
+	#	out2_file12="exc_states2_transitions.out"
+	#	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file12 > exc_states2.tmp
 		
 		# SOC option is implicit performed in the higher multiplicity
 		out2_file13="exc_states3_transitions.out"
@@ -58,87 +58,92 @@ echo $uniq_MO | awk -F" " '{for (i=1; i<=NF; i++) print $i}' > mo2_line.tmp
 
 #####     Default option: S'=S     #####
 
-# getting position lines having info
-#state_line="$(grep -n "STATE " $out2_file1 | cut -d':' -f1)" 
-# getting position lines having info
-state_line="$(grep -n "STATE " exc_states.tmp | cut -d':' -f1)" 
+if (( $opt_soc==0 )); then
 
-# the previous list (state_line) now is organized by tuples
-# where the first position of the tuple is the initial linenumber of the 
-# excited-state-list section and the second position of the tuple is the 
-# last linenumber of that excited-state-list section
-echo $state_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state_line.tmp  
+       # getting position lines having info
+       #state_line="$(grep -n "STATE " $out2_file1 | cut -d':' -f1)" 
+       # getting position lines having info
+       state_line="$(grep -n "STATE " exc_states.tmp | cut -d':' -f1)" 
+       
+       # the previous list (state_line) now is organized by tuples
+       # where the first position of the tuple is the initial linenumber of the 
+       # excited-state-list section and the second position of the tuple is the 
+       # last linenumber of that excited-state-list section
+       echo $state_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state_line.tmp  
+       
+       rm -rf trans_st.out virt_MO.tmp trans_st.tmp
+       
+       # for each excited-state-position-line in list, do:
+       while read -r line
+       do
+             row="$(echo $line | awk '{print $1}')" # position line of excited state 
+             row2="$(echo $line | awk '{print $2}')" # final position
+             
+             # getting the information of that line ($row) to use as head
+             head_state="$(sed -n "${row}p" exc_states.tmp)"
+             row1=$(($row+1)) # initial position
+       
+             # creating a temporary file with a specific range linenumber
+             echo "$(sed -n ''"$row1"','"$row2"'p' exc_states.tmp)" > state_tmp.tmp
+             # idea: to find a way of "read-in-line" this previous sed command in the
+             # following awk command to be faster running
+       
+             # Looking elements from the unique column of file1 in the first column of
+             # the file2.
+             # file1 is the list of core MOs (mo2_line.tmp) and file2 is the excited-
+             # state information with their MO coupling (state_tmp.tmp) using the
+             # format '->' to separate MOs. Then, separator used here is '-' and the
+             # conditional statement has the two elements from the both columns with a
+             # trivial sum of zero in order to ensure the nummerical comparison and not
+             # the string comparison, e.g. 19 == 9 can be true if both elements are strings 
+             awk -v x="$head_state" -F'[-]' 'NR==FNR{a[$0]=1; next} {for(i in a) if($1+0 == i+0){printf "%s\n%s\n",x,$0}}' mo2_line.tmp state_tmp.tmp >> trans_st.tmp
+       
+       done < state_line.tmp
+       
+       # exctracting from trans_st.tmp file the virtual MOs, ordering them numerically
+       # and listing it in a file
+       sed -n "/->/p" trans_st.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO.tmp
+       
+       mv trans_st.tmp trans_st.out
 
-rm -rf trans_st.out virt_MO.tmp trans_st.tmp
-
-# for each excited-state-position-line in list, do:
-while read -r line
-do
-      row="$(echo $line | awk '{print $1}')" # position line of excited state 
-      row2="$(echo $line | awk '{print $2}')" # final position
-      
-      # getting the information of that line ($row) to use as head
-      head_state="$(sed -n "${row}p" exc_states.tmp)"
-      row1=$(($row+1)) # initial position
-
-      # creating a temporary file with a specific range linenumber
-      echo "$(sed -n ''"$row1"','"$row2"'p' exc_states.tmp)" > state_tmp.tmp
-      # idea: to find a way of "read-in-line" this previous sed command in the
-      # following awk command to be faster running
-
-      # Looking elements from the unique column of file1 in the first column of
-      # the file2.
-      # file1 is the list of core MOs (mo2_line.tmp) and file2 is the excited-
-      # state information with their MO coupling (state_tmp.tmp) using the
-      # format '->' to separate MOs. Then, separator used here is '-' and the
-      # conditional statement has the two elements from the both columns with a
-      # trivial sum of zero in order to ensure the nummerical comparison and not
-      # the string comparison, e.g. 19 == 9 can be true if both elements are strings 
-      awk -v x="$head_state" -F'[-]' 'NR==FNR{a[$0]=1; next} {for(i in a) if($1+0 == i+0){printf "%s\n%s\n",x,$0}}' mo2_line.tmp state_tmp.tmp >> trans_st.tmp
-
-done < state_line.tmp
-
-# exctracting from trans_st.tmp file the virtual MOs, ordering them numerically
-# and listing it in a file
-sed -n "/->/p" trans_st.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO.tmp
-
-mv trans_st.tmp trans_st.out
+fi
 
 #####        Option: S'=S+1        #####
 #####      ergo SOC evaluation     #####
 
 
-if (( $opt_soc==1 )); then
-	# Commands explanation in the default case
-	#  same commands and order such as previous case 
-	#  but for the higher multiplicity
-        state2_line="$(grep -n "STATE " exc_states2.tmp | cut -d':' -f1)" 
-        
-        echo $state2_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state2_line.tmp  
-        
-        rm -rf trans_st2.out virt_MO2.tmp trans_st2.tmp
-        
-	while read -r line # S'=S+1
-        do
-              row="$(echo $line | awk '{print $1}')" # position line of excited state 
-              row2="$(echo $line | awk '{print $2}')" # final position
-              
-              head_state="$(sed -n "${row}p" exc_states2.tmp)"
-              row1=$(($row+1)) # initial position
-        
-              echo "$(sed -n ''"$row1"','"$row2"'p' exc_states2.tmp)" > state_tmp2.tmp
-              
-	      awk -v x="$head_state" -F'[-]' 'NR==FNR{a[$0]=1; next} {for(i in a) if($1+0 == i+0){printf "%s\n%s\n",x,$0}}' mo2_line.tmp state_tmp2.tmp >> trans_st2.tmp
-        
-        done < state2_line.tmp
-        
-        sed -n "/->/p" trans_st2.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO2.tmp
-        
-        mv trans_st2.tmp trans_st2.out
+#if (( $opt_soc==1 )); then
+#	# Commands explanation in the default case
+#	#  same commands and order such as previous case 
+#	#  but for the higher multiplicity
+#        state2_line="$(grep -n "STATE " exc_states2.tmp | cut -d':' -f1)" 
+#        
+#        echo $state2_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state2_line.tmp  
+#        
+#        rm -rf trans_st2.out virt_MO2.tmp trans_st2.tmp
+#        
+#	while read -r line # S'=S+1
+#        do
+#              row="$(echo $line | awk '{print $1}')" # position line of excited state 
+#              row2="$(echo $line | awk '{print $2}')" # final position
+#              
+#              head_state="$(sed -n "${row}p" exc_states2.tmp)"
+#              row1=$(($row+1)) # initial position
+#        
+#              echo "$(sed -n ''"$row1"','"$row2"'p' exc_states2.tmp)" > state_tmp2.tmp
+#              
+#	      awk -v x="$head_state" -F'[-]' 'NR==FNR{a[$0]=1; next} {for(i in a) if($1+0 == i+0){printf "%s\n%s\n",x,$0}}' mo2_line.tmp state_tmp2.tmp >> trans_st2.tmp
+#        
+#        done < state2_line.tmp
+#        
+#        sed -n "/->/p" trans_st2.tmp | cut -d'>' -f2 | cut -d' ' -f1 | sort -nu | uniq > virt_MO2.tmp
+#        
+#        mv trans_st2.tmp trans_st2.out
 
 
 #####      SOC evaluation     #####
 
+if (( $opt_soc==1 )); then
 
         # To overwrite an existing report
 	rm -rf err_report_step4_min.out
