@@ -83,38 +83,49 @@ if (( $opt_soc==1 )); then
 	./step4_soc.sh $out1_step4 $out2_step1 $out3_step1 $out4_step1
 fi
 
-out2_step4="trans_st.out" # modified in step4_soc
-
 out1_step4="virt_MO.tmp"
 ./step5.sh $B_ini $B_fin $out1_step1 $out1_step4
 
-out1_step5="resB_mo.out" #resA_MOcore.out comes from step3.sh
-out2_step5="resA_popMO.tmp" #resA_popMO.tmp comes from step3.sh
+out2_step5="resA_popMO.tmp" # resA_popMO.tmp comes from step3.sh
 # generating transitions list just for the atoms involved in resA and the list of virtual
 #  MO involved in these transitions
 
-out1_step6="resB_mo.out"
-./step6.sh $out1_step6
+out1_step5="resB_mo.out" # resA_MOcore.out comes from step3.sh
+./step6.sh $out1_step5
 
 #exc_states_transitions.out
 out1_step7="resB_collapsedMO.out"
 ./step7.sh $out1_step4 $out1_step7
 
-#./step8.sh $out2_step1 $exc_range
-
+out2_step4="trans_st.out"
 ./step8.sh $out2_step4 $exc_range $opt_soc
+
+# Additional step only for higher multiplicity in SOC evaluation
+if (( $opt_soc==1 )); then
+	mv corevirtMO_matrix.out corevirtMO_matrix0.out
+	mv corevirtMO_matrix_ts_probability.out corevirtMO_matrix_ts_probability0.out
+	mv corevirtMO_matrix.csv corevirtMO_matrix0.csv
+	mv corevirtMO_matrix_ts_probability.csv corevirtMO_matrix_ts_probability0.csv
+        out2_step4="trans1_st.out"
+        ./step8.sh $out2_step4 $exc_range $opt_soc
+	mv corevirtMO_matrix.out corevirtMO_matrix1.out
+	mv corevirtMO_matrix_ts_probability.out corevirtMO_matrix_ts_probability1.out
+	mv corevirtMO_matrix.csv corevirtMO_matrix1.csv
+	mv corevirtMO_matrix_ts_probability.csv corevirtMO_matrix_ts_probability1.csv
+fi
+
+# Original step9 version which only works with 
+# velocity and electric dipole moment spectrum
+
+out2_step4="trans_st.out"
+./step9.sh $out2_step4 $out_file
 
 # Additional step to differentiate which 9th step to perform
 if (( $spectra==0 )); then
 	# Updated step9 version which only works with corrected spectra version
+	out2_step4="trans1_st.out"
         ./step9_soc.sh $out2_step4 $out_file $opt_soc
-else
-	# Original step9 version which only works with 
-	# velocity and electric dipole moment spectrum
-        ./step9.sh $out2_step4 $out_file
 fi
-
-#./step9.sh exc_states.tmp $out_file
 
 mkdir -p ${out_file}_out
 mv *.out ${out_file}_out/
@@ -125,21 +136,24 @@ suff=".out"
 pop_name=${out_file/%$suff}
 
 mkdir -p pop_matrices
-folder2="RWG4MG3_rocisdft/"
+folder2="FY_rocisdft/"
 sufff=$exc_range
 
 cp ${out_file}_out/resA_MOcore.csv pop_matrices/${folder2}/resA_MOcore_${pop_name}_${sufff}.csv
 cp ${out_file}_out/resB_MOcore.csv pop_matrices/${folder2}/resB_MOvirt_${pop_name}_${sufff}.csv
-cp ${out_file}_out/corevirtMO_matrix.csv pop_matrices/${folder2}/corevirtMO_matrix_${pop_name}_${sufff}.csv
-cp ${out_file}_out/corevirtMO_matrix_ts_probability.csv pop_matrices/${folder2}/corevirtMO_matrix_tspb_${pop_name}_${sufff}.csv
+for ii in 0 1
+do
+	cp ${out_file}_out/corevirtMO_matrix${ii}.csv pop_matrices/${folder2}/corevirtMO_matrix${ii}_${pop_name}_${sufff}.csv
+        cp ${out_file}_out/corevirtMO_matrix_ts_probability${ii}.csv pop_matrices/${folder2}/corevirtMO_matrix${ii}_tspb_${pop_name}_${sufff}.csv
+done
 
 # Additional step only for the SOC evaluation
 if (( $opt_soc==0 )); then
-	cp ${out_file}_out/corevirt_fosc_e_matrix.csv pop_matrices/${folder2}/corevirt_fosce_${pop_name}_${sufff}.csv
-	cp ${out_file}_out/corevirt_fosc_w_matrix.csv pop_matrices/${folder2}/corevirt_foscw_${pop_name}_${sufff}.csv
+	cp ${out_file}_out/corevirt_fosc_corr_matrix1.csv pop_matrices/${folder2}/corevirt_fosc1_corr_${pop_name}_${sufff}.csv
+	cp ${out_file}_out/corevirt_foscw_corr_matrix1.csv pop_matrices/${folder2}/corevirt_foscw1_corr_${pop_name}_${sufff}.csv
 else
-	cp ${out_file}_out/corevirt_fosc_corr_matrix.csv pop_matrices/${folder2}/corevirt_fosc_corr_${pop_name}_${sufff}.csv
-	cp ${out_file}_out/corevirt_foscw_corr_matrix.csv pop_matrices/${folder2}/corevirt_foscw_corr_${pop_name}_${sufff}.csv
+	cp ${out_file}_out/corevirt_fosc_e_matrix0.csv pop_matrices/${folder2}/corevirt_fosc0_${pop_name}_${sufff}.csv
+	cp ${out_file}_out/corevirt_fosc_we_matrix0.csv pop_matrices/${folder2}/corevirt_foscw0_${pop_name}_${sufff}.csv
 fi
 
 
