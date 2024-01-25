@@ -105,12 +105,12 @@ do
 done
 
 mv exc_fosc_corrected.tmp exc_fosc_corrected.out
-mv corevirt_fosc_corr_matrix.tmp corevirt_fosc_corr_matrix.out
-mv corevirt_foscw_corr_matrix.tmp corevirt_foscw_corr_matrix.out
+mv corevirt_fosc_corr_matrix.tmp corevirt_fosc_corr_matrix1.out
+mv corevirt_foscw_corr_matrix.tmp corevirt_foscw_corr_matrix1.out
 mv temp_states_ts.tmp states_corevirtMO_fosc_table.out
 
-sed -r 's/\s+/,/g' corevirt_fosc_corr_matrix.out > corevirt_fosc_corr_matrix.csv
-sed -r 's/\s+/,/g' corevirt_foscw_corr_matrix.out > corevirt_foscw_corr_matrix.csv
+sed -r 's/\s+/,/g' corevirt_fosc_corr_matrix1.out > corevirt_fosc_corr_matrix1.csv
+sed -r 's/\s+/,/g' corevirt_foscw_corr_matrix1.out > corevirt_foscw_corr_matrix1.csv
 
 #seven files as outputs from this script:
 # (exc_fosc_elecdm.out, exc_fosc_veldm.out, corevirt_fosc_e_matrix.out, corevirt_fosc_v_matrix.out,
