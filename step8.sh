@@ -49,7 +49,7 @@ do
 			# Average
 			#ts_p="$(echo $list_ts_p | awk -v x=0 -v y=$ts_num '{while (c++<=NR) x=x+$c; print x/y}')"
 			# Weighted average
-			ts_p="$(echo $list_ts_p | awk -v x=0 -v y=0 '{while (c++<=NF){ x=x+($c*$c); y=y+$c}; print x/y}')"
+			ts_p="$(echo $list_ts_p | awk -v x=0 -v y=0 '{while (c++<=NF){ x=x+($c*$c); y=y+$c}; if(y==0){print y}else{print x/y}}')"
 		else
 			ts_p=0
 		fi
