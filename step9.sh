@@ -85,15 +85,15 @@ done
 
 mv exc_fosc_electronic_dm.tmp exc_fosc_elecdm.out
 mv exc_fosc_velocity_dm.tmp exc_fosc_veldm.out
-mv corevirt_fosc_e_matrix.tmp corevirt_fosc_e_matrix.out
+mv corevirt_fosc_e_matrix.tmp corevirt_fosc_e_matrix0.out
 mv corevirt_fosc_v_matrix.tmp corevirt_fosc_v_matrix.out
-mv corevirt_fosc_we_matrix.tmp corevirt_fosc_we_matrix.out
+mv corevirt_fosc_we_matrix.tmp corevirt_fosc_we_matrix0.out
 mv corevirt_fosc_wv_matrix.tmp corevirt_fosc_wv_matrix.out
 mv temp_states_ts.tmp states_corevirtMO_fosc_table.out
 
-sed -r 's/\s+/,/g' corevirt_fosc_e_matrix.out > corevirt_fosc_e_matrix.csv
+sed -r 's/\s+/,/g' corevirt_fosc_e_matrix0.out > corevirt_fosc_e_matrix0.csv
 sed -r 's/\s+/,/g' corevirt_fosc_v_matrix.out > corevirt_fosc_v_matrix.csv
-sed -r 's/\s+/,/g' corevirt_fosc_we_matrix.out > corevirt_fosc_we_matrix.csv
+sed -r 's/\s+/,/g' corevirt_fosc_we_matrix0.out > corevirt_fosc_we_matrix0.csv
 sed -r 's/\s+/,/g' corevirt_fosc_wv_matrix.out > corevirt_fosc_wv_matrix.csv
 
 # Seven files as outputs from this script:
