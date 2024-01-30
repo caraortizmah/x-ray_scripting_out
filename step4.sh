@@ -7,30 +7,46 @@ opt_soc="$4" #multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1, inclu
 arg_exc="$5" #excited states range
 #atmcore="$6" #atom type from the core space (C, N, S)
 
-# cleaning transition states file by a defined range of excited states
-if (($arg_exc=="none")); then
-	
-	# copying all the excited states (default: none)
-        sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
-else
-	# copying a range of excited states specified in $arg_exc
-	ex_ini="$(echo $arg_exc | cut -d'-' -f1)" # initial excited state
-	ex_fin="$(echo $arg_exc | cut -d'-' -f2)" # final excited state
+# Two different procedures to read excited states
+if (( $opt_soc==0 ));then
+        
+	# no SOC option (only low multiplicity)
+	# cleaning transition states file by a defined range of excited states
+        if (($arg_exc=="none")); then
+        	
+        	# copying all the excited states (default: none)
+                sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
+        else
+        	# copying a range of excited states specified in $arg_exc
+        	ex_ini="$(echo $arg_exc | cut -d'-' -f1)" # initial excited state
+        	ex_fin="$(echo $arg_exc | cut -d'-' -f2)" # final excited state
+        
+        	# The command below 'sed -ne "(...)" $out2_file1 > (...)' does: 
+        	# copy excited states list range (sed command) using as variables
+        	# the word 'STATE' combined with (specifically numerical format)
+        	# the excited state number (initial and final)
+        	# this command operates under three conditions:
+                sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+	fi
 
-	# The command below 'sed -ne "(...)" $out2_file1 > (...)' does: 
-	# copy excited states list range (sed command) using as variables
-	# the word 'STATE' combined with (specifically numerical format)
-	# the excited state number (initial and final)
-	# this command operates under three conditions:
-        sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file1 > exc_states.tmp
+else
+
+        # SOC option (both: low and high multiplicity)
+	out2_file13="exc_states3_transitions.out"
+	
+	if (( $arg_exc=="none" )); then
+
+        	# copying all the excited states (default: none)
+                sed -ne '/State 1: /,$ p' $out2_file13 > exc_states3.tmp
+	else
+		# copying (again) a range of excited states specified in $arg_exc
+        	ex_ini="$(echo $arg_exc | cut -d'-' -f1)" # initial excited state
+        	ex_fin="$(echo $arg_exc | cut -d'-' -f2)" # final excited state
 	
 	# In the if statement condition the same command is used over different files
-	if (( $opt_soc==1 )); then
 	#	out2_file12="exc_states2_transitions.out"
 	#	sed -ne "/$(echo STATE $ex_ini | awk '{printf("%s%4d ",$1,$2)}')/,/$(echo STATE $ex_fin | awk '{printf("%s%4d",$1,$2+1)}')/p" $out2_file12 > exc_states2.tmp
 		
-		# SOC option is implicit performed in the higher multiplicity
-		out2_file13="exc_states3_transitions.out"
 		sed -ne "/$(echo State $ex_ini | awk '{printf("%s %d: ",$1,$2)}')/,/$(echo State $ex_fin | awk '{printf("%s %d:",$1,$2+1)}')/p" $out2_file13 > exc_states3.tmp
 	fi
 
@@ -220,4 +236,5 @@ if (( $opt_soc==1 )); then
 
 fi
 
-#two files as output from this script (virt_MO.tmp, trans_st.out)
+# opt_soc = 0: two files as output from this script (virt_MO.tmp, trans_st.out)
+# opt_soc = 1: two files as output from this script (virt_MO.tmp, trans_st3.out)
