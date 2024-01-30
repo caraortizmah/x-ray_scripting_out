@@ -5,8 +5,8 @@
 out_file1="$1" # trans_st.out
 out1_file1="$2" # original ORCA output
 
-opt1="ABSORPTION SPECTRUM VIA TRANSITION ELECTRIC DIPOLE MOMENTS" 
-opt2="ABSORPTION SPECTRUM VIA TRANSITION VELOCITY DIPOLE MOMENTS" 
+opt1="  ABSORPTION SPECTRUM VIA TRANSITION ELECTRIC DIPOLE MOMENTS" 
+opt2="  ABSORPTION SPECTRUM VIA TRANSITION VELOCITY DIPOLE MOMENTS" 
 
 # Cleaning transition states file
 sed -ne "/$opt1/,/^$/p" $out1_file1 > exc_fosc_electronic_dm.tmp
