@@ -97,35 +97,48 @@ out1_step5="resB_mo.out" # resA_MOcore.out comes from step3.sh
 out1_step7="resB_collapsedMO.out"
 ./step7.sh $out1_step4 $out1_step7
 
-out2_step4="trans_st.out"
-./step8.sh $out2_step4 $exc_range $opt_soc
 
-# Additional step only for higher multiplicity in SOC evaluation
-if (( $opt_soc==1 )); then
-	mv corevirtMO_matrix.out corevirtMO_matrix0.out
-	mv corevirtMO_matrix_ts_probability.out corevirtMO_matrix_ts_probability0.out
-	mv corevirtMO_matrix.csv corevirtMO_matrix0.csv
-	mv corevirtMO_matrix_ts_probability.csv corevirtMO_matrix_ts_probability0.csv
-        out2_step4="trans1_st.out"
-        ./step8.sh $out2_step4 $exc_range $opt_soc
-	mv corevirtMO_matrix.out corevirtMO_matrix1.out
-	mv corevirtMO_matrix_ts_probability.out corevirtMO_matrix_ts_probability1.out
-	mv corevirtMO_matrix.csv corevirtMO_matrix1.csv
-	mv corevirtMO_matrix_ts_probability.csv corevirtMO_matrix_ts_probability1.csv
+# Conditional step only for SOC option
+if (( $opt_soc!=1 )); then
+
+        out2_step4="trans_st.out"
+        ./step8.sh $out2_step4 $exc_range 0 # no soc option by default
+
+        # Original step9 version which only works with 
+        # velocity and electric dipole moment spectrum
+        
+        ./step9.sh $out2_step4 $out_file
+
+else
+	# soc option: both multiplicities considered
+        
+	for ii in 0 1 # repeating same process for multiplicity 0 and 1
+	do
+		out2_step4="trans${ii}_st.out"
+                ./step8.sh $out2_step4 $exc_range $opt_soc
+	        mv corevirtMO_matrix.out corevirtMO_matrix${ii}.out
+	        mv corevirtMO_matrix_ts_probability.out corevirtMO_matrix_ts_probability${ii}.out
+	        mv corevirtMO_matrix.csv corevirtMO_matrix${ii}.csv
+	        mv corevirtMO_matrix_ts_probability.csv corevirtMO_matrix_ts_probability${ii}.csv
+	
+	        # Additional step to differentiate which 9th step to perform
+                if (( $spectra==0 )); then
+                	# Updated step9 version which only works with corrected spectra version
+                        ./step9_soc.sh $out2_step4 $out_file $opt_soc
+                fi
+                mv corevirt_fosc_corr_matrix.csv corevirt_fosc_corr_matrix${ii}.csv
+                mv corevirt_foscw_corr_matrix.csv corevirt_foscw_corr_matrix${ii}.csv
+	done
+	#mv corevirtMO_matrix.out corevirtMO_matrix0.out
+	#mv corevirtMO_matrix_ts_probability.out corevirtMO_matrix_ts_probability0.out
+	#mv corevirtMO_matrix.csv corevirtMO_matrix0.csv
+	#mv corevirtMO_matrix_ts_probability.csv corevirtMO_matrix_ts_probability0.csv
+        
 fi
 
-# Original step9 version which only works with 
-# velocity and electric dipole moment spectrum
+# END PROGRAM
 
-out2_step4="trans_st.out"
-./step9.sh $out2_step4 $out_file
-
-# Additional step to differentiate which 9th step to perform
-if (( $spectra==0 )); then
-	# Updated step9 version which only works with corrected spectra version
-	out2_step4="trans1_st.out"
-        ./step9_soc.sh $out2_step4 $out_file $opt_soc
-fi
+# Organizing outputs to be read in the next post processing step
 
 mkdir -p ${out_file}_out
 mv *.out ${out_file}_out/
@@ -141,19 +154,26 @@ sufff=$exc_range
 
 cp ${out_file}_out/resA_MOcore.csv pop_matrices/${folder2}/resA_MOcore_${pop_name}_${sufff}.csv
 cp ${out_file}_out/resB_MOcore.csv pop_matrices/${folder2}/resB_MOvirt_${pop_name}_${sufff}.csv
-for ii in 0 1
-do
-	cp ${out_file}_out/corevirtMO_matrix${ii}.csv pop_matrices/${folder2}/corevirtMO_matrix${ii}_${pop_name}_${sufff}.csv
-        cp ${out_file}_out/corevirtMO_matrix_ts_probability${ii}.csv pop_matrices/${folder2}/corevirtMO_matrix${ii}_tspb_${pop_name}_${sufff}.csv
-done
 
-# Additional step only for the SOC evaluation
-if (( $opt_soc==0 )); then
-	cp ${out_file}_out/corevirt_fosc_corr_matrix1.csv pop_matrices/${folder2}/corevirt_fosc1_corr_${pop_name}_${sufff}.csv
-	cp ${out_file}_out/corevirt_foscw_corr_matrix1.csv pop_matrices/${folder2}/corevirt_foscw1_corr_${pop_name}_${sufff}.csv
+if (( $opt_soc!=1 )); then
+
+	cp ${out_file}_out/corevirtMO_matrix.csv pop_matrices/${folder2}/corevirtMO_matrix_${pop_name}_${sufff}.csv
+        cp ${out_file}_out/corevirtMO_matrix_ts_probability.csv pop_matrices/${folder2}/corevirtMO_matrix_tspb_${pop_name}_${sufff}.csv
+	cp ${out_file}_out/corevirt_fosc_e_matrix.csv pop_matrices/${folder2}/corevirt_fosc_${pop_name}_${sufff}.csv
+	cp ${out_file}_out/corevirt_fosc_we_matrix.csv pop_matrices/${folder2}/corevirt_foscw_${pop_name}_${sufff}.csv
+
 else
-	cp ${out_file}_out/corevirt_fosc_e_matrix0.csv pop_matrices/${folder2}/corevirt_fosc0_${pop_name}_${sufff}.csv
-	cp ${out_file}_out/corevirt_fosc_we_matrix0.csv pop_matrices/${folder2}/corevirt_foscw0_${pop_name}_${sufff}.csv
+	
+	for ii in 0 1
+	do
+		cp ${out_file}_out/corevirtMO_matrix${ii}.csv pop_matrices/${folder2}/corevirtMO_matrix${ii}_${pop_name}_${sufff}.csv
+                cp ${out_file}_out/corevirtMO_matrix_ts_probability${ii}.csv pop_matrices/${folder2}/corevirtMO_matrix${ii}_tspb_${pop_name}_${sufff}.csv
+
+		# Additional step only for the SOC evaluation
+		cp ${out_file}_out/corevirt_fosc_corr_matrix${ii}.csv pop_matrices/${folder2}/corevirt_fosc${ii}_corr_${pop_name}_${sufff}.csv
+	        cp ${out_file}_out/corevirt_foscw_corr_matrix${ii}.csv pop_matrices/${folder2}/corevirt_foscw${ii}_corr_${pop_name}_${sufff}.csv
+	done
+
 fi
 
 
