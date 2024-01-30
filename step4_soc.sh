@@ -5,13 +5,13 @@
 #  when the output includes SOC. This script redoes the list for the
 #  following steps
 
-out4_file3="$1" # excited states output from step4.sh (trans_st3.tmp)
+out4_file3="$1" # excited states output from step4.sh (trans_st3.out)
 out1_file1="$2" # excited states output from step1.sh (exc_states_transitions.out)
 out1_file2="$3" # excited states output from step1.sh (exc_states2_transitions.out)
 out1_file3="$4" # excited states list from step1.sh (exc_energies_list.out)
 
 # Listing the line after finding the word "State " in trans_st3.tmp
-# The file trans_st3.tmp has, as format, for each state a subsequent line
+# The file trans_st3.out has, as format, for each state a subsequent line
 #  having weight, root number and multiplicity type.
 grep -n "State " $out4_file3 | cut -d':' -f1 | awk '{print $0+1}' >  tmp.tmp.tmp
 
@@ -34,7 +34,13 @@ do
       if (( $target_mult==0 )); then
 	      echo "$(sed -n "/ ${energy}cm/,/^$/p" $out1_file1)" \
 		      > exc_states_soc0.tmp # exc_states_soc.tmp
-	      cp exc_states_soc0.tmp exc_states_soc0_transitions.out
+
+	      # Adding the target weight to each pair MO coupling and
+              # the target root that will used in step9_soc.sh
+              awk -v x=$target_weight -v y=$target_root \
+        	      'NF!=0{if ($1!="STATE"){print $0, x}else{print $0, y}}'\
+        	      exc_states_soc0.tmp >> exc_states_soc0_transitions.out
+
       elif (( $target_mult==1 )); then
 	      #sed -ne "/ ${energy}cm**-1 /,/^$/p" ${out1_file2} \
 	      sed -n "/ ${energy}cm/,/^$/p" $out1_file2 \
@@ -118,8 +124,8 @@ done
 
 cat virt_MO.tmp1 | sort -nu | uniq > virt_MO.tmp
 
-mv trans0_st.out trans_st.out
-mv exc_states_soc0_transitions.out exc_states_soc_transitions.out
+#mv trans0_st.out trans_st.out
+#mv exc_states_soc0_transitions.out exc_states_soc_transitions.out
 
 rm -rf virt_MO.tmp1
 
