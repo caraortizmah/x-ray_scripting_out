@@ -14,7 +14,7 @@ if (( $opt_soc == 1)); then
 	echo "STATE(root) coreMO->virtMO trans_probability ampt_coeff. fosc_soc_(D2+m2+Q2)" > temp_states_ts.tmp
 else
 	# S'=S
-	opt1="COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)"
+	opt1="  COMBINED ELECTRIC DIPOLE + MAGNETIC DIPOLE + ELECTRIC QUADRUPOLE SPECTRUM (origin adjusted)"
         # Creating heads of temp_states_ts.tmp
 	echo "STATE(root) coreMO->virtMO trans_probability ampt_coeff. fosc_(D2+m2+Q2)" > temp_states_ts.tmp
 fi
@@ -105,12 +105,12 @@ do
 done
 
 mv exc_fosc_corrected.tmp exc_fosc_corrected.out
-mv corevirt_fosc_corr_matrix.tmp corevirt_fosc_corr_matrix1.out
-mv corevirt_foscw_corr_matrix.tmp corevirt_foscw_corr_matrix1.out
+mv corevirt_fosc_corr_matrix.tmp corevirt_fosc_corr_matrix.out
+mv corevirt_foscw_corr_matrix.tmp corevirt_foscw_corr_matrix.out
 mv temp_states_ts.tmp states_corevirtMO_fosc_table.out
 
-sed -r 's/\s+/,/g' corevirt_fosc_corr_matrix1.out > corevirt_fosc_corr_matrix1.csv
-sed -r 's/\s+/,/g' corevirt_foscw_corr_matrix1.out > corevirt_foscw_corr_matrix1.csv
+sed -r 's/\s+/,/g' corevirt_fosc_corr_matrix.out > corevirt_fosc_corr_matrix.csv
+sed -r 's/\s+/,/g' corevirt_foscw_corr_matrix.out > corevirt_foscw_corr_matrix.csv
 
 #seven files as outputs from this script:
 # (exc_fosc_elecdm.out, exc_fosc_veldm.out, corevirt_fosc_e_matrix.out, corevirt_fosc_v_matrix.out,
