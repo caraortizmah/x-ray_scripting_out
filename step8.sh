@@ -49,7 +49,7 @@ do
 			# Average
 			#ts_p="$(echo $list_ts_p | awk -v x=0 -v y=$ts_num '{while (c++<=NR) x=x+$c; print x/y}')"
 			# Weighted average
-			ts_p="$(echo $list_ts_p | awk -v x=0 -v y=0 '{while (c++<=NF){ x=x+($c*$c); y=y+$c}; if(y==0){print y}else{print x/y}}')"
+			ts_p="$(echo $list_ts_p | awk -v x=0 -v y=0 '{while (c++<=NF){ x=x+($c*$c); y=y+$c}; print x/y}')"
 		else
 			ts_p=0
 		fi
@@ -69,8 +69,14 @@ sed -r 's/\s+/,/g' corevirtMO_matrix.out > corevirtMO_matrix.csv
 sed -r 's/\s+/,/g' corevirtMO_matrix_ts_probability.out > corevirtMO_matrix_ts_probability.csv
 
 rm exc_states.tmp2
-head -n -1 exc_states.tmp > test2
-mv test2 exc_states.tmp
+
+if (( $opt_soc!=1 )); then
+	head -n -1 exc_states.tmp > test2
+	mv test2 exc_states.tmp
+else
+	head -n -1 exc_states3.tmp > test2
+	mv test2 exc_states3.tmp
+fi
 
 # Four files as outputs from this script (corevirtMO_matrix.out, corevirtMO_matrix_ts_probability.out,
 #  corevirtMO_matrix.csv, corevirtMO_matrix_ts_probability.csv)
