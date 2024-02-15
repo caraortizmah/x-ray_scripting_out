@@ -149,7 +149,7 @@ suff=".out"
 pop_name=${out_file/%$suff}
 
 mkdir -p pop_matrices
-folder2="FY_rocisdft/"
+folder2="RWG4MG3_SOC_rocisdft/"
 sufff=$exc_range
 
 cp ${out_file}_out/resA_MOcore.csv pop_matrices/${folder2}/resA_MOcore_${pop_name}_${sufff}.csv
