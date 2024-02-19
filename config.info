@@ -1,0 +1,20 @@
+-----------------------------------------------------
+|  Configuration input file for the pipeline        |
+|Do not modify any NAME or FLAG in the section below|
+-----------------------------------------------------
+NAME                     FLAG
+-------------------------------
+Atom_number_range_A    = 0-46
+Atom_number_range_B    = 0-46
+core_MO_range          = 7-24
+exc_state_range        = 1-17
+soc_option             = 0
+orca_output            = orca.out
+-------------------------------
+Optional flags
+-------------------------------
+spectra_option         = 0
+external_MO_file       = 
+atm_core               = C
+wave_f_type            = s
+-------------------------------
