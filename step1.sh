@@ -32,6 +32,9 @@ else # $opt_soc==1
 
 	awk -v x=$exc_ini -v y=$exc_fin 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states_transitions.out
 	awk -v x=$exc_ini2 -v y=$exc_fin2 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states2_transitions.out
+	
+	head -n -3 exc_states_transitions.out > trans_tmp
+	mv trans_tmp exc_states_transitions.out
 #bonus: spin-orbit coupling (SOC)
 	exc_ini3="$(grep -n "Eigenvectors of SOC calculation:" $out_file | cut -d':' -f1)"
 	exc_fin3="$(grep -n "Excitation energies (after SOC)" $out_file | cut -d':' -f1)"
@@ -39,6 +42,9 @@ else # $opt_soc==1
 	exc_fin4="$(grep -n "ROCIS-EXCITATION SPECTRA" $out_file | awk '{if(FNR==1) print $0}' | cut -d':' -f1)"
 	awk -v x=$exc_ini3 -v y=$exc_fin3 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states3_transitions.out
 	awk -v x=$exc_ini4 -v y=$exc_fin4 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_energies_list.out
+	head -n -3 exc_states3_transitions.out > trans_tmp
+	mv trans_tmp exc_states3_transitions.out
+
 
 fi
 
