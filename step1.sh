@@ -9,13 +9,12 @@ MO_ini="$1" # first 1s core MO
 MO_fin="$2" # last 1s core MO
 opt_soc="$3" # multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1 including SOC) 
 out_file="$4" # orca output
+ext_file="$5" # external file for MO population (optional)
 
-#extracting information from the output
+#extracting mo population
 
-#extracting excited states
-
-popul_ini="$(grep -n "LOEWDIN REDUCED ORBITAL POPULATIONS PER MO" $out_file | cut -d':' -f1)"
-popul_fin="$(grep -n "MAYER POPULATION ANALYSIS" $out_file | cut -d':' -f1)"
+popul_ini="$(grep -n "LOEWDIN REDUCED ORBITAL POPULATIONS PER MO" $ext_file | cut -d':' -f1)"
+popul_fin="$(grep -n "MAYER POPULATION ANALYSIS" $ext_file | cut -d':' -f1)"
 
 #zero: default option S'=S
 exc_ini="$(grep -n "Eigenvectors of ROCIS calculation:" $out_file | cut -d':' -f1)"
