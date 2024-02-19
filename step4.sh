@@ -12,7 +12,7 @@ if (( $opt_soc==0 ));then
         
 	# no SOC option (only low multiplicity)
 	# cleaning transition states file by a defined range of excited states
-        if (($arg_exc=="none")); then
+        if [[ "$arg_exc" == "none" ]]; then
         	
         	# copying all the excited states (default: none)
                 sed -ne '/STATE   1 /,$ p' $out2_file1 > exc_states.tmp
@@ -34,7 +34,7 @@ else
         # SOC option (both: low and high multiplicity)
 	out2_file13="exc_states3_transitions.out"
 	
-	if (( $arg_exc=="none" )); then
+	if [[ "$arg_exc" == "none" ]]; then
 
         	# copying all the excited states (default: none)
                 sed -ne '/State 1: /,$ p' $out2_file13 > exc_states3.tmp
@@ -75,6 +75,12 @@ echo $uniq_MO | awk -F" " '{for (i=1; i<=NF; i++) print $i}' > mo2_line.tmp
 #####     Default option: S'=S     #####
 
 if (( $opt_soc==0 )); then
+        
+       # This conditional is just in case the pattern is for the last excited state
+       num_sts="$(grep -n "STATE " exc_states.tmp | cut -d':' -f1 | wc -l)"
+       if [[ "$num_sts" == "1" ]]; then
+	       echo "STATE " >> exc_states.tmp
+       fi
 
        # getting position lines having info
        #state_line="$(grep -n "STATE " $out2_file1 | cut -d':' -f1)" 
@@ -163,6 +169,11 @@ if (( $opt_soc==1 )); then
 
         # To overwrite an existing report
 	rm -rf err_report_step4_min.out
+	# This conditional is just in case the pattern is for the last excited state
+	num_sts="$(grep -n "State " exc_states3.tmp | cut -d':' -f1 | wc -l)"
+	if [[ "$num_sts" == "1" ]]; then 
+		echo "State " >> exc_states3.tmp
+	fi
 	# Commands explanation in the first case
 	#  same commands and order such as previous case
 	#  but for the SOC case
