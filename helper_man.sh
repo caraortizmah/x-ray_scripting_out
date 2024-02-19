@@ -38,10 +38,12 @@ if [[ -z "$A_ini" || -z "$A_fin" || -z "$B_ini" || -z "$B_fin" || \
 	exit 1
 fi
 
-# Executing manager.sh
-#./manager ${A_ini} ${A_fin} ${B_ini} ${B_fin} ${MO_ini} ${MO_fin} ${opt_soc} \
-#	${out_file} ${exc_range} ${spectra} ${atm_core} ${wavef} ${ext_file}
-
-echo "./manager "$A_ini" "$A_fin" "$B_ini" "$B_fin" "$MO_ini" "$MO_fin" "$opt_soc" "\
+echo "Running manager.sh as: "
+echo "./manager.sh "$A_ini" "$A_fin" "$B_ini" "$B_fin" "$MO_ini" "$MO_fin" "$opt_soc" "\
 	$out_file" "$exc_range" "$spectra" "$atm_core" "$wavef" "$ext_file
+
+# Executing manager.sh
+./manager.sh ${A_ini} ${A_fin} ${B_ini} ${B_fin} ${MO_ini} ${MO_fin} ${opt_soc} \
+	${out_file} ${exc_range} ${spectra} ${atm_core} ${wavef} ${ext_file}
+
 exit 0
