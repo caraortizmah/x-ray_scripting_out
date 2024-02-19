@@ -34,7 +34,7 @@ do
       if (( $target_mult==0 )); then
 	      echo "$(sed -n "/ ${energy}cm/,/^$/p" $out1_file1)" \
 		      > exc_states_soc0.tmp # exc_states_soc.tmp
-
+	      
 	      # Adding the target weight to each pair MO coupling and
               # the target root that will used in step9_soc.sh
               awk -v x=$target_weight -v y=$target_root \
@@ -70,55 +70,61 @@ rm -rf virt_MO.tmp trans_st.tmp trans1_st.tmp
 
 for ii in 0 1 # repeating same process for multiplicity 0 and 1
 do
-      cp exc_states_soc${ii}_transitions.out exc_states_soc${ii}_tr.tmp
-      echo "STATE " >> exc_states_soc${ii}_tr.tmp
+      if [[ -f "exc_states_soc${ii}_transitions.out" ]]; then
+	   # It can be the case when excited state does not have one of the
+	   # multiplicities
+	   cp exc_states_soc${ii}_transitions.out exc_states_soc${ii}_tr.tmp
+           echo "STATE " >> exc_states_soc${ii}_tr.tmp
       
-      ### copied code from step4.sh ###
-      
-      # getting position lines having info
-      state_line="$(grep -n "STATE " exc_states_soc${ii}_tr.tmp | cut -d':' -f1)" 
-      
-      # the previous list (state_line) now is organized by tuples
-      # where the first position of the tuple is the initial linenumber of the 
-      # excited-state-list section and the second position of the tuple is the 
-      # last linenumber of that excited-state-list section
-      echo $state_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state3_line.tmp  
-            
-      # for each excited-state-position-line in list, do:
-      while read -r line
-      do
-            row="$(echo $line | awk '{print $1}')" # position line of excited state 
-            row2="$(echo $line | awk '{print $2}')" # final position
-            
-            # getting the information of that line ($row) to use as head
-            head_state="$(sed -n "${row}p" exc_states_soc${ii}_tr.tmp)"
-            row1=$(($row+1)) # initial position
-      
-            # creating a temporary file with a specific range linenumber
-            echo "$(sed -n ''"$row1"','"$row2"'p' exc_states_soc${ii}_tr.tmp)" > state_tmp.tmp
-            # idea: to find a way of "read-in-line" this previous sed command in the
-            # following awk command to be faster running
-      
-            # Looking elements from the unique column of file1 in the first column of
-            # the file2.
-            # file1 is the list of core MOs (mo2_line.tmp) and file2 is the excited-
-            # state information with their MO coupling (state_tmp.tmp) using the
-            # format '->' to separate MOs. Then, separator used here is '-' and the
-            # conditional statement has the two elements from the both columns with a
-            # trivial sum of zero in order to ensure the nummerical comparison and not
-            # the string comparison, e.g. 19 == 9 can be true if both elements are strings 
-            awk -v x="$head_state" -F'[-]' 'NR==FNR{a[$0]=1; next} {for(i in a) if($1+0 == i+0){printf "%s\n%s\n",x,$0}}' mo2_line.tmp state_tmp.tmp >> trans${ii}_st.tmp
-      
-      done < state3_line.tmp
-      
-      rm -rf exc_states_soc${ii}_tr.tmp
+           ### copied code from step4.sh ###
+           
+           # getting position lines having info
+           state_line="$(grep -n "STATE " exc_states_soc${ii}_tr.tmp | cut -d':' -f1)" 
+           
+           # the previous list (state_line) now is organized by tuples
+           # where the first position of the tuple is the initial linenumber of the 
+           # excited-state-list section and the second position of the tuple is the 
+           # last linenumber of that excited-state-list section
+           echo $state_line | awk -F" " '{for (i=1; i<NF; i++) print $i,$(i+1)-1}' > state3_line.tmp  
+                 
+           # for each excited-state-position-line in list, do:
+           while read -r line
+           do
+                 row="$(echo $line | awk '{print $1}')" # position line of excited state 
+                 row2="$(echo $line | awk '{print $2}')" # final position
+                 
+                 # getting the information of that line ($row) to use as head
+                 head_state="$(sed -n "${row}p" exc_states_soc${ii}_tr.tmp)"
+                 row1=$(($row+1)) # initial position
+           
+                 # creating a temporary file with a specific range linenumber
+                 echo "$(sed -n ''"$row1"','"$row2"'p' exc_states_soc${ii}_tr.tmp)" > state_tmp.tmp
+                 # idea: to find a way of "read-in-line" this previous sed command in the
+                 # following awk command to be faster running
+           
+                 # Looking elements from the unique column of file1 in the first column of
+                 # the file2.
+                 # file1 is the list of core MOs (mo2_line.tmp) and file2 is the excited-
+                 # state information with their MO coupling (state_tmp.tmp) using the
+                 # format '->' to separate MOs. Then, separator used here is '-' and the
+                 # conditional statement has the two elements from the both columns with a
+                 # trivial sum of zero in order to ensure the nummerical comparison and not
+                 # the string comparison, e.g. 19 == 9 can be true if both elements are strings 
+                 awk -v x="$head_state" -F'[-]' 'NR==FNR{a[$0]=1; next} {for(i in a) if($1+0 == i+0){printf "%s\n%s\n",x,$0}}' mo2_line.tmp state_tmp.tmp >> trans${ii}_st.tmp
+           
+           done < state3_line.tmp
+           
+           rm -rf exc_states_soc${ii}_tr.tmp
 
-      # Exctracting from trans_st.tmp file the virtual MOs, ordering them numerically
-      #  and listing it in a file
-      sed -n "/->/p" trans${ii}_st.tmp | cut -d'>' -f2 | cut -d' ' -f1 >> virt_MO.tmp1
+           # Exctracting from trans_st.tmp file the virtual MOs, ordering them numerically
+           #  and listing it in a file
+           sed -n "/->/p" trans${ii}_st.tmp | cut -d'>' -f2 | cut -d' ' -f1 >> virt_MO.tmp1
 
-      # Rewriting trans_st.out now with the information at the end of the SOC evaluation
-      mv trans${ii}_st.tmp trans${ii}_st.out
+           # Rewriting trans_st.out now with the information at the end of the SOC evaluation
+           mv trans${ii}_st.tmp trans${ii}_st.out
+      else
+	   echo "Multiplicity "${ii}" is not involved in this set of excited states"
+      fi
 
 done
 
