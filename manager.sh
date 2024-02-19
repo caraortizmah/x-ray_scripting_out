@@ -51,6 +51,14 @@ else
     fi
 fi
 
+# Lecture of Loewdin MO population as external file:
+# 
+if [[ ! -n ${13} ]]; then
+    ext_file="${out_file}" #default option same out_file
+else
+    ext_file="${13}" # new file only for Loewdin population
+fi
+
 # Defining zero as default option: S'=S
 if (( $opt_soc!=1 )); then
 	opt_soc=$((0))
@@ -58,7 +66,7 @@ fi
 
 # Extracting information from the output
 
-./step1.sh $MO_ini $MO_fin $opt_soc $out_file #obtaining excited states and 1s core MOs
+./step1.sh $MO_ini $MO_fin $opt_soc $out_file $ext_file #obtaining excited states and 1s core MOs
 
 out1_step1="popul_mo.out" #popul_mo.out comes from step1.sh
 #./step2.sh $A_ini $A_fin $MO_ini $MO_fin $out1_step1 #obtaining core MOs from residue A 
