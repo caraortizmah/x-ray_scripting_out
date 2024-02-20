@@ -11,11 +11,6 @@ opt_soc="$3" # multiplicity and SOC option, default is 0 (S'=S), 1 (S'=S+1 inclu
 out_file="$4" # orca output
 ext_file="$5" # external file for MO population (optional)
 
-#extracting mo population
-
-popul_ini="$(grep -n "LOEWDIN REDUCED ORBITAL POPULATIONS PER MO" $ext_file | cut -d':' -f1)"
-popul_fin="$(grep -n "MAYER POPULATION ANALYSIS" $ext_file | cut -d':' -f1)"
-
 #zero: default option S'=S
 exc_ini="$(grep -n "Eigenvectors of ROCIS calculation:" $out_file | cut -d':' -f1)"
 
@@ -50,7 +45,10 @@ fi
 
 #extracting loewdin MO population
 
-awk -v x=$popul_ini -v y=$popul_fin 'NR==x, NR==y {printf "%s\n", $0}' $out_file > popul_mo.out
+popul_ini="$(grep -n "LOEWDIN REDUCED ORBITAL POPULATIONS PER MO" $ext_file | cut -d':' -f1)"
+popul_fin="$(grep -n "MAYER POPULATION ANALYSIS" $ext_file | cut -d':' -f1)"
+
+awk -v x=$popul_ini -v y=$popul_fin 'NR==x, NR==y {printf "%s\n", $0}' $ext_file > popul_mo.out
 
 sed -n "/  $MO_ini  /,/  $MO_fin  /p" popul_mo.out > resA_mo.out
 sed -n "/  $MO_fin  /,/^$/p" popul_mo.out >> resA_mo.out
