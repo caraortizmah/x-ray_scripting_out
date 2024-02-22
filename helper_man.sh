@@ -28,6 +28,8 @@ spectra="$(grep "spectra_option" $file | cut -d'=' -f2)"
 ext_file="$(grep "external_MO_file" $file | cut -d'=' -f2)"
 atm_core="$(grep "atm_core" $file | cut -d'=' -f2)"
 wavef="$(grep "wave_f_type" $file | cut -d'=' -f2)"
+input="$(grep "input_path" $file | cut -d'=' -f2)"
+output="$(grep "output_path" $file | cut -d'=' -f2)"
 
 # Checking the existence of the mandatory flags
 if [[ -z "$A_ini" || -z "$A_fin" || -z "$B_ini" || -z "$B_fin" || \
@@ -40,10 +42,12 @@ fi
 
 echo "Running manager.sh as: "
 echo "./manager.sh "$A_ini" "$A_fin" "$B_ini" "$B_fin" "$MO_ini" "$MO_fin" "$opt_soc" "\
-	$out_file" "$exc_range" "$spectra" "$atm_core" "$wavef" "$ext_file
+	$out_file" "$exc_range" "$spectra" "$atm_core" "$wavef" "$ext_file \
+	"$input" "$output"
 
 # Executing manager.sh
 ./manager.sh ${A_ini} ${A_fin} ${B_ini} ${B_fin} ${MO_ini} ${MO_fin} ${opt_soc} \
-	${out_file} ${exc_range} ${spectra} ${atm_core} ${wavef} ${ext_file}
+	${out_file} ${exc_range} ${spectra} ${atm_core} ${wavef} ${ext_file} \
+	${input} ${output}
 
 exit 0
