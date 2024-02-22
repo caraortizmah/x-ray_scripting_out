@@ -59,6 +59,21 @@ else
     ext_file="${13}" # new file only for Loewdin population
 fi
 
+# Lecture of input file path (ORCA(s) output(s))
+# 
+if [[ ! -n ${14} ]]; then
+    echo "Reading excited-state results from "${out_file}" and "
+    echo "reading Loewdin molecular orbital population from "${ext_file}
+    echo " in the same pipeline path"
+else
+    input_path="${14}" # new directory path
+    echo "Reading excited-state results from "${out_file}" and "
+    echo "reading Loewdin molecular orbital population from "${ext_file}
+    echo " in the following path: "${input_path}
+    cp ${input_path}/${out_file} .
+    cp ${input_path}/${ext_file} .
+fi
+
 # Defining zero as default option: S'=S
 if (( $opt_soc!=1 )); then
 	opt_soc=$((0))
@@ -161,7 +176,8 @@ suff=".out"
 pop_name=${out_file/%$suff}
 
 mkdir -p pop_matrices
-folder2="RWG4MG3_SOC_rocisdft/"
+folder2=${out_file}"_csv"
+mkdir -p pop_matrices/${folder2}
 sufff=$exc_range
 
 cp ${out_file}_out/resA_MOcore.csv pop_matrices/${folder2}/resA_MOcore_${pop_name}_${sufff}.csv
@@ -188,4 +204,16 @@ else
 
 fi
 
+# Lecture of output file path (Pipeline results)
+# 
+if [[ ! -n ${15} ]]; then
+    echo "The total of the results are in the folder "${out_file}"_out/ in the same pipeline path" 
+    echo "A reduced version of the result for jupyter-notebook reading are in the folder pop_matrices in the same pipeline path"
+else
+    output_path="${15}" # new directory path
+    echo "Moving results to "$output_path
+    mv ${out_file}_out $output_path/
+    mkdir -p $output_path/pop_matrices
+    mv pop_matrices/${folder2} $output_path/pop_matrices/
+fi
 
