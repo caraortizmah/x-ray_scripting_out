@@ -208,12 +208,26 @@ fi
 # 
 if [[ ! -n ${15} ]]; then
     echo "The total of the results are in the folder "${out_file}"_out/ in the same pipeline path" 
-    echo "A reduced version of the result for jupyter-notebook reading are in the folder pop_matrices in the same pipeline path"
+    echo "A reduced version of the results for jupyter-notebook analysis are in the folder pop_matrices in the same pipeline path"
 else
     output_path="${15}" # new directory path
-    echo "Moving results to "$output_path
-    mv ${out_file}_out $output_path/
+    if [[ -d "$output_path/${out_file}_out/" ]]; then
+        echo "Avoiding replacement files: Raw results will remain in " ${PWD}
+        echo "Due to the fact that the path "$output_path/${out_file}"_out/ already exists"
+        #mv ${out_file}_out/*.* $output_path/${out_file}_out/
+    else
+        echo "Moving results to "$output_path
+        mv ${out_file}_out $output_path/
+    fi
+
+    echo "A reduced version of the results for jupyter-notebook analysis are in the folder pop_matrices in the path:"
+    echo $output_path"/pop_matrices/"${folder2}"/"
     mkdir -p $output_path/pop_matrices
-    mv pop_matrices/${folder2} $output_path/pop_matrices/
+    if [[ -d "$output_path/pop_matrices/${folder2}" ]]; then
+        mv pop_matrices/${folder2}/*.* $output_path/pop_matrices/${folder2}/
+    else
+        mv pop_matrices/${folder2} $output_path/pop_matrices/
+    fi
 fi
 
+echo "Pipeline run terminated"
