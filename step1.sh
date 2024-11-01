@@ -15,7 +15,7 @@ ext_file="$5" # external file for MO population (optional)
 exc_ini="$(grep -n "Eigenvectors of ROCIS calculation:" $out_file | cut -d':' -f1)"
 
 if (( $opt_soc==0 )); then
-	exc_fin="$(grep -n "Calculating transition densities   ...Done" $out_file | cut -d':' -f1)"
+	exc_fin="$(grep -n "Calculating transition densities" $out_file | cut -d':' -f1)"
         
 	awk -v x=$exc_ini -v y=$exc_fin 'NR==x, NR==y {printf "%s\n", $0}' $out_file > exc_states_transitions.out
 #one: higher multiplicity S'=S+1	
