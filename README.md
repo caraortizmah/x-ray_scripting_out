@@ -61,7 +61,7 @@ The **NAME** column describes the parameter, option, or condition, while the **F
 
 Please **do not** alter the file format, such as lines, dashes, or naming conventions. Additionally, **do not** modify any NAME or FLAG entries.  
 
-##### Details About the 'FLAG's
+##### General overview of the 'FLAG's
 
 The following parameters are **MANDATORY**:
 - `Atom_number_range_A`
@@ -79,11 +79,35 @@ The following parameters are **OPTIONAL**:
 - `input_path`
 - `output_path`
 
-##### General overview
+##### Description of the 'FLAG's
 
+- **`Atom_number_range_A`** and **`Atom_number_range_B`**: Specify the range of atom sequential numbers in the coordinates used in the XAS ORCA output file (`orca_output`). Note that the enumeration starts from 0 for the first atom.  
+- **`core_MO_range`**: Defines the range of core molecular orbitals (MOs) for the target atom, e.g., C. To study specific core MOs, such as 4 and 15, run the pipeline separately for each, setting `core_MO_range = 4-4` for one and `core_MO_range = 15` for the other. If `core_MO_range = 4-15` is specified, the program processes the entire sequential range, following the same logic as the atom number range flags (`Atom_number_range_A` and `Atom_number_range_B`).
+- **`exc_state_range`**: Specifies the range of excited states to analyze, based on those computed in `orca_output`. It follows the same format as `core_MO_range`, `Atom_number_range_B` and `Atom_number_range_A`.  
+- **`soc_option`**: Accepts 0 or 1, where 0 excludes spin-orbit coupling effects, and 1 includes them (e.g., for sulfur L-edge analysis).  
+- **`orca_output`**: Refers to the XAS ORCA output file, compatible with ORCA versions 4 and 5.0.4. Note that ORCA 6.0 introduces a **substantially** different output format, which will be supported in a future update.  
 
+- **`spectra_option`** (optional): Accepts 0 or 1. Default is 0 (recommended). Option 1 allows advanced analysis (beta), particularly for `soc_option = 1`, though 0 is still advised unless further testing is conducted.  
+- **`external_MO_file`** (optional): An ORCA file containing L&ouml;wdin population data. Ensure that the ORCA input includes the flag `!Normalprint` to output L&ouml;wdin populations. This flag allows workflow separation from the `orca_output` file. Read more about [ORCA input](https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis).
+- **`atm_core`** (optional): Atomic symbol of the target atom, e.g., C, O, N, P, S. Default is C.  
+- **`wave_f_type`** (optional): Specifies the type of core MO, such as `s` or `p`. Default is `s`.  
+- **`input_path`** (optional): Absolute path to the directory containing ORCA output files (inputs for the pipeline).  
+- **`output_path`** (optional): Absolute path to the directory where the pipeline will save results (outputs).  
 
-##### Details About the 'NAMES's
+##### Assumptions
+
+- The file **`config.info`** must retain the name `config.info`.  :) 
+- Sequential ranges (`Atom_number_range_A`, `Atom_number_range_B`, `core_MO_range`, and `exc_state_range`) should be specified with numbers joined by a dash (`-`) without spaces (e.g., `4-15`).  
+- To analyze the full set of computed excited states, replace the range with the word `none` (without quotes).  
+- **`soc_option`** defaults to 0. It is recommended to explicitly set all FLAG values, even default ones like 0.  
+- **`spectra_option`** defaults to 0.  
+- **`external_MO_file`** can be left empty, in which case the pipeline assumes that L&ouml;wdin populations are included in the `orca_output`.  
+- **`atm_core`** defaults to C.  
+- **`wave_f_type`** defaults to `s`.  
+It is highly recommended to use absolute paths for `input_path` and `output_path`.
+- If `input_path` is not provided, the pipeline will attempt to use its current execution location to find the `orca_output` and `external_MO_file` (if applicable).
+- If `output_path` is not specified, the pipeline will place the results in its execution location.
+The results will be saved in the `output_path` under a newly created folder named "`orca_output`_out" (e.g., `output_path`/`orca_output`_out/). A reduced version for subsequent analysis will be placed in a new directory: `output_path`/pop_matrices/`orca_output`_csv/.
 
 </details>
  
