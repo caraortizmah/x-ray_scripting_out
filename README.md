@@ -40,7 +40,57 @@ Clone the `x-ray_scripting_out` repository using Git
 
 ### Run
 
-`manager.sh` is the main script that runs all the scripts following their evident sequential step names. 
+The pipeline can be run in two ways: a simpler, more automated approach using `helper_man.sh`, or a more customizable option with `manager.sh`.  
+
+- **`manager.sh`**: This is the primary script that executes all the pipeline steps in a sequential (noticeable) order, as indicated by their step-specific names.  
+- **`helper_man.sh`**: This provides an easier method by reading the required parameters from a separate file, named `config.info`.  
+
+#### Recommended: Automated Method
+
+Run the following command:
+
+    $ ./helper_man.sh
+
+`helper_man.sh` uses the information in `config.info` to execute `manager.sh`.
+
+<details>
+  <summary>Read further about the config.info file</summary> 
+
+The `config.info` file is self-explanatory, formatted as a two-column table (NAME and FLAG). 
+The **NAME** column describes the parameter, option, or condition, while the **FLAG** column specifies the values that `manager.sh` will directly apply to the ORCA outputs.  
+
+Please **do not** alter the file format, such as lines, dashes, or naming conventions. Additionally, **do not** modify any NAME or FLAG entries.  
+
+##### Details About the 'FLAG's
+
+The following parameters are **MANDATORY**:
+- `Atom_number_range_A`
+- `Atom_number_range_B`
+- `core_MO_range`
+- `exc_state_range`
+- `soc_option`
+- `orca_output`
+
+The following parameters are **OPTIONAL**:
+- `spectra_option`
+- `external_MO_file`
+- `atm_core`
+- `wave_f_type`
+- `input_path`
+- `output_path`
+
+##### General overview
+
+
+
+##### Details About the 'NAMES's
+
+</details>
+ 
+
+#### Automated way (recommended):
+
+
 The way of running is by typing:
 
      $ ./manager.sh $1 $2 $3 $4 $5 $6 $7 $8
