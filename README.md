@@ -1,9 +1,5 @@
 # X-ray absorption computation analysis
 
-[comment]: <> (```)
-[comment]: <> (    Date: 06.07.22)
-[comment]: <> (    Author: Carlos Andrés Ortiz-Mahecha)
-[comment]: <> (```)
 [comment]: <> (****)
 [comment]: <> (First version: 20.03.23)
 [comment]: <> (comment:)
@@ -54,6 +50,7 @@ Run the following command:
 `helper_man.sh` uses the information in `config.info` to execute `manager.sh`.
 
 <details>
+     
   <summary>Read further about the config.info file</summary> 
 
 The `config.info` file is self-explanatory, formatted as a two-column table (NAME and FLAG). 
@@ -81,7 +78,9 @@ The following parameters are **OPTIONAL**:
 
 ##### Description of the 'FLAG's
 
-- **`Atom_number_range_A`** and **`Atom_number_range_B`**: Specify the range of atom sequential numbers in the coordinates used in the XAS ORCA output file (`orca_output`). Note that the enumeration starts from 0 for the first atom.  
+- **`Atom_number_range_A`** and **`Atom_number_range_B`**: Specify the range of atom sequential numbers in the coordinates used in the XAS ORCA output file (`orca_output`). Note that the enumeration starts from 0 for the first atom.
+- **`Atom_number_range_A`**: Atoms of the core space.
+- **`Atom_number_range_A`**: Atoms of the virtual space.  
 - **`core_MO_range`**: Defines the range of core molecular orbitals (MOs) for the target atom, e.g., C. To study specific core MOs, such as 4 and 15, run the pipeline separately for each, setting `core_MO_range = 4-4` for one and `core_MO_range = 15` for the other. If `core_MO_range = 4-15` is specified, the program processes the entire sequential range, following the same logic as the atom number range flags (`Atom_number_range_A` and `Atom_number_range_B`).
 - **`exc_state_range`**: Specifies the range of excited states to analyze, based on those computed in `orca_output`. It follows the same format as `core_MO_range`, `Atom_number_range_B` and `Atom_number_range_A`.  
 - **`soc_option`**: Accepts 0 or 1, where 0 excludes spin-orbit coupling effects, and 1 includes them (e.g., for sulfur L-edge analysis).  
@@ -110,37 +109,110 @@ It is highly recommended to use absolute paths for `input_path` and `output_path
 The results will be saved in the `output_path` under a newly created folder named "`orca_output`_out" (e.g., `output_path`/`orca_output`_out/). A reduced version for subsequent analysis will be placed in a new directory: `output_path`/pop_matrices/`orca_output`_csv/.
 
 </details>
- 
 
-#### Automated way (recommended):
+#### Customizable Method
+
+I recommed to read the information related the `config.info` file.
+To run the pipeline, use the following command:
+
+     $ ./manager.sh $1 $2 $3 $4 $5 $6 $7 $8 $9 $10 $11 $12 $13 $14 $15
+
+Where:
+
+- `$1`: Initial number range of **`Atom_number_range_A`**
+- `$2`: Final number range of **`Atom_number_range_A`**
+- `$3`: Initial number range of **`Atom_number_range_B`**
+- `$4`: Final number range of **`Atom_number_range_B`**
+- `$5`: Initial number range of **`core_MO_range`**
+- `$6`: Final number range of **`core_MO_range`**
+- `$7`: **`soc_option`**
+- `$8`: **`orca_output`**
+- `$9`: **`exc_state_range`**
+- `$10`: **`spectra_option`**
+- `$11`: **`atm_core`**
+- `$12`: **`wave_f_type`**
+- `$13`: **`external_MO_file`**
+- `$14`: **`input_path`**
+- `$15`: **`output_path`**
+
+Please note that you cannot leave any field empty; otherwise, the subsequent field (parameter) will be interpreted as the missing option for the previous one.
+
+[comment]: <> (To be removed, not for now)
+[comment]: <> (`$1` and `$2` 1 are the atom range, initial and final atom, that represents a first molecular region target in the whole protein or peptide calculation )
+[comment]: <> (`$3` and `$4` are the atom range, initial and final, atom that represents a second molecular region target in the whole protein or peptide calculation)
+[comment]: <> (`$5` and `$6` are the core MO range, initial and final MO, corresponding to C 1s in the furute will be adapt to N, O and S)
+[comment]: <> (`$7` is the XAS ORCA output)
+[comment]: <> (`$8` is the excited state range described by two numbers jount by the character '-')   
+    
+
+### Examples:
+
+The provided example of the `config.info` file serves as a template, where only the second column (the flags) should be modified to suit your analysis.  
+
+This example demonstrates an analysis setup for:  
+- XAS for Sulfur (`atm_core = S`) at the L-edge (`wave_f_type = p`) including spin-orbit coupling effects (`soc_option = 1`).  
+- Three p core MOs to analyze: `core_MO_range = 63-65`.  
+- Excited states limited to the first seven (`exc_state_range = 1-7`).  
+- Atoms involved (`0-116`): the entire molecule. Although including all atoms might be unnecessary since not all are sulfur, this approach simplifies the setup by screening everything, even if it seems redundant or overly detailed.  
+
+For `Atom_number_range_A`, include only the enumerated atoms representing Sulfur (core MO space). For `Atom_number_range_B`, include the enumerated atoms of the virtual MO space (it is recommended to include all atoms). This range (0 to 116) represents the entire molecule's interaction.  
+
+More detailed information about running examples can be found in the `example/readme.md` file.  
+
+[comment]: <> (Using as molecule a pair of amino acids: phenylalanine F and tyrosine Y face-to-face separated by 4.0\AA. The F is in the atom range 0 to 22 and Y in the atom range 23 to 46 and the core MOs for C 1s are in the range of 7 to 24. The information presented in matricial form will come from the ouput `FY_output.out` in the excited-state range number of 1 to 17.)
+
+[comment]: <> (     $ ./manager.sh 0 22 23 46 7 24 FY_output.out 1-17)
+
+[comment]: <> (More information about the running in `example/readme.md`)
+
+### Final Comments:
+
+This pipeline primarily utilizes Linux text processing tools:  
+
+- `grep`  
+- `cut`  
+- `awk`  
+- `sed`  
+- `vim`
 
 
-The way of running is by typing:
+### Contributing  
 
-     $ ./manager.sh $1 $2 $3 $4 $5 $6 $7 $8
+Contributions are what make the open-source community such a remarkable space for learning, inspiration, and innovation. Your contributions are highly valued and greatly appreciated!  
+If you have a suggestion to improve this project, feel free to fork the repository and submit a pull request. 
+Alternatively, you can open an issue with the tag "enhancement." And do not forget to give the project a star if you find it helpful—thank you for your support! 
 
-where:
+#### Steps to Contribute  
 
-    `$1` and `$2` are the atom range (initial and final atom) that represents a first molecular region target in the whole protein or peptide calculation
-    `$3` and `$4` are the atom range (initial and final atom) that represents a second molecular region target in the whole protein or peptide calculation
-    `$5` and `$6` are the core MO range (initial and final MO) corresponding to C 1s (in the furute will be adapt to N, O and S)
-    `$7` is the XAS ORCA output
-    `$8` is the excited state range described by two numbers jount by the character '-'
+1. **Fork the Project**  
+2. **Create Your Feature Branch**:   
+   ```bash  
+   git checkout -b feature/branch  
+   ```
+3. **Commit your Changes**:
+   ```bash  
+   git commit -m 'Add some Feature'  
+   ```
+4. **Push to the Branch**:
+   ```bash  
+   git push origin feature/branch 
+   ```
+5. **Open a Pull Request**
 
-### Example:
+#### Top contributors:
 
-Using as molecule a pair of amino acids: phenylalanine (F) and tyrosine (Y) face-to-face separated by 4.0\AA.
-The F is in the atom range 0 to 22 and Y in the atom range 23 to 46 and the core MOs for C 1s are in the range of 7 to 24.
-The information presented in matricial form will come from the ouput `FY_output.out` in the excited-state range number of 1 to 17.
+ [caraortizmah]([https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis](https://github.com/caraortizmah))
 
-     $ ./manager.sh 0 22 23 46 7 24 FY_output.out 1-17
 
-More information about the running in `example/readme.md`
+### License
 
-### Requirements - Linux text processing tool
+Distributed under the GNU General Public License v3.0
 
-* grep
-* cut
-* awk
-* sed
-* vim
+### Contact
+
+<details>
+     
+  <summary>caraortizmah</summary> 
+  
+  **Carlos A. Ortiz-Mahecha** - ortizmahecha[at]proton.me
+</details>
