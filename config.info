@@ -9,14 +9,14 @@ Atom_number_range_B    = 0-116
 core_MO_range          = 63-65
 exc_state_range        = 1-7
 soc_option             = 1
-orca_output            = RWMG7_rocisdft.out
+orca_output            = molecule_rocisdft.out
 -------------------------------
 Optional flags
 -------------------------------
 spectra_option         = 0
-external_MO_file       = RWMG7_SP1.out
+external_MO_file       = molecule_MOs.out
 atm_core               = S
 wave_f_type            = p
-input_path             = /beegfs/desy/group/fsbig/Pipeline_test/input
-output_path            = /beegfs/desy/group/fsbig/Pipeline_test/output
+input_path             = /absolute_path/input
+output_path            = /absolute_path/output
 -------------------------------
