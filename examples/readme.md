@@ -21,7 +21,7 @@ In most cases (though it’s advisable to verify for your specific situation), t
 If the required parameters for analyzing excited states and L&ouml;wdin population data remain consistent across a list of ORCA output files, you can use `overall.sh`. This script automatically executes `manager.sh` for each input file in the list.  
 
 - **Using `overall.sh`**:  
-  Ensure that the list of ORCA output files is not placed in the same directory as the scripts. As with `manager.sh`, no additional files should be present in the folder during execution.  
+  Ensure that the list of ORCA output files is not placed in the same directory as the scripts. As with `manager.sh`, no additional files should be present in the folder during execution. Go to the **Run** section to read more about `overall.sh`.
 
 **Note:**
 It is advisable to review the latest updates to `manager.sh` and `helper_man.sh` and, if necessary, incorporate or modify them in `overall.sh` to suit your specific preferences. 
@@ -32,29 +32,27 @@ Please refer to the updated details about `manager.sh` in the main `README.md` f
 
 ---
 
+**Note:**
+Please refer to the updated information details in the main `README.md` first, as the following information may be outdated.
+
+You can execute the pipeline using one of the following scripts:  
+
+- **Using `manager.sh`**:  
+  Place the ORCA output file in the same folder as the scripts. Ensure that no additional files are present in the directory.  
+
+- **Using `overall.sh`**:  
+  The list of ORCA output files must not be placed in the same folder as the scripts. Similarly, ensure no additional files are present.  
+ 
+- **Using `helper_man.sh`**:  
+  Fill in the required parameters in the `config.info` file, as detailed in the main `README.md`.  
+
+---
+
 ### Prerequisites for Running the Pipeline  
 
-The required input for this pipeline is an XAS output file from ORCA, generated using either `ROCIS/DFT` or `PNO-ROCIS/DFT`.  
+The pipeline requires an XAS output file from ORCA, generated using either `ROCIS/DFT` or `PNO-ROCIS/DFT`.  
 
-An example input file, `AB_4.0A.out`, is provided. This file was generated using `PNO-ROCIS/DFT` and includes the molecular orbital (MO) L&ouml;wdin population data.  
-
-
-
-
-The pipeline is written in Shell script. It is recommendable to run it in linux SO.
-You can run it either using `manager.sh` or `overall.sh`
-
-If you are using `manager.sh`, the ORCA output can be placed in the same folder where all the scripts are placed.
-But no other additional file should be there at the same time.
-
-If you are using `overall.sh`, the list of ORCA outputs cannot be placed in the same folder where all the scripts are placed.
-And no other additional file should be there at the same time.
-
-### Prerequisites to run (inside the ORCA output)
-
-The input required to run this pipeline is a XAS ouput from ORCA using `ROCIS/DFT` or `PNO-ROCIS/DFT`.
-In this case, the input example is `AB_4.0A.out`.
-The `AB_4.0A.out` file was done using `PNO-ROCIS/DFT`, it contains the molecular orbital (MO) L&ouml;wdin population
+An example input file, `AB_4.0A.out`, is provided. This file was created using `PNO-ROCIS/DFT` and includes molecular orbital (MO) L&ouml;wdin population data.
 
 The L&ouml;wdin population looks as follows:
 
@@ -96,9 +94,10 @@ THRESHOLD FOR PRINTING IS 0.1%
 (...)
 ```
 
-In the first group of six MOs are from the core space and the last two (in this example) belong to the virtual space.
+The first six MOs in the group belong to the core space, while the last two (in this example) are from the virtual space.
 
-In `AB_4.0A.out`, the XAS results has the folowing standard format of transitions by excited state with including the list of coupling MOs:
+In `AB_4.0A.out`, the XAS results follow the standard format, including transitions by excited state along with a list of coupling MOs:  
+
 
 ```
 Eigenvectors of ROCIS calculation:
@@ -134,13 +133,16 @@ Calculating transition densities   ...Done
 (...)
 ```
 
-There are more format versions for presenting the excited states and the MO coupling transitions.
-This pipeline just **accepts** the format presented below.
+There are other format versions available for presenting the excited states and MO coupling transitions.  
+This pipeline **only accepts** the format shown below: ORCA 4 and ORCA 5
 
 ### Run
 
-`manager.sh` is the main script that runs all the scripts following their evident sequential step names. 
-The way of running is by typing:
+**Note:**
+Please refer to the updated information details in the main `README.md` first, as the following information may be outdated.
+
+`manager.sh` is the main script that executes all the scripts in order, following their clearly defined sequential step names.  
+To run it, type:  
 
      $ ./manager.sh $1 $2 $3 $4 $5 $6 $7 $8
 
@@ -154,18 +156,16 @@ where:
 
 Examples of this in the following part.
 
-`overall.sh` is another script that you can use to start the pipeline, the only difference is that overall is intended for a list of ORCA outputs.
-So in this case you will repeat the pipeline the same number of times as number of ORCA outputs you present.
+`overall.sh` is another script to run the pipeline, designed for handling a list of ORCA outputs.  
+The pipeline will run once for all the ORCA outputs provided.
 
-The only condition to run using `overall.sh` is to save all the ORCA outputs in another folder.
+The only requirement is to store all ORCA outputs in a separate folder.
 
      $ ./overall.sh $DIR
 
-where:
-     
-     $DIR is the absolute path where the list of ORCA outputs are placed (only ORCA output files!)
+where `$DIR` is the absolute path where the ORCA output files are stored (only ORCA output files!).
 
-### Examples:
+### Example files:
 
 1. `AB_4.0A.out` for S'=S (option `0`)
 2. `AB_4.1A.out` for S'=S+1 and SOC evaluation (option `1`).
