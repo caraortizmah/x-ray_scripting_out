@@ -1,13 +1,45 @@
-# x-ray_scripting_out (Detailed example of use)
+# x-ray_scripting_out
 
-```
-    Date: 06.07.22
-    Author: Carlos Andrés Ortiz-Mahecha
+## Detailed examples
 
-```
+### Additional Recommendations  
+
+It is strongly recommended to read the main `README.md` file before proceeding.  
+
+Similar to `manager.sh` and `helper_man.sh`, the pipeline can also be run using `overall.sh` as an alternative.  
+
+This method is particularly useful when working with a list of ORCA output files that require the same parameters. For instance, this could apply to cases where the same molecule has multiple conformers.  
+
+In most cases (though it’s advisable to verify for your specific situation), the molecular orbitals (MOs) L&ouml;wdin population data is organized consistently across outputs. This consistency allows you to apply the same parameters (e.g., `core_MO_range`) across the list of ORCA outputs.  
+
+**Important Note:**  
+- Each individual ORCA output file in the list **must** include the L&ouml;wdin population calculation.
+- Even with conformational variations of the same molecule, the target excited state (`exc_state_range`) for analysis might vary slightly between outputs.
+
+### Assumptions  
+
+If the required parameters for analyzing excited states and L&ouml;wdin population data remain consistent across a list of ORCA output files, you can use `overall.sh`. This script automatically executes `manager.sh` for each input file in the list.  
+
+- **Using `overall.sh`**:  
+  Ensure that the list of ORCA output files is not placed in the same directory as the scripts. As with `manager.sh`, no additional files should be present in the folder during execution.  
+
+**Note:**
+It is advisable to review the latest updates to `manager.sh` and `helper_man.sh` and, if necessary, incorporate or modify them in `overall.sh` to suit your specific preferences. 
+
+- **Using `manager.sh`**:
+Please refer to the updated details about `manager.sh` in the main `README.md` first, as the following information may be outdated.  
+  Place the ORCA output file in the same directory as the scripts. Ensure that no other additional files are present in the folder during execution.  
+
+---
+
+### Prerequisites for Running the Pipeline  
+
+The required input for this pipeline is an XAS output file from ORCA, generated using either `ROCIS/DFT` or `PNO-ROCIS/DFT`.  
+
+An example input file, `AB_4.0A.out`, is provided. This file was generated using `PNO-ROCIS/DFT` and includes the molecular orbital (MO) L&ouml;wdin population data.  
 
 
-### Usage
+
 
 The pipeline is written in Shell script. It is recommendable to run it in linux SO.
 You can run it either using `manager.sh` or `overall.sh`
@@ -162,3 +194,14 @@ The **only difference** is that calculation includes higher multiplicity and spi
 Due to calculation has two options: `0` for S'=S and `1` S'=S+1 and SOC evaluation.
 I used the same name of file just changing the last number.
 Then: `AB_4.0A.out` of option `0` S'=S and `AB_4.1A.out` of option `1` S'=S+1 and SOC evaluation.
+
+### Contact
+
+For technical support, please reach out via email.
+
+<details>
+     
+  <summary>caraortizmah</summary> 
+  
+  **Carlos A. Ortiz-Mahecha** - ortizmahecha[at]proton.me
+</details>
