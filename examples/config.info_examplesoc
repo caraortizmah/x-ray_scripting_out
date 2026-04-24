@@ -1,0 +1,22 @@
+-----------------------------------------------------
+|  Configuration input file for the pipeline        |
+|Do not modify any NAME or FLAG in the section below|
+-----------------------------------------------------
+NAME                     FLAG
+-------------------------------
+Atom_number_range_A    = 0-46
+Atom_number_range_B    = 0-46
+core_MO_range          = 25-27
+exc_state_range        = 25-799
+soc_option             = 1
+orca_output            = .out
+-------------------------------
+Optional flags
+-------------------------------
+spectra_option         = 0
+external_MO_file       = .out
+atm_core               = S
+wave_f_type            = p
+input_path             = /data/dust/group/fs/big/Big_scale_pairAA/ESCT_bigscale/pairaa_mettrp_datamol/mw_distance_sl_soc/input
+output_path            = /data/dust/group/fs/big/Big_scale_pairAA/ESCT_bigscale/pairaa_mettrp_datamol/mw_distance_sl_soc/output
+-------------------------------
