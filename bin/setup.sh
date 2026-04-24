@@ -18,24 +18,24 @@ chmod +x overall.sh 2>/dev/null || true
 chmod +x step*.sh 2>/dev/null || true
 chmod +x bin/*.sh 2>/dev/null || true
 chmod +x bin/*.py 2>/dev/null || true
-echo "Scripts transformed into executables"
+echo "+ Scripts transformed into executables"
 
 # Create necessary directories
 echo ""
 echo "[2/4] Setting up directory structure..."
 for dir in input output src tests docs; do
     if [ -d "$dir" ]; then
-        echo "$dir directory exists"
+        echo "+ $dir directory exists"
     else
         mkdir -p "$dir"
-        echo "Created $dir directory"
+        echo "+ Created $dir directory"
     fi
 done
 
 # Add .gitkeep files to maintain empty directories
 touch input/.gitkeep 2>/dev/null || true
 touch output/.gitkeep 2>/dev/null || true
-echo "Directory structure ready"
+echo "+ Directory structure ready"
 
 # Copy original shell scripts to src/ if not already there
 echo ""
@@ -44,7 +44,7 @@ SHELL_SCRIPTS=(manager.sh helper_man.sh overall.sh step1.sh step2.sh step3.sh st
 for script in "${SHELL_SCRIPTS[@]}"; do
     if [ -f "$script" ] && [ ! -f "src/$script" ]; then
         cp "$script" "src/$script"
-        echo "Copied $script to src/"
+        echo "+ Copied $script to src/"
     fi
 done
 
@@ -53,17 +53,17 @@ echo ""
 echo "[4/4] Checking Python environment..."
 if command -v python3 &> /dev/null; then
     PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
-    echo "Python $PYTHON_VERSION found"
+    echo "+ Python $PYTHON_VERSION found"
     
     # Check if xray_scripting package is importable
     if python3 -c "import sys; sys.path.insert(0, '.'); from xray_scripting import ConfigManager" 2>/dev/null; then
-        echo "Python package xray_scripting is ready"
+        echo "+ Python package xray_scripting is ready"
     else
-        echo "Warning: Could not import xray_scripting package"
-        echo " Make sure to install dependencies if needed"
+        echo "! Warning: Could not import xray_scripting package"
+        echo "  Make sure to install dependencies if needed"
     fi
 else
-    echo "Python 3 not found - some features will not work"
+    echo "! Python 3 not found - some features will not work"
 fi
 
 echo ""
