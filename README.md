@@ -44,17 +44,6 @@ Choose any of the two versions:
 - run in shell: [docs/quickstart_old.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/quickstart_old.md)
 
 
-### Final Comments:
-
-This pipeline primarily utilizes Linux text processing tools:  
-
-- `grep`  
-- `cut`  
-- `awk`  
-- `sed`  
-- `vim`
-
-
 ### Contributing  
 
 Contributions are what make the open-source community such a remarkable space for learning, inspiration, and innovation. Your contributions are highly valued and greatly appreciated!  
@@ -80,7 +69,7 @@ Alternatively, you can open an issue with the tag "enhancement." And do not forg
 
 #### Top contributors:
 
- [caraortizmah]([https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis](https://github.com/caraortizmah))
+ [External information from ORCA](https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis)
 
 
 ### License
@@ -91,7 +80,7 @@ Distributed under the GNU General Public License v3.0
 
 <details>
      
-  <summary>caraortizmah</summary> 
+  <summary>Author:</summary> 
   
-  **Carlos A. Ortiz-Mahecha** - ortizmahecha[at]proton.me
+  **Carlos A. Ortiz-Mahecha**
 </details>
