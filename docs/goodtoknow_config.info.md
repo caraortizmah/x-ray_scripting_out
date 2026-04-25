@@ -104,8 +104,8 @@ This example demonstrates an analysis setup for:
 
 For `Atom_number_range_A`, include only the enumerated atoms representing Sulfur (core MO space). For `Atom_number_range_B`, include the enumerated atoms of the virtual MO space (it is recommended to include all atoms). This range (0 to 116) represents the entire molecule's interaction.  
 
-More detailed information about running examples can be found in the `example/readme.md` file.  
+## For a deeper (detailed) explanation 
+
+Information about running examples can be found in the [docs/examplesrun.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/examplesrun.md) file.  
 
 [comment]: <> (Using as molecule a pair of amino acids: phenylalanine F and tyrosine Y face-to-face separated by 4.0\AA. The F is in the atom range 0 to 22 and Y in the atom range 23 to 46 and the core MOs for C 1s are in the range of 7 to 24. The information presented in matricial form will come from the ouput `FY_output.out` in the excited-state range number of 1 to 17.)
-
-[comment]: <> (More information about the running in `example/readme.md`)
