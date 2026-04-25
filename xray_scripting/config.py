@@ -141,10 +141,15 @@ class ConfigManager:
             parts = range_str.split('-')
             if len(parts) == 2:
                 try:
+                    if int(parts[0].strip()) > int(parts[1].strip()):
+                        self.errors.append(f"Invalid range: start {parts[0]} is greater than end {parts[1]}")
+                        return None
                     return (int(parts[0].strip()), int(parts[1].strip()))
                 except ValueError:
                     self.errors.append(f"Invalid range format: {range_str}")
                     return None
+                
+                
         
         self.errors.append(f"Invalid range format: {range_str}")
         return None
