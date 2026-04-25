@@ -15,8 +15,17 @@ The updated output format integrates transition intensity from the matrix densit
      1. Number of transition intensities
      2. Transition intensity probability
      3. Force oscillator strenght 
-     
-[comment]: <> (TASK: cite here the paper in the correct equations when get published)
+
+This program has been used, e.g. for the analysis of quantum spectroscopy calculations for charge transfer in aromatic amino acids.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[![charge transfer](https://pubs.rsc.org/en/Image/Get?imageInfo.ImageType=GA&imageInfo.ImageIdentifier.ManuscriptID=D4CP04615C&imageInfo.ImageIdentifier.Year=2025)](https://pubs.rsc.org/en/content/articlelanding/2025/cp/d4cp04615c)
+
+Electron transition decomposition atomic contribution analysis (equation 5 of the [reference](https://pubs.rsc.org/en/content/articlelanding/2025/cp/d4cp04615c)) uses some matrix expressions.  
+Those matrix representations are encoded information from quantum spectroscopy calculations, the data parsing and encoding process prior to the calculation of the analysis (equation 5) is exactly what this repo does :)
+
+__________________________________________
 
 ### Getting Started
 
@@ -27,6 +36,14 @@ To execute the pipeline, you can use either `manager.sh` or `overall.sh`.
 
 The input required to run this pipeline is an XAS output file from ORCA, generated using either `ROCIS/DFT` or `PNO-ROCIS/DFT`. This input file must include the molecular orbital (MO) L&ouml;wdin population and the standard format of the transition intensities and probabilities for each excited state, along with a list of coupling MOs.
 You can specify a localized group of atoms involved in the coupling MO transitions, allowing for focused analysis of transitions between two sets of atoms, such as two amino acids in a protein.
+
+
+## Quick start
+Choose any of the two versions:
+- run in python+shell: [docs/quickstart.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/quickstart.md)
+- run in shell: [docs/quickstart_old.md](https://github.com/caraortizmah/x-ray_scripting_out/readme.md)
+
+
 
 ### Download
 
