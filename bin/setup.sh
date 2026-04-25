@@ -37,7 +37,9 @@ echo "+ Directory structure ready"
 # Copy original shell scripts to src/ if not already there
 echo ""
 echo "[3/4] Organizing shell scripts..."
-SHELL_SCRIPTS=(manager.sh helper_man.sh overall.sh step1.sh step2.sh step3.sh step4.sh step4_soc.sh step5.sh step6.sh step7.sh step8.sh step9.sh step9_soc.sh step10.sh step11.sh)
+SHELL_SCRIPTS=(manager.sh helper_man.sh overall.sh step1.sh step2.sh \
+step3.sh step4.sh step4_soc.sh step5.sh step6.sh step7.sh step8.sh \
+step9.sh step9_soc.sh step10.sh step11.sh)
 for script in "${SHELL_SCRIPTS[@]}"; do
     if [ -f "$script" ] && [ ! -f "src/$script" ]; then
         cp "$script" "src/$script"
