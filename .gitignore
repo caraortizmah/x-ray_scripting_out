@@ -1,14 +1,70 @@
-# ignore all .csv (pipeline outputs)
+# ===== Pipeline Outputs =====
+# ORCA output and CSV results
 *.csv
-# ignore all .out (ORCA and pipeline outputs)
 *.out
-# ignore all .out.absq.dat (ORCA output plots)
 *.out.absq.dat
-# all temporary files
-*.tmp
-# all svg images
 *.svg
-# all xls files
 *.xls*
-# all txt files
-*.txt
+
+# ===== Temporary & Log Files =====
+*.tmp
+*.log
+*.bak
+*.orig
+*.swp
+*.swo
+*~
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ===== Virtual Environments =====
+venv/
+ENV/
+env/
+.venv
+
+# ===== IDE & Editors =====
+.vscode/
+.idea/
+*.swp
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# ===== Project Data =====
+input/*.out
+input/*.csv
+output/*.out
+output/*.csv
+output/*/
+pop_matrices/*/
+*.tar.gz
+*.zip
+
+# ===== Text Files (preserve docs) =====
+# *.txt excluded to keep documentation
