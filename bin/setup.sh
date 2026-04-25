@@ -12,10 +12,7 @@ echo ""
 
 # Make scripts executable
 echo "[1/4] Making scripts executable..."
-chmod +x manager.sh 2>/dev/null || true
-chmod +x helper_man.sh 2>/dev/null || true
-chmod +x overall.sh 2>/dev/null || true
-chmod +x step*.sh 2>/dev/null || true
+chmod +x src/*.sh 2>/dev/null || true
 chmod +x bin/*.sh 2>/dev/null || true
 chmod +x bin/*.py 2>/dev/null || true
 echo "+ Scripts transformed into executables"
