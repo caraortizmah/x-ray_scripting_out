@@ -125,9 +125,10 @@ class ConfigManager:
     def parse_range(self, range_str: str) -> Optional[Tuple[int, int]]:
         """
         Parse a range string like "4-15" into tuple (4, 15).
+        Handles negative numbers like "-5-10".
         
         Args:
-            range_str: Range string (e.g., "4-15" or "none")
+            range_str: Range string (e.g., "4-15", "-5-10" or "none")
             
         Returns:
             Tuple (start, end) or None if range is "none"
@@ -137,20 +138,27 @@ class ConfigManager:
         if range_str.lower() == 'none':
             return None
         
-        if '-' in range_str:
-            parts = range_str.split('-')
-            if len(parts) == 2:
-                try:
-                    if int(parts[0].strip()) > int(parts[1].strip()):
-                        self.errors.append(f"Invalid range: start {parts[0]} is greater than end {parts[1]}")
-                        return None
-                    return (int(parts[0].strip()), int(parts[1].strip()))
-                except ValueError:
-                    self.errors.append(f"Invalid range format: {range_str}")
-                    return None
-                
-                
+        # Handle ranges with potential negative numbers
+        # Split by '-' and reconstruct considering negative signs
+        parts = range_str.split('-')
         
+        # Filter out empty strings from leading/trailing dashes
+        non_empty_parts = [p for p in parts if p]
+        
+        # 2 numbers (unusual with negative signs)
+        if len(non_empty_parts) == 2:
+            try:
+                # Check if first part was empty (indicating negative first number)
+                if range_str[0] == '-':
+                    start = -int(non_empty_parts[0].strip())
+                    end = int(non_empty_parts[1].strip())
+                else:
+                    start = int(non_empty_parts[0].strip())
+                    end = int(non_empty_parts[1].strip())
+                return (start, end)
+            except (ValueError, IndexError):
+                self.errors.append(f"Invalid range format: {range_str}")
+                return None
         self.errors.append(f"Invalid range format: {range_str}")
         return None
     
@@ -175,14 +183,13 @@ class ConfigManager:
         return self.parse_range(val) if val else None
     
     def get_soc_option(self) -> int:
-        """Get soc_option as integer (0 or 1)."""
+        """Get soc_option as integer.
+        Returns the parsed integer value without validation.
+        Validation is handled by ConfigValidator.
+        """
         val = self.config.get('soc_option', '0').strip()
         try:
-            soc = int(val)
-            if soc not in (0, 1):
-                self.warnings.append(f"soc_option should be 0 or 1, got {soc}. Using 0.")
-                return 0
-            return soc
+            return int(val)
         except ValueError:
             self.errors.append(f"soc_option must be an integer, got: {val}")
             return 0
