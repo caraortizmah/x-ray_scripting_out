@@ -41,3 +41,15 @@ Run the following command:
 
 `helper_man.sh` uses the information in `config.info` to execute `manager.sh`.
 
+Important: Read further about the format of the `config.info` in [docs/goodtoknow_config.info.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/goodtoknow_config.info.md)
+
+Information about running examples can be found in the [docs/examplesrun.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/examplesrun.md) file.
+
+## Support
+
+- Review the extended documentation in `docs/` for a deeper explanation
+- Check examples/ directory for sample configs
+
+---
+
+Enjoy!
