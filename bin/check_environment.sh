@@ -87,18 +87,21 @@ done
 # Check script permissions
 echo ""
 echo "[4/6] Checking script permissions..."
-SCRIPTS=("manager.sh" "helper_man.sh" "overall.sh" "step1.sh" "step2.sh")
+echo $PWD
+SCRIPTS=("manager.sh" "step1.sh" "step2.sh" "step3.sh" "step4.sh"
+"step4_soc.sh" "step5.sh" "step6.sh" "step7.sh" "step8.sh" 
+"step9.sh" "step9_soc.sh" "migrator.sh")
 
 for script in "${SCRIPTS[@]}"; do
-    if [ -f "$script" ]; then
-        if [ -x "$script" ]; then
+    if [ -f "src/$script" ]; then
+        if [ -x "src/$script" ]; then
             print_status "+" "$script is executable"
         else
             print_status "!" "$script is not executable"
             echo "      Run: chmod +x $script"
         fi
     else
-        print_status "!" "$script not found"
+        print_status "!" "src/$script not found"
     fi
 done
 
@@ -124,6 +127,7 @@ echo ""
 echo "[6/6] Checking ORCA compatibility..."
 if [ -f "config.info" ]; then
     ORCA_FILE=$(grep "orca_output" config.info | cut -d'=' -f2 | tr -d ' ')
+    ORCA_PATH=$(grep "input_path" config.info | cut -d'=' -f2 | tr -d ' ')
     if [ -z "$ORCA_FILE" ]; then
         print_status "!" "orca_output not set in config.info"
     elif [ -f "$ORCA_FILE" ]; then
