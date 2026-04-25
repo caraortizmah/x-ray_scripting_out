@@ -127,20 +127,48 @@ echo ""
 echo "[6/6] Checking ORCA compatibility..."
 if [ -f "config.info" ]; then
     ORCA_FILE=$(grep "orca_output" config.info | cut -d'=' -f2 | tr -d ' ')
-    ORCA_PATH=$(grep "input_path" config.info | cut -d'=' -f2 | tr -d ' ')
+    INPUT_PATH=$(grep "input_path" config.info | cut -d'=' -f2 | tr -d ' ')
+    OUTPUT_PATH=$(grep "output_path" config.info | cut -d'=' -f2 | tr -d ' ')
     if [ -z "$ORCA_FILE" ]; then
         print_status "!" "orca_output not set in config.info"
-    elif [ -f "$ORCA_FILE" ]; then
+    elif [ ! -e "$INPUT_PATH" ]; then
+        print_status "!" "Input path $INPUT_PATH does not exist"
+    elif [ ! -e "$OUTPUT_PATH" ]; then
+        print_status "!" "Output path $OUTPUT_PATH does not exist"
+    elif [ -f "$INPUT_PATH/$ORCA_FILE" ]; then
         # Check ORCA version in file
-        if grep -q "ORCA" "$ORCA_FILE"; then
-            ORCA_VERSION=$(grep "ORCA" "$ORCA_FILE" | head -1)
-            print_status "+" "ORCA file found"
-            echo "      Version info: $ORCA_VERSION"
+        if grep -q "ORCA TERMINATED NORMALLY" "$INPUT_PATH/$ORCA_FILE"; then
+            ORCA_VERSION=$(grep "Version" "$INPUT_PATH/$ORCA_FILE" | head -1)
+            print_status "+" "ORCA output file found"
+            ORCA_version_number=$(echo "$ORCA_VERSION" | tr -s ' ' | cut -d' ' -f4)
+            echo "      Version info: $ORCA_version_number"
+            if [ "$(echo "$ORCA_version_number" | cut -d'.' -f1)" -ge 6 ]; then
+                print_status "!" "ORCA version $ORCA_version_number may not be fully compatible"
+            else
+                print_status "+" "ORCA version $ORCA_version_number appears compatible"
+                echo "$INPUT_PATH"
+            fi
         else
             print_status "x" "ORCA file does not appear to be valid"
         fi
     else
-        print_status "!" "ORCA output file not found: $ORCA_FILE"
+        print_status "!" "ORCA output file $ORCA_FILE not found in $INPUT_PATH"
+    fi
+    EXT_FILE=$(grep "external_MO_file" config.info | cut -d'=' -f2 | tr -d ' ')
+    if [ -z "$EXT_FILE" ]; then
+        print_status "!" "external_MO_file not set in config.info "$ORCA_FILE\
+        " may be used as external MO file, which may cause issues"
+    elif [ ! -f "$INPUT_PATH/$EXT_FILE" ]; then
+        print_status "!" "external_MO_file $EXT_FILE not found in $INPUT_PATH"
+    elif grep -q "NormalPrint" "$INPUT_PATH/$EXT_FILE" && \
+    grep -q "LOEWDIN REDUCED ORBITAL POPULATIONS PER MO" "$INPUT_PATH/$EXT_FILE"; then
+        print_status "+" "Loewdin population analysis appears to be found in NormalPrint \
+        format in "$EXT_FILE
+        if [ "$EXT_FILE" == "$ORCA_FILE" ]; then
+            print_status "+" "external_MO_file is set to ORCA output file"
+        fi
+    else
+        print_status "!" "Loewdin population analysis appears to not be found in "$EXT_FILE
     fi
 else
     print_status "!" "config.info not found"
