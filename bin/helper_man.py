@@ -94,16 +94,25 @@ def main():
         print(validator.get_summary())
         return 1
     
+    # Build migrator.sh command
+    logger.info("Building migrator.sh command...")
+    migrator_args_str = config.to_migrator_args()
+    print(f"Migrating information from the following arguments: {migrator_args_str}\n")
+    mig_cmd = f"./src/migrator.sh {migrator_args_str}"
+
+    logger.debug(f"Command: {mig_cmd}")
+
     # Build manager.sh command
     logger.info("Building manager.sh command...")
     args_str = config.to_manager_args()
-    cmd = f"./src/manager.sh {args_str}"
+    cmd = f"{config.get_output_path()}/tmp_last_execution/manager.sh {args_str}"
     
     logger.debug(f"Command: {cmd}")
     
     if args.dry_run:
-        logger.info("DRY RUN MODE - Command not executed")
-        print(f"\nWould execute: {cmd}\n")
+        logger.info("DRY RUN MODE - Commands not executed")
+        print(f"\nWould execute migrator: {mig_cmd}\n")
+        print(f"Would execute manager: {cmd}\n")
         return 0
     
     # Log execution info
@@ -112,9 +121,22 @@ def main():
     logger.info("="*70)
     
     try:
-        # Execute manager.sh
-        logger.info(f"Executing: {cmd}")
+        # Execute migrator.sh first to setup temp environment
+        logger.info(f"Executing migrator: {mig_cmd}")
+        mig_result = subprocess.run(mig_cmd, shell=True, check=False)
+        
+        if mig_result.returncode != 0:
+            logger.error(f"Migrator failed with exit code {mig_result.returncode}")
+            return 1
+        
+        # Execute manager.sh from temp directory
+        logger.info(f"Executing manager: {cmd}")
         result = subprocess.run(cmd, shell=True, check=False)
+        
+        # Cleanup temp directory
+        logger.info(f"Cleaning up temporary directory: {output_path}/tmp_last_execution")
+        cleanup_cmd = f"rm -rf {output_path}/tmp_last_execution"
+        subprocess.run(cleanup_cmd, shell=True, check=False)
         
         if result.returncode == 0:
             logger.info("Pipeline execution completed successfully")
