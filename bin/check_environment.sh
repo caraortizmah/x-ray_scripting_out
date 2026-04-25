@@ -23,10 +23,10 @@ print_status() {
         echo -e "${GREEN}${status}${NC} ${message}"
     elif [ "$status" = "x" ]; then
         echo -e "${RED}${status}${NC} ${message}"
-        ((ERRORS++))
+        ERRORS=$((ERRORS + 1))
     elif [ "$status" = "!" ]; then
         echo -e "${YELLOW}${status}${NC} ${message}"
-        ((WARNINGS++))
+        WARNINGS=$((WARNINGS + 1))
     fi
 }
 
@@ -126,9 +126,9 @@ done
 echo ""
 echo "[6/6] Checking ORCA compatibility..."
 if [ -f "config.info" ]; then
-    ORCA_FILE=$(grep "orca_output" config.info | cut -d'=' -f2 | tr -d ' ')
-    INPUT_PATH=$(grep "input_path" config.info | cut -d'=' -f2 | tr -d ' ')
-    OUTPUT_PATH=$(grep "output_path" config.info | cut -d'=' -f2 | tr -d ' ')
+    ORCA_FILE=$(grep "orca_output" config.info | cut -d'=' -f2 | tr -d ' ' || true)
+    INPUT_PATH=$(grep "input_path" config.info | cut -d'=' -f2 | tr -d ' ' || true)
+    OUTPUT_PATH=$(grep "output_path" config.info | cut -d'=' -f2 | tr -d ' ' || true)
     if [ -z "$ORCA_FILE" ]; then
         print_status "!" "orca_output not set in config.info"
     elif [ ! -e "$INPUT_PATH" ]; then
@@ -138,11 +138,11 @@ if [ -f "config.info" ]; then
     elif [ -f "$INPUT_PATH/$ORCA_FILE" ]; then
         # Check ORCA version in file
         if grep -q "ORCA TERMINATED NORMALLY" "$INPUT_PATH/$ORCA_FILE"; then
-            ORCA_VERSION=$(grep "Version" "$INPUT_PATH/$ORCA_FILE" | head -1)
+            ORCA_VERSION=$(grep "Version" "$INPUT_PATH/$ORCA_FILE" | head -1 || true)
             print_status "+" "ORCA output file found"
-            ORCA_version_number=$(echo "$ORCA_VERSION" | tr -s ' ' | cut -d' ' -f4)
+            ORCA_version_number=$(echo "$ORCA_VERSION" | tr -s ' ' | cut -d' ' -f4 || true)
             echo "      Version info: $ORCA_version_number"
-            if [ "$(echo "$ORCA_version_number" | cut -d'.' -f1)" -ge 6 ]; then
+            if [ "$(echo "$ORCA_version_number" | cut -d'.' -f1 || true)" -ge 6 ]; then
                 print_status "!" "ORCA version $ORCA_version_number may not be fully compatible"
             else
                 print_status "+" "ORCA version $ORCA_version_number appears compatible"
@@ -154,7 +154,7 @@ if [ -f "config.info" ]; then
     else
         print_status "!" "ORCA output file $ORCA_FILE not found in $INPUT_PATH"
     fi
-    EXT_FILE=$(grep "external_MO_file" config.info | cut -d'=' -f2 | tr -d ' ')
+    EXT_FILE=$(grep "external_MO_file" config.info | cut -d'=' -f2 | tr -d ' ' || true)
     if [ -z "$EXT_FILE" ]; then
         print_status "!" "external_MO_file not set in config.info "$ORCA_FILE\
         " may be used as external MO file, which may cause issues"
