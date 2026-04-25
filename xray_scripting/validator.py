@@ -71,33 +71,53 @@ class ConfigValidator:
                 self.errors.append(f"{name}: start ({start}) cannot be greater than end ({end})")
     
     def _validate_files(self) -> None:
-        """Validate that required files exist."""
+        """Validate that required input files exist in the specified input_path."""
         orca_file = self.config.get_orca_output()
         
         if not orca_file:
             self.errors.append("orca_output cannot be empty")
             return
         
-        # Check in input path if specified
+        # Get input path
         input_path = self.config.get_input_path()
-        if input_path:
-            full_path = os.path.join(input_path, orca_file)
-            if not os.path.isfile(full_path):
-                self.errors.append(f"ORCA output file not found: {full_path}")
-        else:
-            if not os.path.isfile(orca_file):
-                self.warnings.append(f"ORCA output file not found in current directory: {orca_file}")
         
-        # Validate external MO file if different from orca_output
-        ext_file = self.config.config.get('external_MO_file')
-        if ext_file and ext_file.strip() != orca_file:
-            if input_path:
-                full_path = os.path.join(input_path, ext_file.strip())
-                if not os.path.isfile(full_path):
-                    self.warnings.append(f"External MO file not found: {full_path}")
-            else:
-                if not os.path.isfile(ext_file.strip()):
-                    self.warnings.append(f"External MO file not found in current directory: {ext_file.strip()}")
+        # If input_path is specified, files MUST exist there (strict check)
+        if input_path:
+            # Check ORCA output file
+            full_path_orca = os.path.join(input_path, orca_file.strip())
+            if not os.path.isfile(full_path_orca):
+                self.errors.append(
+                    f"ORCA output file not found in input_path:\n"
+                    f"  Expected: {full_path_orca}\n"
+                    f"  Check input_path in config.info or verify file exists"
+                )
+            
+            # Check external MO file if different from orca_output
+            ext_file = self.config.config.get('external_MO_file', '').strip()
+            if ext_file and ext_file != orca_file.strip():
+                full_path_ext = os.path.join(input_path, ext_file)
+                if not os.path.isfile(full_path_ext):
+                    self.errors.append(
+                        f"External MO file not found in input_path:\n"
+                        f"  Expected: {full_path_ext}\n"
+                        f"  Check external_MO_file in config.info or verify file exists"
+                    )
+        else:
+            # No input_path specified - check current directory (warning only)
+            if not os.path.isfile(orca_file.strip()):
+                self.warnings.append(
+                    f"ORCA output file not found in current directory: {orca_file}\n"
+                    f"  Set input_path in config.info or place files in current directory"
+                )
+            
+            # Check external MO file
+            ext_file = self.config.config.get('external_MO_file', '').strip()
+            if ext_file and ext_file != orca_file.strip():
+                if not os.path.isfile(ext_file):
+                    self.warnings.append(
+                        f"External MO file not found in current directory: {ext_file}\n"
+                        f"  Set input_path in config.info or place files in current directory"
+                    )
     
     def _validate_soc_option(self) -> None:
         """Validate soc_option parameter."""
