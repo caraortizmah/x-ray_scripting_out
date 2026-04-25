@@ -146,7 +146,6 @@ if [ -f "config.info" ]; then
                 print_status "!" "ORCA version $ORCA_version_number may not be fully compatible"
             else
                 print_status "+" "ORCA version $ORCA_version_number appears compatible"
-                echo "$INPUT_PATH"
             fi
         else
             print_status "x" "ORCA file does not appear to be valid"
