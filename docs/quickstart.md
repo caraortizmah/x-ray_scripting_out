@@ -81,6 +81,10 @@ wave_f_type            = p
 soc_option             = 1
 ```
 
+Important: Read further about the format of the `config.info` in [docs/goodtoknow_config.info.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/goodtoknow_config.info.md)
+
+Information about running examples can be found in the [docs/examplesrun.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/examplesrun.md) file. 
+
 ## Step 5: Validate & Run
 
 ```bash
@@ -164,8 +168,8 @@ chmod +x bin/*.sh bin/*.py src/*.sh
 ## Getting Help
 
 1. **Check documentation**:
-   - docs/ARCHITECTURE.md - System design
-   - docs/CONTRIBUTING.md - Development guide
+   - docs/architecture.md - System design
+   - docs/contributing.md - Development guide
 
 2. **Review logs**:
    ```bash
@@ -179,8 +183,8 @@ chmod +x bin/*.sh bin/*.py src/*.sh
 
 ## Additional information
 
-- **Development**: See docs/CONTRIBUTING.md
-- **Advanced Usage**: See docs/ARCHITECTURE.md
+- **Development**: See docs/contributing.md
+- **Advanced Usage**: See docs/architecture.md
 - **Custom Analysis**: Modify step*.sh scripts
 
 ## Running Tests
@@ -191,13 +195,14 @@ pytest tests/ -v
 
 ## Support
 
-- Review README.md for detailed documentation
+- Review README.md for general documentation
+- Review the extended documentation in `docs/` for a deeper explanation
 - Check examples/ directory for sample configs
 - Submit issues on GitHub
 
 ---
 
-**Parse quantum X-ray Absorption calculations** Run:
+**Parse and encode quantum X-ray Absorption calculations** Run:
 ```bash
 ./bin/helper_man.py
 ```
