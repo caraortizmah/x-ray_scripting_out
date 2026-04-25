@@ -203,6 +203,29 @@ class ConfigManager:
             if path and not os.path.isabs(path):
                 path = os.path.abspath(path)
         return path if path else None
+
+    def to_migrator_args(self) -> str:
+        """
+        Generate command-line arguments for migrator.sh before running manager.sh
+        
+        Returns:
+            String of arguments for migrator.sh
+        """
+        out_file = self.get_orca_output()
+        ext_file = self.config.get('external_MO_file', out_file).strip()
+        input_path = self.get_input_path()
+        output_path = self.get_output_path()
+        
+        args = [
+            out_file, ext_file
+        ]
+        
+        if input_path:
+            args.append(input_path)
+        if output_path:
+            args.append(output_path)
+        
+        return ' '.join(args)
     
     def to_manager_args(self) -> str:
         """
