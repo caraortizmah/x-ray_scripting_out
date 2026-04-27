@@ -43,6 +43,8 @@ This verifies:
 ## Step 4: Configure
 
 Edit `config.info` with your parameters:
+Check that input and output paths of config.info examples
+ fit accordingly to the path you are working at
 
 ```bash
 vim config.info
@@ -55,7 +57,7 @@ Key parameters to set:
 - `exc_state_range`: Excited states to analyze (e.g., 1-26)
 - `orca_output`: Your ORCA output file name
 - `input_path`: Path to ORCA files
-- `output_path`: Where to save results
+- `output_path`: Where to save results (usually inside repo path)
 
 ### Common Configurations
 
