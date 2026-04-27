@@ -42,21 +42,15 @@ BEFORE RUNNING REGRESSION TESTS:
 
 1. Run pipeline with toy models using corresponding config files:
    
+   Use tester.sh exclusively for regression tests.
+
    For nosoc (AB_4.0A) case:
-   $ ./manager.sh input/AB_4.0A.out examples/config.info_examplenosoc output/ab40_test
+   $ ./tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc
    
    For soc (AB_5.0A) case:
-   $ ./manager.sh input/AB_5.0A.out examples/config.info_examplesoc output/ab50_test
+   $ ./tests/tester.sh ab50_test AB_5.0A.out config.info_examplesoc
 
-2. Move or copy pipeline output matrices to output directories:
-   
-   For AB_4.0A (nosoc):
-   $ cp -r output/pop_matrices/AB_4.0A.out_csv/* output/ab40_test/
-   
-   For AB_5.0A (soc):
-   $ cp -r output/pop_matrices/AB_5.0A.out_csv/* output/ab50_test/
-
-3. Now run regression tests (see examples below)
+2. Now run regression tests (see examples below)
 
 For detailed pipeline execution documentation, see: docs/quickstart.md
 """
