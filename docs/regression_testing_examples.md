@@ -4,7 +4,7 @@ Usage Examples and Configuration for Regression Testing
 This document provides practical examples for running regression tests locally and in CI/CD.
 
 For complete test documentation, rationale, and detailed explanations, see:
-- docs/DATA_PROCESSING_TESTS.md - Full test structure, tolerance levels, and developer workflows
+- docs/data_processin_tests.md - Full test structure, tolerance levels, and developer workflows
 """
 
 # ============================================================================
@@ -43,6 +43,8 @@ BEFORE RUNNING REGRESSION TESTS:
 1. Run pipeline with toy models using corresponding config files:
    
    Use tester.sh exclusively for regression tests.
+   Be sure that input and output paths of config.info examples
+   fit accordingly to the path you are working at
 
    For nosoc (AB_4.0A) case:
    $ ./tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc
@@ -80,11 +82,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pandas numpy
       
-      - name: Prepare input data
+      - name: Prepare structure for data
         run: |
-          mkdir -p input output/ab40_test output/ab50_test
-          cp input/AB_4.0A.out examples/AB_4.0A.out
-          cp input/AB_5.0A.out examples/AB_5.0A.out
+          mkdir -p input output
       
       - name: Validate reference fixtures (before pipeline runs)
         run: |
@@ -92,16 +92,10 @@ jobs:
           pytest tests/test_data_processing.py::TestSOCRegressionAB50 -v
       
       - name: Run nosoc pipeline (AB_4.0A)
-        run: ./manager.sh input/AB_4.0A.out examples/config.info_examplenosoc output/ab40_test
-      
-      - name: Copy nosoc output matrices to test directory
-        run: cp -r output/pop_matrices/AB_4.0A.out_csv/* output/ab40_test/
+        run: ./tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc
       
       - name: Run soc pipeline (AB_5.0A)
-        run: ./manager.sh input/AB_5.0A.out examples/config.info_examplesoc output/ab50_test
-      
-      - name: Copy soc output matrices to test directory
-        run: cp -r output/pop_matrices/AB_5.0A.out_csv/* output/ab50_test/
+        run: ./tests/tester.sh ab50_test AB_5.0A.out config.info_examplesoc
       
       - name: Run pipeline regression tests (nosoc)
         run: pytest tests/test_data_processing.py::TestPipelineRegressionNOSOC -v
@@ -121,7 +115,7 @@ jobs:
 # EXAMPLE 2: Local Development Workflow
 # ============================================================================
 """
-Developer Workflow: Make changes → Validate reference → Run pipeline → Test against reference
+Developer Workflow: Make changes -> Validate reference -> Run pipeline -> Test against reference
 
 Step 1: Create feature branch and make code changes
     $ git checkout -b feature/optimize-calculations
@@ -136,20 +130,16 @@ Step 2: Quick validation - confirm reference fixtures are valid
     (These tests check that reference data files conform to config.info ranges)
 
 Step 3: Run pipeline with toy models (uses corresponding config files)
-    $ ./manager.sh input/AB_4.0A.out examples/config.info_examplenosoc output/ab40_test
-    $ ./manager.sh input/AB_5.0A.out examples/config.info_examplesoc output/ab50_test
+    $ ./tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc
+    $ ./tests/tester.sh ab50_test AB_5.0A.out config.info_examplesoc
 
-Step 4: Move pipeline output matrices to test directories (CRITICAL)
-    $ cp -r output/pop_matrices/AB_4.0A.out_csv/* output/ab40_test/
-    $ cp -r output/pop_matrices/AB_5.0A.out_csv/* output/ab50_test/
-
-Step 5: Run regression tests - compare pipeline outputs against reference
+Step 4: Run regression tests - compare pipeline outputs against reference
     $ pytest tests/test_data_processing.py::TestPipelineRegressionNOSOC -v
     $ pytest tests/test_data_processing.py::TestPipelineRegressionSOC -v
     
     (If all tests pass, calculations haven't changed unintentionally)
 
-Step 6: All tests pass → Create PR
+Step 6: All tests pass -> Create PR
     $ git push origin feature/optimize-calculations
     $ # Create PR in GitHub/GitLab
     $ # CI/CD runs full test suite again
@@ -173,12 +163,12 @@ Command:
     pytest tests/test_data_processing.py::TestNOSOCRegressionAB40 -v   # nosoc fixtures
     pytest tests/test_data_processing.py::TestSOCRegressionAB50 -v     # soc fixtures
 What it checks:
-    ✓ Reference files exist in tests/fixtures/reference_data/
-    ✓ Column headers (MO numbers) are in core_MO_range from config.info
-    ✓ Row indices (atom numbers) are in Atom_number_range_A and all atoms in Atom_number_range_B
-    ✓ Virtual MOs are NOT in core_MO_range
-    ✓ Population values are in 0-100 range
-    ✓ All corevirt* files exist (4 for nosoc, 8 for soc)
+    &check; Reference files exist in tests/fixtures/reference_data/
+    &check; Column headers (MO number ranges) are in core_MO_range from config.info
+    &check; Row indices (atom numbers) are in Atom_number_range_A and all atoms in Atom_number_range_B
+    &check; Virtual MOs are NOT in core_MO_range
+    &check; Population values are in 0-100 range
+    &check; All corevirt* files exist (4 for nosoc, 8 for soc)
 
 ---
 
@@ -197,10 +187,10 @@ Command:
     pytest tests/test_data_processing.py::TestPipelineRegressionNOSOC -v   # nosoc outputs
     pytest tests/test_data_processing.py::TestPipelineRegressionSOC -v     # soc outputs
 What it checks:
-    ✓ resA_MOcore (core MO populations) match reference (rtol=1e-5, atol=0.1)
-    ✓ corevirtMO_matrix (core-virtual interactions) match reference (rtol=0, atol=1)
-    ✓ corevirtMO_matrix0 and matrix1 (soc multiplicity states) match reference
-    ✓ No unintended changes in calculations
+    &check; resA_MOcore (core MO populations) match reference (rtol=1e-5, atol=0.1)
+    &check; corevirtMO_matrix (core-virtual interactions) match reference (rtol=0, atol=1)
+    &check; corevirtMO_matrix0 and matrix1 (soc multiplicity states) match reference
+    &check; No unintended changes in calculations
 
 ---
 
@@ -213,8 +203,8 @@ Behavior:
     - Then: Runs pipeline regression if output files found, otherwise skips
     - Total: ~20+ tests covering both reference validation and regression checks
 Expected output:
-    - ✅ 17 tests pass (8 nosoc + 9 soc reference validation)
-    - ✅ 5 tests pass (2 nosoc + 3 soc pipeline regression, if outputs present)
+    - &check; 17 tests pass (8 nosoc + 9 soc reference validation)
+    - &check; 5 tests pass (2 nosoc + 3 soc pipeline regression, if outputs present)
     - Total: 22 passed
 
 For more detailed information on test structure, tolerances, and workflows:
@@ -224,6 +214,8 @@ See: docs/DATA_PROCESSING_TESTS.md
 # ============================================================================
 # EXAMPLE 3: Configuration with Pytest Fixtures
 # ============================================================================
+This part has a lot to check so, as developer, you are here by your own :)
+
 """
 File: conftest.py (pytest configuration)
 
@@ -356,50 +348,3 @@ class TestPipelineRegressionNOSOC(TestRegressionBase):
         assert is_match, f"MOcore mismatch: {diff}"
 """
 
-# ============================================================================
-# EXAMPLE 8: Report Generation
-# ============================================================================
-"""
-Generate test report with comparison details:
-
-pytest tests/test_data_processing.py \
-  -v \
-  --tb=short \
-  --junit-xml=test_results.xml \
-  --html=test_results.html \
-  --self-contained-html
-
-# Results saved to:
-# - test_results.xml (machine readable)
-# - test_results.html (human readable with graphs)
-"""
-
-# ============================================================================
-# EXAMPLE 9: Integration with Pre-commit Hook
-# ============================================================================
-"""
-File: .pre-commit-config.yaml
-
-repos:
-  - repo: local
-    hooks:
-      - id: pytest-reference
-        name: pytest reference fixtures
-        entry: pytest tests/test_data_processing.py -m reference
-        language: system
-        types: [python]
-        stages: [commit]
-      
-      - id: pytest-regression
-        name: pytest regression tests
-        entry: pytest tests/test_data_processing.py -m regression
-        language: system
-        types: [python]
-        stages: [push]  # Only on push to avoid blocking commits
-
-# Install: pre-commit install
-# Run: pre-commit run --all-files
-"""
-
-if __name__ == "__main__":
-    print("See examples in this file for integrating regression tests into your workflow.")
