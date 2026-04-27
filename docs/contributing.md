@@ -276,7 +276,7 @@ value = int(value)
 ## Release Process
 
 1. Update version in `xray_scripting/__init__.py`
-2. Update `CHANGELOG.md`
+2. Update `changelog.md`
 3. Create git tag: `git tag v1.2.3`
 4. Push tag: `git push origin v1.2.3`
 
