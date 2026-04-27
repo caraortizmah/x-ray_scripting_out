@@ -12,8 +12,8 @@ This document explains the regression testing framework for validating pipeline 
    - **AB_4.0A**: nosoc case (same spin-state) - C atoms, s orbitals
    - **AB_5.0A**: soc case (changing spin-state) - S atom, p orbital
 3. Regression tests compare pipeline OUTPUT against reference CSV data
-4. If results match numerically -> + test passes -> allow git push/PR
-5. If results diverge -> X test fails -> reject commit (catch regressions)
+4. If results match numerically -> &check; test passes -> allow git push/PR
+5. If results diverge -> &cross; test fails -> reject commit (catch regressions)
 
 ## Reference Data Location
 
@@ -81,17 +81,17 @@ virt\core,7,8,9,10,11,12,...
 
 ### 1. **Reference Fixture Validation** (`TestNOSOCRegressionAB40`, `TestSOCRegressionAB50`)
 Tests that verify the reference data files exist and are valid:
-- + File existence checks
-- + CSV structure validation (correct columns)
-- + Data type validation (numeric values)
-- + Expected atom types/orbitals (nosoc: C/O/N + s; soc: S + p)
-- + Value range validation (populations 0-100)
+- &check; File existence checks
+- &check; CSV structure validation (correct columns)
+- &check; Data type validation (numeric values)
+- &check; Expected atom types/orbitals (nosoc: C/O/N + s; soc: S + p)
+- &check; Value range either serial atoms and MOs validation (usual ranges 0-100)
 
 ### 2. **Regression Tests** (`TestPipelineRegressionNOSOC`, `TestPipelineRegressionSOC`)
 Tests that compare pipeline OUTPUT against reference data:
 - Compares calculated MOcore populations against reference
 - Compares calculated core-virtual matrices against reference
-- Validates multiplicity states (soc case only)
+- Validates previous information in the two spin-state possibilities (soc case only)
 - Uses numerical tolerance for floating-point comparisons
 - **Status**: Currently skipped, activated when pipeline output is available
 
@@ -115,11 +115,23 @@ git checkout -b feature/my-optimization
 
 ### Step 2: Run Pipeline with Toy Models
 ```bash
+# Prepare pipeline inputs (orca output and config.info)
+cp examples/AB_4.0A.out input/
+cp examples/config.info_examplenosoc config.info 
 # Run pipeline with nosoc toy model (AB_4.0A)
-./manager.sh input/AB_4.0A.out config_nosoc.info output/ab40_test
+./bin/helper_man.py
+# copy or move the csv data 
+cp -r output/pop_matrices/AB_4.0A.out_csv output/ab40_test
+# inside ab40_test the 6 csv files should be found
 
+# Prepare pipeline inputs II (orca output and config.info)
+cp examples/AB_5.0A.out input/
+cp examples/config.info_examplesoc config.info
 # Run pipeline with soc toy model (AB_5.0A)
-./manager.sh input/AB_5.0A.out config_soc.info output/ab50_test
+./bin/helper_man.py
+# copy or move the csv data 
+cp -r output/pop_matrices/AB_5.0A.out_csv output/ab50_test
+# inside ab50_test the 10 csv files should be found
 ```
 
 ### Step 3: Run Regression Tests
@@ -274,11 +286,11 @@ pytest tests/test_data_processing.py::TestPipelineRegressionSOC -v  # Validate
 
 ## Test Coverage Strategy
 
-### Phase 1: Reference Fixture Setup (Current +)
-- + Reference data validation
-- + File existence and structure checks
-- + Data integrity verification (nosoc/soc cases)
-- + Baseline numeric constraints
+### Phase 1: Reference Fixture Setup (Current &check;)
+- &check; Reference data validation
+- &check; File existence and structure checks
+- &check; Data integrity verification (nosoc/soc cases)
+- &check; Baseline numeric constraints
 
 ### Phase 2: Regression Testing (In Progress)
 - \ Activate regression tests with pipeline output
