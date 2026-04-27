@@ -119,11 +119,11 @@ Run tester.sh (only for developer context)
 ```bash
 # Prepare pipeline inputs (orca output and config.info)
 # nosoc case, name_test is ab40_test (mandatory)
-./tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc 
+./tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc
 # inside ab40_test the 6 csv files should be found
 
 # nosoc case, name_test is ab50_test (mandatory)
-./tests/tester.sh ab40_test AB_5.0A.out config.info_examplenosoc 
+./tests/tester.sh ab50_test AB_5.0A.out config.info_examplesoc
 # inside ab50_test the 10 csv files should be found
 ```
 
