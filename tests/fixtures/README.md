@@ -160,6 +160,6 @@ See `docs/data_processing_test.md` for detailed format specifications.
 
 ## Related Documentation
 
-- [docs/data_processing_test.md.md](../../docs/docs/data_processing_test.md.md) - Testing strategy and methodology
+- [docs/data_processing_test.md](../../docs/docs/data_processing_test.md) - Testing strategy and methodology
 - [regression_testing_examples.md](../../docs/regression_testing_examples.md) - Integration examples
 - [test_data_processing.py](../test_data_processing.py) - Test implementation
