@@ -6,6 +6,9 @@
 *.svg
 *.xls*
 
+# ===== Configuration info =====
+config.info
+
 # ===== Temporary & Log Files =====
 *.tmp
 *.log
