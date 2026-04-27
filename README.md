@@ -40,8 +40,8 @@ You can specify a localized group of atoms involved in the coupling MO transitio
 
 ## Quick start
 Choose any of the two versions:
-- run in python+shell: [docs/quickstart.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/quickstart.md)
-- run in shell: [docs/quickstart_old.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/quickstart_old.md)
+- run in python+shell: [docs/quickstart.md](../docs/quickstart.md)
+- run in shell: [docs/quickstart_old.md](../docs/quickstart_old.md)
 
 
 ### Contributing  
@@ -80,7 +80,8 @@ Distributed under the GNU General Public License v3.0
 
 <details>
      
-  <summary>Author:</summary> 
+  <summary>Lead project:</summary> 
   
   **Carlos A. Ortiz-Mahecha**
+
 </details>
