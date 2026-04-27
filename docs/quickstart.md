@@ -34,11 +34,11 @@ This script will:
 ```
 
 This verifies:
-- ✓ Python 3.6+
-- ✓ Required shell commands
-- ✓ Script permissions
-- ✓ Directory structure
-- ✓ ORCA file compatibility
+- &check; Python 3.6+
+- &check; Required shell commands
+- &check; Script permissions
+- &check; Directory structure
+- &check; ORCA file compatibility
 
 ## Step 4: Configure
 
