@@ -440,15 +440,16 @@ class TestPipelineRegressionNOSOC(TestRegressionBase):
     """
     
     @pytest.fixture
-    def nosoc_output_dir(self, tmp_path):
+    def nosoc_output_dir(self):
         """
         Fixture for pipeline output directory.
-        In practice, this would be the output from running the pipeline with AB_4.0A.
+        Points to output/ab40_test/ where pipeline generates nosoc output.
         """
-        # This is a placeholder - in actual use, this would be populated by the pipeline
-        return tmp_path
+        output_dir = self.repo_root / 'output' / 'ab40_test'
+        if not output_dir.exists():
+            pytest.skip(f"Pipeline output directory not found: {output_dir}")
+        return output_dir
     
-    @pytest.mark.skip(reason="Requires pipeline output to compare")
     def test_nosoc_mocore_output_matches_reference(self, nosoc_output_dir):
         """Test that nosoc MOcore pipeline output matches reference."""
         # Load reference
@@ -468,7 +469,6 @@ class TestPipelineRegressionNOSOC(TestRegressionBase):
         
         assert is_match, f"Output doesn't match reference: {diff}"
     
-    @pytest.mark.skip(reason="Requires pipeline output to compare")
     def test_nosoc_corevirt_matrix_matches_reference(self, nosoc_output_dir):
         """Test that nosoc core-virtual matrix matches reference."""
         ref_file = self.nosoc_dir / 'corevirtMO_matrix_AB_4.0A_1-26.csv'
@@ -495,15 +495,16 @@ class TestPipelineRegressionSOC(TestRegressionBase):
     """
     
     @pytest.fixture
-    def soc_output_dir(self, tmp_path):
+    def soc_output_dir(self):
         """
         Fixture for pipeline output directory.
-        In practice, this would be the output from running the pipeline with AB_5.0A.
+        Points to output/ab50_test/ where pipeline generates soc output.
         """
-        # This is a placeholder - in actual use, this would be populated by the pipeline
-        return tmp_path
+        output_dir = self.repo_root / 'output' / 'ab50_test'
+        if not output_dir.exists():
+            pytest.skip(f"Pipeline output directory not found: {output_dir}")
+        return output_dir
     
-    @pytest.mark.skip(reason="Requires pipeline output to compare")
     def test_soc_mocore_output_matches_reference(self, soc_output_dir):
         """Test that soc MOcore pipeline output matches reference."""
         ref_file = self.soc_dir / 'resA_MOcore_AB_5.0A_25-799.csv'
@@ -519,7 +520,6 @@ class TestPipelineRegressionSOC(TestRegressionBase):
         is_match, diff = self.compare_dataframes(reference, output, rtol=1e-5, atol=0.1)
         assert is_match, f"Output doesn't match reference: {diff}"
     
-    @pytest.mark.skip(reason="Requires pipeline output to compare")
     def test_soc_multiplicity_state0_matches_reference(self, soc_output_dir):
         """Test that soc multiplicity state 0 output matches reference."""
         ref_file = self.soc_dir / 'corevirtMO_matrix0_AB_5.0A_25-799.csv'
@@ -535,7 +535,6 @@ class TestPipelineRegressionSOC(TestRegressionBase):
         is_match = self.compare_matrices(reference, output, rtol=0, atol=1)
         assert is_match, "Output matrix0 doesn't match reference"
     
-    @pytest.mark.skip(reason="Requires pipeline output to compare")
     def test_soc_multiplicity_state1_matches_reference(self, soc_output_dir):
         """Test that soc multiplicity state 1 output matches reference."""
         ref_file = self.soc_dir / 'corevirtMO_matrix1_AB_5.0A_25-799.csv'
