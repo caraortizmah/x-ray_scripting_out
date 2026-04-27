@@ -114,23 +114,16 @@ git checkout -b feature/my-optimization
 ```
 
 ### Step 2: Run Pipeline with Toy Models
+
+Run tester.sh (only for developer context)
 ```bash
 # Prepare pipeline inputs (orca output and config.info)
-cp examples/AB_4.0A.out input/
-cp examples/config.info_examplenosoc config.info 
-# Run pipeline with nosoc toy model (AB_4.0A)
-./bin/helper_man.py
-# copy or move the csv data 
-cp -r output/pop_matrices/AB_4.0A.out_csv output/ab40_test
+# nosoc case, name_test is ab40_test (mandatory)
+./tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc 
 # inside ab40_test the 6 csv files should be found
 
-# Prepare pipeline inputs II (orca output and config.info)
-cp examples/AB_5.0A.out input/
-cp examples/config.info_examplesoc config.info
-# Run pipeline with soc toy model (AB_5.0A)
-./bin/helper_man.py
-# copy or move the csv data 
-cp -r output/pop_matrices/AB_5.0A.out_csv output/ab50_test
+# nosoc case, name_test is ab50_test (mandatory)
+./tests/tester.sh ab40_test AB_5.0A.out config.info_examplenosoc 
 # inside ab50_test the 10 csv files should be found
 ```
 
