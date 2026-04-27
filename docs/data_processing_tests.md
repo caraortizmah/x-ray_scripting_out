@@ -116,6 +116,8 @@ git checkout -b feature/my-optimization
 ### Step 2: Run Pipeline with Toy Models
 
 Run tester.sh (only for developer context)
+Be sure that input and output paths of config.info examples
+fit accordingly to the path you are working at
 ```bash
 # Prepare pipeline inputs (orca output and config.info)
 # nosoc case, name_test is ab40_test (mandatory)
@@ -286,11 +288,17 @@ pytest tests/test_data_processing.py::TestPipelineRegressionSOC -v  # Validate
 - &check; Baseline numeric constraints
 
 ### Phase 2: Regression Testing (In Progress)
-- \ Activate regression tests with pipeline output
-- \ Validate MOcore populations
-- \ Validate core-virtual matrices
-- \ Validate oscillator strength calculations
-- \ Cross-validate nosoc vs soc consistency
+- ... Activate regression tests with pipeline output
+- ... Validate MOcore populations
+- ... Validate core-virtual matrices
+- ... Validate oscillator strength calculations
+- ... Cross-validate nosoc vs soc consistency
+
+### Phase 2.5: Big scale running (Tested)
+- &check; Run at big scale in HPC
+- &check; Use a simple and robust arcuitecture
+- ... Validate pipeline in the python+shell version
+- ... New tests for CI/CD actions including sbatch commands
 
 ### Phase 3: Enhanced Validation (Future)
 - Pipeline output file format validation
@@ -307,7 +315,7 @@ pytest tests/test_data_processing.py::TestPipelineRegressionSOC -v  # Validate
 5. **CI/CD Ready**: Integrates into automated testing pipelines
 6. **Developer Friendly**: Clear messages on what diverged and by how much
 
-## Benefits of This Approach
+## Benefits of this Approach
 
 | Benefit | Description |
 |---------|-------------|
