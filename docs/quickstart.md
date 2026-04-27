@@ -83,9 +83,9 @@ wave_f_type            = p
 soc_option             = 1
 ```
 
-Important: Read further about the format of the `config.info` in [docs/goodtoknow_config.info.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/goodtoknow_config.info.md)
+Important: Read further about the format of the `config.info` in [docs/goodtoknow_config.info.md](goodtoknow_config.info.md)
 
-Information about running examples can be found in the [docs/examplesrun.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/examplesrun.md) file. 
+Information about running examples can be found in the [docs/examplesrun.md](examplesrun.md) file. 
 
 ## Step 5: Validate & Run
 
