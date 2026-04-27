@@ -40,8 +40,8 @@ You can specify a localized group of atoms involved in the coupling MO transitio
 
 ## Quick start
 Choose any of the two versions:
-- run in python+shell: [docs/quickstart.md](../docs/quickstart.md)
-- run in shell: [docs/quickstart_old.md](../docs/quickstart_old.md)
+- run in python+shell: [docs/quickstart.md](docs/quickstart.md)
+- run in shell: [docs/quickstart_old.md](docs/quickstart_old.md)
 
 
 ### Contributing  
