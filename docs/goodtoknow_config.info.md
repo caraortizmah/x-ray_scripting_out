@@ -34,7 +34,7 @@ The following parameters are **OPTIONAL**:
 - **`orca_output`**: Refers to the XAS ORCA output file, compatible with ORCA versions 4 and 5.0.4. Note that ORCA 6.0 introduces a **substantially** different output format, which will be supported in a future update.  
 
 - **`spectra_option`** (optional): Accepts 0 or 1. Default is 0 (recommended). Option 1 allows advanced analysis (beta), particularly for `soc_option = 1`, though 0 is still advised unless further testing is conducted.  
-- **`external_MO_file`** (optional): An ORCA file containing L&ouml;wdin population data. Ensure that the ORCA input includes the flag `!Normalprint` to output L&ouml;wdin populations. This flag allows workflow separation from the `orca_output` file. Read more about [ORCA input](https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis).
+- **`external_MO_file`** (optional): An ORCA file containing L&ouml;wdin population data. Ensure that the ORCA input includes the flag `!Normalprint` to output L&ouml;wdin populations. This flag allows workflow separation from the `orca_output` file. Read more about [ORCA input flags](https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis).
 - **`atm_core`** (optional): Atomic symbol of the target atom, e.g., C, O, N, P, S. Default is C.  
 - **`wave_f_type`** (optional): Specifies the type of core MO, such as `s` or `p`. Default is `s`.  
 - **`input_path`** (optional): Absolute path to the directory containing ORCA output files (inputs for the pipeline).  
@@ -106,6 +106,6 @@ For `Atom_number_range_A`, include only the enumerated atoms representing Sulfur
 
 ## For a deeper (detailed) explanation 
 
-Information about running examples can be found in the [docs/examplesrun.md](https://github.com/caraortizmah/x-ray_scripting_out/blob/alt_ver/docs/examplesrun.md) file.  
+Information about running examples can be found in the [docs/examplesrun.md](../docs/examplesrun.md) file.  
 
 [comment]: <> (Using as molecule a pair of amino acids: phenylalanine F and tyrosine Y face-to-face separated by 4.0\AA. The F is in the atom range 0 to 22 and Y in the atom range 23 to 46 and the core MOs for C 1s are in the range of 7 to 24. The information presented in matricial form will come from the ouput `FY_output.out` in the excited-state range number of 1 to 17.)
