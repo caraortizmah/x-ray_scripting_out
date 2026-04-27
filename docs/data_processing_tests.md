@@ -168,8 +168,8 @@ def nosoc_output_dir(self):
 # In GitHub Actions / GitLab CI
 - name: Run pipeline with toys models
   run: |
-    ./manager.sh input/AB_4.0A.out config_nosoc.info output/ab40_test
-    ./manager.sh input/AB_5.0A.out config_soc.info output/ab50_test
+    ./tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc
+    ./tests/tester.sh ab50_test AB_5.0A.out config.info_examplesoc
 
 - name: Run regression tests
   run: pytest tests/test_data_processing.py -v --tb=short
@@ -209,16 +209,16 @@ def test_nosoc_soc_consistency(self):
     """Verify nosoc and soc cases produce consistent intermediate results."""
     # Load nosoc MOcore
     nosoc_mocore = self.load_csv(
-        self.nosoc_dir / 'resA_MOcore_AB_4.0A_1-26.csv'
+        self.nosoc_dir / 'resB_MOvirt_AB_4.0A_1-26.csv'
     )
     
     # Load soc MOcore (subset of MOs)
     soc_mocore = self.load_csv(
-        self.soc_dir / 'resA_MOcore_AB_5.0A_25-799.csv'
+        self.soc_dir / 'resB_MOvirt_AB_5.0A_25-799.csv'
     )
     
     # Compare atoms where they overlap
-    # (nosoc uses MOs 1-26, soc uses MOs 25-799)
+    # E.g. same chemical systen (nosoc and soc virtual MOs)
     # Atoms should be numbered consistently
     assert nosoc_mocore['num-1'].max() > 0
     assert soc_mocore['num-1'].max() > 0
