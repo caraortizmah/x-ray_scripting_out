@@ -118,7 +118,7 @@ soc_dir = tests_dir / 'fixtures' / 'reference_data' / 'soc'
 
 New reference data should be as small as the "toy model" like in the AB_4.0A (FY pair of amino acids)
 and AB_5.0A (MW pair of amino acids) enabling fast testing times.
-Add chemical explanation and detailed metadata information in [examples_overview](../examples/examples_overview.md)
+Add chemical explanation and detailed metadata information in [examples_overview.md](../../examples/examples_overview.md)
 
 
 When adding new toy models or test cases:
@@ -160,6 +160,6 @@ See `docs/data_processing_test.md` for detailed format specifications.
 
 ## Related Documentation
 
-- [docs/data_processing_test.md.md](../docs/docs/data_processing_test.md.md) - Testing strategy and methodology
-- [regression_testing_examples.md](../docs/regression_testing_examples.md) - Integration examples
+- [docs/data_processing_test.md.md](../../docs/docs/data_processing_test.md.md) - Testing strategy and methodology
+- [regression_testing_examples.md](../../docs/regression_testing_examples.md) - Integration examples
 - [test_data_processing.py](../test_data_processing.py) - Test implementation
