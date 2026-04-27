@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Change to script directory - allows calling from anywhere
-cd "$(dirname "$0")" || exit 1
-
 # A_ini and A_fin are the atom range that represents the
 #  residue of interest (res A) as occupied core MO
 # B_ini and B_fin are the atom range that represents the
@@ -81,6 +78,9 @@ fi
 if (( $opt_soc!=1 )); then
 	opt_soc=$((0))
 fi
+
+# Change to script directory - allows calling from anywhere
+cd "$(dirname "$0")" || exit 1
 
 # Extracting information from the output
 
