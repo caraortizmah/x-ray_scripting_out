@@ -21,16 +21,32 @@ x-ray_scripting_out/
 │   └── logger.py            # Logging system
 │
 ├── tests/                   # Unit tests
-│   ├── test_config.py       # Tests for config module
-│   └── test_validator.py    # Tests for validator module
+│   ├── fixtures/
+│   │   ├── reference_data/  # Toy models reference data
+│   │   │    ├── nosoc/      # AB_4.0A model, FY (6 csv files)
+│   │   │    ├── soc/        # AB_5.0A model, MW (10 csv files)
+│   │   └── README.md
+│   ├── tester.sh            # Tester for automate running
+│   ├── conftest.py          # Tests for config module
+│   ├── test_conf.py         # Tests for config validation module
+│   └── test_data_processing.py    # Tests for regression data
 │
 ├── docs/                    # Documentation
-│   ├── ARCHITECTURE.md      # This file
-│   ├── CONTRIBUTING.md      # Contribution guidelines
-│   └── API.md              # Python API documentation
+│   ├── architecture.md      # This file
+│   ├── contributing.md      # Contribution guidelines
+│   ├── data_processing_tests.md  # Data test guide
+│   ├── examplesrun.md       # Guidelines of the ORCA files and run
+│   ├── goodtoknow_config.info.md # config.info documentation
+│   ├── quickstart_old.md    # How to run (shell version)
+│   ├── quickstart.md    # How to run (+pythonshell version)
+│   └── regression_testing_examples.md # Regression test guideline
 │
 ├── examples/                # Example configurations
-│   └── config.info          # Example config file
+│   ├── config.info_examplenosoc     # Example config file nosoc case
+│   ├── config.info_examplesoc       # Example config file soc case
+│   ├── AB_4.0A.out          # Example ORCA output file nosoc case
+│   ├── AB_5.0A.out          # Example ORCA output file soc case
+│   └── examples_overview.md
 │
 ├── input/                   # ORCA input files directory
 └── output/                  # Pipeline output directory
