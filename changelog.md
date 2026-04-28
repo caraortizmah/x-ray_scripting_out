@@ -5,9 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2026-04-24
+## [2.0.1] - 2026-04-20
+## [3.0.0] - soon
 
-### Added - Phase 1: Foundation
+### Added - in atl_ver future new [3.0.0] : new structure
 
 #### Project Structure
 - New directory organization: `src/`, `tests/`, `docs/`, `bin/`, `xray_scripting/`
@@ -19,7 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Configuration Management
 - `ConfigManager` class for parsing and managing config.info
 - Support for mandatory and optional flags
-- Range parsing utility ("4-15" format)
 - Type-safe parameter access methods
 - Configuration-to-command-line conversion
 
@@ -47,9 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated original `helper_man.sh` (preserved for backward compatibility)
 
 #### Documentation
-- `docs/ARCHITECTURE.md`: System design and data flow
-- `docs/QUICKSTART.md`: Getting started guide
-- `docs/CONTRIBUTING.md`: Development guidelines
+- `docs/architecture.md`: System design and data flow
+- `docs/quickstart.md`: Getting started guide
+- `docs/contributing.md`: Development guidelines
 - Python docstrings for all modules
 
 #### Testing
@@ -61,11 +61,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Quality Assurance
 - Enhanced `.gitignore` with Python-specific entries
 - `requirements.txt` with dependencies
-- `CHANGELOG.md` for version tracking
+- `changelog.md` for version tracking
 
 #### Examples
 - Example configuration file with comments
-- Sample configurations for different use cases (C K-edge, O K-edge, S L-edge)
+- Sample configurations for different use cases (C K-edge and S L-edge)
 
 ### Changed
 - Project now uses Python for validation and logging (backward compatible)
@@ -91,7 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Migration Guide**:
 All existing workflows continue to work. New features are additive.
 
-## [0.1.0] - Previous Release
+## [2.0.1] - Previous Release
 
 Original shell script implementation.
 
@@ -100,28 +100,23 @@ Original shell script implementation.
 ## Roadmap
 
 ### Phase 2 (Coming Soon)
-- CLI improvements with named flags (`--atom-range-a` instead of `$1`)
-- Interactive configuration builder
-- Help system (`-h`, `--help`)
-- Config format alternatives (YAML, JSON)
+- Join HPC configuration
+- Batch processing manager
 
 ### Phase 3 (Short-term)
-- Parallel processing support
-- Batch processing manager
-- Performance profiling
-- Resume/checkpointing capability
+- Bridge Pipeline data as input for GAT model
+- Program of graph data base (external) should be ready
 
 ### Phase 4 (Medium-term)
-- GUI application
-- Data visualization
-- Output format converters (JSON, HDF5)
-- Plugin/extension system
+- Parallel processing support (python)
+- Config format alternatives (YAML, JSON)
+- Help system (`-h`, `--help`)
+- CLI improvements with named flags (`--atom-range-a` instead of `$1`)
+- Interactive configuration builder
 
-### Phase 5+ (Long-term)
-- REST API server
-- Database backend
-- Advanced analytics
-- Publication-ready visualizations
+### Phase 5 (Long-term)
+- GUI application
+- Docker
 
 ---
 
@@ -157,5 +152,5 @@ See LICENSE file for details.
 
 ## Contributors
 
-- Carlos Ortiz-Mahecha (Project Lead)
+- Carlos A. Ortiz-Mahecha (Project Lead)
 - Community contributions welcome (see contributing.md)
