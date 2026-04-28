@@ -20,8 +20,8 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
 sys.path.insert(0, project_root)
 
-from xray_scripting import ConfigManager, ConfigValidator, setup_logger
-from xray_scripting.logger import get_default_log_path, log_execution_info, log_completion
+from xas_qmol_parser import ConfigManager, ConfigValidator, setup_logger
+from xas_qmol_parser.logger import get_default_log_path, log_execution_info, log_completion
 
 
 def main():
