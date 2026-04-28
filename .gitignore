@@ -62,10 +62,8 @@ env/
 Thumbs.db
 
 # ===== Project Data =====
-input/*.out
-input/*.csv
-output/*.out
-output/*.csv
+input/*.*
+output/*.*
 output/*/
 pop_matrices/*/
 *.tar.gz
