@@ -8,6 +8,8 @@
 
 # ===== Configuration info =====
 config.info
+misc.md
+roadmap_goals.md
 
 # ===== Temporary & Log Files =====
 *.tmp
