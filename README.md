@@ -15,8 +15,17 @@ The updated output format integrates transition intensity from the matrix densit
      1. Number of transition intensities
      2. Transition intensity probability
      3. Force oscillator strenght 
-     
-[comment]: <> (TASK: cite here the paper in the correct equations when get published)
+
+This program has been used, e.g. for the analysis of quantum spectroscopy calculations for charge transfer in aromatic amino acids.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[![charge transfer](https://pubs.rsc.org/en/Image/Get?imageInfo.ImageType=GA&imageInfo.ImageIdentifier.ManuscriptID=D4CP04615C&imageInfo.ImageIdentifier.Year=2025)](https://pubs.rsc.org/en/content/articlelanding/2025/cp/d4cp04615c)
+
+Electron transition decomposition atomic contribution analysis (equation 5 of the [reference](https://pubs.rsc.org/en/content/articlelanding/2025/cp/d4cp04615c)) uses some matrix expressions.  
+Those matrix representations are encoded information from quantum spectroscopy calculations, the data parsing and encoding process prior to the calculation of the analysis (equation 5) is exactly what this repo does :)
+
+__________________________________________
 
 ### Getting Started
 
@@ -28,152 +37,11 @@ To execute the pipeline, you can use either `manager.sh` or `overall.sh`.
 The input required to run this pipeline is an XAS output file from ORCA, generated using either `ROCIS/DFT` or `PNO-ROCIS/DFT`. This input file must include the molecular orbital (MO) L&ouml;wdin population and the standard format of the transition intensities and probabilities for each excited state, along with a list of coupling MOs.
 You can specify a localized group of atoms involved in the coupling MO transitions, allowing for focused analysis of transitions between two sets of atoms, such as two amino acids in a protein.
 
-### Download
 
-Clone the `x-ray_scripting_out` repository using Git
-
-    $ git clone https://github.com/caraortizmah/x-ray_scripting_out.git
-
-### Run
-
-The pipeline can be run in two ways: a simpler, more automated approach using `helper_man.sh`, or a more customizable option with `manager.sh`.  
-
-- **`manager.sh`**: This is the primary script that executes all the pipeline steps in a sequential (noticeable) order, as indicated by their step-specific names.  
-- **`helper_man.sh`**: This provides an easier method by reading the required parameters from a separate file, named `config.info`.  
-
-#### Recommended: Automated Method
-
-Run the following command:
-
-    $ ./helper_man.sh
-
-`helper_man.sh` uses the information in `config.info` to execute `manager.sh`.
-
-<details>
-     
-  <summary>Read further about the config.info file</summary> 
-
-The `config.info` file is self-explanatory, formatted as a two-column table (NAME and FLAG). 
-The **NAME** column describes the parameter, option, or condition, while the **FLAG** column specifies the values that `manager.sh` will directly apply to the ORCA outputs.  
-
-Please **do not** alter the file format, such as lines, dashes, or naming conventions. Additionally, **do not** modify any NAME or FLAG entries.  
-
-##### General overview of the 'FLAG's
-
-The following parameters are **MANDATORY**:
-- `Atom_number_range_A`
-- `Atom_number_range_B`
-- `core_MO_range`
-- `exc_state_range`
-- `soc_option`
-- `orca_output`
-
-The following parameters are **OPTIONAL**:
-- `spectra_option`
-- `external_MO_file`
-- `atm_core`
-- `wave_f_type`
-- `input_path`
-- `output_path`
-
-##### Description of the 'FLAG's
-
-- **`Atom_number_range_A`** and **`Atom_number_range_B`**: Specify the range of atom sequential numbers in the coordinates used in the XAS ORCA output file (`orca_output`). Note that the enumeration starts from 0 for the first atom.
-- **`Atom_number_range_A`**: Atoms of the core space.
-- **`Atom_number_range_A`**: Atoms of the virtual space.  
-- **`core_MO_range`**: Defines the range of core molecular orbitals (MOs) for the target atom, e.g., C. To study specific core MOs, such as 4 and 15, run the pipeline separately for each, setting `core_MO_range = 4-4` for one and `core_MO_range = 15` for the other. If `core_MO_range = 4-15` is specified, the program processes the entire sequential range, following the same logic as the atom number range flags (`Atom_number_range_A` and `Atom_number_range_B`).
-- **`exc_state_range`**: Specifies the range of excited states to analyze, based on those computed in `orca_output`. It follows the same format as `core_MO_range`, `Atom_number_range_B` and `Atom_number_range_A`.  
-- **`soc_option`**: Accepts 0 or 1, where 0 excludes spin-orbit coupling effects, and 1 includes them (e.g., for sulfur L-edge analysis).  
-- **`orca_output`**: Refers to the XAS ORCA output file, compatible with ORCA versions 4 and 5.0.4. Note that ORCA 6.0 introduces a **substantially** different output format, which will be supported in a future update.  
-
-- **`spectra_option`** (optional): Accepts 0 or 1. Default is 0 (recommended). Option 1 allows advanced analysis (beta), particularly for `soc_option = 1`, though 0 is still advised unless further testing is conducted.  
-- **`external_MO_file`** (optional): An ORCA file containing L&ouml;wdin population data. Ensure that the ORCA input includes the flag `!Normalprint` to output L&ouml;wdin populations. This flag allows workflow separation from the `orca_output` file. Read more about [ORCA input](https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis).
-- **`atm_core`** (optional): Atomic symbol of the target atom, e.g., C, O, N, P, S. Default is C.  
-- **`wave_f_type`** (optional): Specifies the type of core MO, such as `s` or `p`. Default is `s`.  
-- **`input_path`** (optional): Absolute path to the directory containing ORCA output files (inputs for the pipeline).  
-- **`output_path`** (optional): Absolute path to the directory where the pipeline will save results (outputs).  
-
-##### Assumptions
-
-- The file **`config.info`** must retain the name `config.info`.  :) 
-- Sequential ranges (`Atom_number_range_A`, `Atom_number_range_B`, `core_MO_range`, and `exc_state_range`) should be specified with numbers joined by a dash (`-`) without spaces (e.g., `4-15`).  
-- To analyze the full set of computed excited states, replace the range with the word `none` (without quotes).  
-- **`soc_option`** defaults to 0. It is recommended to explicitly set all FLAG values, even default ones like 0.  
-- **`spectra_option`** defaults to 0.  
-- **`external_MO_file`** can be left empty, in which case the pipeline assumes that L&ouml;wdin populations are included in the `orca_output`.  
-- **`atm_core`** defaults to C.  
-- **`wave_f_type`** defaults to `s`.  
-It is highly recommended to use absolute paths for `input_path` and `output_path`.
-- If `input_path` is not provided, the pipeline will attempt to use its current execution location to find the `orca_output` and `external_MO_file` (if applicable).
-- If `output_path` is not specified, the pipeline will place the results in its execution location.
-The results will be saved in the `output_path` under a newly created folder named "`orca_output`_out" (e.g., `output_path`/`orca_output`_out/). A reduced version for subsequent analysis will be placed in a new directory: `output_path`/pop_matrices/`orca_output`_csv/.
-
-</details>
-
-#### Customizable Method
-
-I recommed to read the information related the `config.info` file.
-To run the pipeline, use the following command:
-
-     $ ./manager.sh $1 $2 $3 $4 $5 $6 $7 $8 $9 $10 $11 $12 $13 $14 $15
-
-Where:
-
-- `$1`: Initial number range of **`Atom_number_range_A`**
-- `$2`: Final number range of **`Atom_number_range_A`**
-- `$3`: Initial number range of **`Atom_number_range_B`**
-- `$4`: Final number range of **`Atom_number_range_B`**
-- `$5`: Initial number range of **`core_MO_range`**
-- `$6`: Final number range of **`core_MO_range`**
-- `$7`: **`soc_option`**
-- `$8`: **`orca_output`**
-- `$9`: **`exc_state_range`**
-- `$10`: **`spectra_option`**
-- `$11`: **`atm_core`**
-- `$12`: **`wave_f_type`**
-- `$13`: **`external_MO_file`**
-- `$14`: **`input_path`**
-- `$15`: **`output_path`**
-
-Please note that you cannot leave any field empty; otherwise, the subsequent field (parameter) will be interpreted as the missing option for the previous one.
-
-[comment]: <> (To be removed, not for now)
-[comment]: <> (`$1` and `$2` 1 are the atom range, initial and final atom, that represents a first molecular region target in the whole protein or peptide calculation )
-[comment]: <> (`$3` and `$4` are the atom range, initial and final, atom that represents a second molecular region target in the whole protein or peptide calculation)
-[comment]: <> (`$5` and `$6` are the core MO range, initial and final MO, corresponding to C 1s in the furute will be adapt to N, O and S)
-[comment]: <> (`$7` is the XAS ORCA output)
-[comment]: <> (`$8` is the excited state range described by two numbers jount by the character '-')   
-    
-
-### Examples:
-
-The provided example of the `config.info` file serves as a template, where only the second column (the flags) should be modified to suit your analysis.  
-
-This example demonstrates an analysis setup for:  
-- XAS for Sulfur (`atm_core = S`) at the L-edge (`wave_f_type = p`) including spin-orbit coupling effects (`soc_option = 1`).  
-- Three p core MOs to analyze: `core_MO_range = 63-65`.  
-- Excited states limited to the first seven (`exc_state_range = 1-7`).  
-- Atoms involved (`0-116`): the entire molecule. Although including all atoms might be unnecessary since not all are sulfur, this approach simplifies the setup by screening everything, even if it seems redundant or overly detailed.  
-
-For `Atom_number_range_A`, include only the enumerated atoms representing Sulfur (core MO space). For `Atom_number_range_B`, include the enumerated atoms of the virtual MO space (it is recommended to include all atoms). This range (0 to 116) represents the entire molecule's interaction.  
-
-More detailed information about running examples can be found in the `example/readme.md` file.  
-
-[comment]: <> (Using as molecule a pair of amino acids: phenylalanine F and tyrosine Y face-to-face separated by 4.0\AA. The F is in the atom range 0 to 22 and Y in the atom range 23 to 46 and the core MOs for C 1s are in the range of 7 to 24. The information presented in matricial form will come from the ouput `FY_output.out` in the excited-state range number of 1 to 17.)
-
-[comment]: <> (     $ ./manager.sh 0 22 23 46 7 24 FY_output.out 1-17)
-
-[comment]: <> (More information about the running in `example/readme.md`)
-
-### Final Comments:
-
-This pipeline primarily utilizes Linux text processing tools:  
-
-- `grep`  
-- `cut`  
-- `awk`  
-- `sed`  
-- `vim`
+## Quick start
+Choose any of the two versions:
+- run in python+shell: [docs/quickstart.md](docs/quickstart.md)
+- run in shell: [docs/quickstart_old.md](docs/quickstart_old.md)
 
 
 ### Contributing  
@@ -201,7 +69,7 @@ Alternatively, you can open an issue with the tag "enhancement." And do not forg
 
 #### Top contributors:
 
- [caraortizmah]([https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis](https://github.com/caraortizmah))
+ [External information from ORCA](https://sites.google.com/site/orcainputlibrary/orbital-and-density-analysis)
 
 
 ### License
@@ -212,7 +80,8 @@ Distributed under the GNU General Public License v3.0
 
 <details>
      
-  <summary>caraortizmah</summary> 
+  <summary>Lead project:</summary> 
   
-  **Carlos A. Ortiz-Mahecha** - ortizmahecha[at]proton.me
+  **Carlos A. Ortiz-Mahecha**
+
 </details>
