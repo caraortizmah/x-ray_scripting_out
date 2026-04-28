@@ -152,6 +152,7 @@ if [ -f "config.info" ]; then
         fi
     else
         print_status "!" "ORCA output file $ORCA_FILE not found in $INPUT_PATH"
+        echo "Hint:   read docs/quickstart.md to set up config.info and necessary files prior to run"
     fi
     EXT_FILE=$(grep "external_MO_file" config.info | cut -d'=' -f2 | tr -d ' ' || true)
     if [ -z "$EXT_FILE" ]; then
@@ -159,6 +160,7 @@ if [ -f "config.info" ]; then
         " may be used as external MO file, which may cause issues"
     elif [ ! -f "$INPUT_PATH/$EXT_FILE" ]; then
         print_status "!" "external_MO_file $EXT_FILE not found in $INPUT_PATH"
+        echo "Hint:   read docs/quickstart.md to set up config.info and necessary files prior to run"
     elif grep -q "NormalPrint" "$INPUT_PATH/$EXT_FILE" && \
     grep -q "LOEWDIN REDUCED ORBITAL POPULATIONS PER MO" "$INPUT_PATH/$EXT_FILE"; then
         print_status "+" "Loewdin population analysis appears to be found in NormalPrint \
