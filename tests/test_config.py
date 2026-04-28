@@ -10,8 +10,8 @@ from pathlib import Path
 # Add package to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from xray_scripting.config import ConfigManager
-from xray_scripting.validator import ConfigValidator
+from xas_qmol_parser.config import ConfigManager
+from xas_qmol_parser.validator import ConfigValidator
 
 
 class TestConfigManager:

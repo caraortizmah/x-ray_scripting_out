@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added - in atl_ver future new [3.0.0] : new structure
 
 #### Project Structure
-- New directory organization: `src/`, `tests/`, `docs/`, `bin/`, `xray_scripting/`
-- Python package `xray_scripting` for core functionality
+- New directory organization: `src/`, `tests/`, `docs/`, `bin/`, `xas_qmol_parser/`
+- Python package `xas_qmol_parser` for core functionality
 - `src/` contains the steps (.sh files)
 - `tests/` will implement a run test
 - `bin/` will implement the setup and the 'helper_man' in python

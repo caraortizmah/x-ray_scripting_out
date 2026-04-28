@@ -14,7 +14,7 @@ x-ray_scripting_out/
 │   ├── helper_man.sh (original)
 │   └── step*.sh
 │
-├── xray_scripting/          # Python package (new)
+├── xas_qmol_parser/          # Python package (new)
 │   ├── __init__.py
 │   ├── config.py            # Configuration management
 │   ├── validator.py         # Input validation
@@ -71,7 +71,7 @@ Output/ (CSV matrices)
 
 ## Configuration Management
 
-### ConfigManager (`xray_scripting/config.py`)
+### ConfigManager (`xas_qmol_parser/config.py`)
 
 **Purpose**: Parse and manage configuration files
 
@@ -83,7 +83,7 @@ Output/ (CSV matrices)
 
 **Example Usage**:
 ```python
-from xray_scripting import ConfigManager
+from xas_qmol_parser import ConfigManager
 
 config = ConfigManager("config.info")
 if config.load():
@@ -93,7 +93,7 @@ if config.load():
 
 ## Validation System
 
-### ConfigValidator (`xray_scripting/validator.py`)
+### ConfigValidator (`xas_qmol_parser/validator.py`)
 
 **Purpose**: Validate configuration and input files
 
@@ -106,7 +106,7 @@ if config.load():
 
 **Example Usage**:
 ```python
-from xray_scripting import ConfigManager, ConfigValidator
+from xas_qmol_parser import ConfigManager, ConfigValidator
 
 config = ConfigManager("config.info")
 config.load()
@@ -120,7 +120,7 @@ else:
 
 ## Logging System
 
-### Setup Logger (`xray_scripting/logger.py`)
+### Setup Logger (`xas_qmol_parser/logger.py`)
 
 **Features**:
 - Colored console output
@@ -130,7 +130,7 @@ else:
 
 **Example Usage**:
 ```python
-from xray_scripting import setup_logger
+from xas_qmol_parser import setup_logger
 
 logger = setup_logger(
     name="my_script",
@@ -196,7 +196,7 @@ pytest tests/test_config.py
 pytest tests/ -v
 
 # With coverage
-pytest tests/ --cov=xray_scripting
+pytest tests/ --cov=xas_qmol_parser
 ```
 
 ## Adding New Features
@@ -286,5 +286,5 @@ chmod +x src/*.sh
 ```bash
 # Ensure Python can find the package
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
-python3 -c "from xray_scripting import ConfigManager"
+python3 -c "from xas_qmol_parser import ConfigManager"
 ```

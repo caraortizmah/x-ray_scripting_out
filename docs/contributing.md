@@ -149,7 +149,7 @@ log_message "Processing: $INPUT_FILE"
 
 1. **Update ConfigManager**:
    ```python
-   # In xray_scripting/config.py
+   # In xas_qmol_parser/config.py
    MANDATORY_FLAGS = {
        'new_param': str,  # or int, etc.
    }
@@ -202,7 +202,7 @@ log_message "Processing: $INPUT_FILE"
 
 ```python
 import pytest
-from xray_scripting import ConfigManager
+from xas_qmol_parser import ConfigManager
 
 def test_config_loading():
     """Test that config loads successfully."""
@@ -225,7 +225,7 @@ def test_config_loading():
 
 Aim for >80% coverage:
 ```bash
-pytest tests/ --cov=xray_scripting --cov-report=html
+pytest tests/ --cov=xas_qmol_parser --cov-report=html
 ```
 
 ## Documentation
@@ -275,7 +275,7 @@ value = int(value)
 
 ## Release Process
 
-1. Update version in `xray_scripting/__init__.py`
+1. Update version in `xas_qmol_parser/__init__.py`
 2. Update `changelog.md`
 3. Create git tag: `git tag v1.2.3`
 4. Push tag: `git push origin v1.2.3`

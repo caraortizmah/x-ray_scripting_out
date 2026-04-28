@@ -5,7 +5,7 @@ A package for processing (data parser) X-ray Absorption Spectroscopy (XAS)
 output data from ORCA (4.0 and 5.0 versions) quantum chemistry software.
 """
 
-__version__ = "3.0.0"
+__version__ = "3.0.1"
 __author__ = "Carlos Ortiz-Mahecha"
 
 from .config import ConfigManager

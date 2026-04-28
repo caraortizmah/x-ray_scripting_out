@@ -126,7 +126,7 @@ Developer Workflow: Make changes -> Validate reference -> Run pipeline -> Test a
 Step 1: Create feature branch and make code changes
 ```bash
     git checkout -b feature/optimize-calculations
-    # ... edit src/step*.sh or xray_scripting/*.py ...
+    # ... edit src/step*.sh or xas_qmol_parser/*.py ...
     git add .
     git commit -m "Optimize MO population calculations"
 ```

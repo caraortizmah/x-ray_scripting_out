@@ -110,7 +110,7 @@ Different tolerances for different data types:
 ```bash
 # Developer modifies pipeline code
 git checkout -b feature/my-optimization
-# ... edit src/step*.sh or xray_scripting/*.py ...
+# ... edit src/step*.sh or xas_qmol_parser/*.py ...
 ```
 
 ### Step 2: Run Pipeline with Toy Models
