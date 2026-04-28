@@ -54,11 +54,11 @@ if command -v python3 &> /dev/null; then
     PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
     echo "+ Python $PYTHON_VERSION found"
     
-    # Check if xray_scripting package is importable
-    if python3 -c "import sys; sys.path.insert(0, '.'); from xray_scripting import ConfigManager" 2>/dev/null; then
-        echo "+ Python package xray_scripting is ready"
+    # Check if xas_qmol_parser package is importable
+    if python3 -c "import sys; sys.path.insert(0, '.'); from xas_qmol_parser import ConfigManager" 2>/dev/null; then
+        echo "+ Python package xas_qmol_parser is ready"
     else
-        echo "! Warning: Could not import xray_scripting package"
+        echo "! Warning: Could not import xas_qmol_parser package"
         echo "  Make sure to install dependencies if needed"
     fi
 else
