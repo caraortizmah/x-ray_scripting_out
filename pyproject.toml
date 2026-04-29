@@ -68,7 +68,7 @@ xasqm-parser-test = "xas_qmol_parser.cli:run_xasqm_parsertest"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
-addopts = "-v --cov=xas_qmol_parser --cov-report=html"
+addopts = "-v"
 
 [tool.coverage.run]
 source = ["xas_qmol_parser"]
