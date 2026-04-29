@@ -40,7 +40,19 @@ You can specify a localized group of atoms involved in the coupling MO transitio
 
 ## Quick start
 Choose any of the two versions:
+
+### 1. Using Python:
+
+#### Installation from PyPI (only user) or using pip (user and development mode)
+(pre-release, alpha version):
+- Read [docs/installation.md](docs/installation.md)
+
+#### Direct use without installation (development mode too)
+
 - run in python+shell: [docs/quickstart.md](docs/quickstart.md)
+
+### 2. Using only shell:
+
 - run in shell: [docs/quickstart_old.md](docs/quickstart_old.md)
 
 
