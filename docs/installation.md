@@ -53,17 +53,38 @@ This installs:
 
 ### Using Installed Commands
 
-After installation, you can run:
+After installation, you can check:
 
 ```bash
-# Run manager script (not working yet)
-manager --help
+# For help
+xasqm-parser --help
+```
+To do before running:
 
-# Run overall script  it should call helper_manager (not working yet)
-overall --help
+```bash
+# Setup
+xasqm-parser-setup
+# Test
+xasqm-parser-test
 ```
 
-### Direct Script Execution (Without Installation)
+# Run overall script  it should call helper_manager (not working yet)
+#overall --help
+```
+xasqm_parser will call `bin/helper_man.py`
+
+1. Please READ [quickstart.md](quickstart.md) to understand how the Pipeline runs.
+2. Then READ [goodtoknow_config.info.md] to understand the config.info file required (and orca output).
+
+Then now you can run:
+```bash
+# Run xas_quantumol_parser package
+xasqm_parser 
+```
+
+### Direct Script Execution (Without Installation or Python)
+
+Read [quickstart_old.md](quickstart_old.md) to understand how the Pipeline works only in shell.
 
 From the repository root:
 
@@ -72,7 +93,9 @@ From the repository root:
 ./src/helper_man.sh [options]
 ```
 
-Or using Python:
+### Direct Script Execution using Python (Without Installation)
+
+Read [quickstart.md](quickstart.md) to understand how the Pipeline works.
 
 ```bash
 python3 bin/helper_man.py [options]
@@ -103,7 +126,7 @@ which manager
 which overall
 ```
 
-### 3. Run Tests
+### 3. Run Tests (not working yet)
 
 ```bash
 pytest tests/ -v
@@ -167,6 +190,7 @@ pip uninstall x-ray-quantumol-parser
 
 ## Next Steps
 
-- Read [quickstart.md](quickstart.md) for pipeline usage
+- Read [quickstart.md](quickstart.md), [examplesrun.md](examplesrun.md) for pipeline usage
 - Check [architecture.md](architecture.md) for system design
+- Further reading [data_processing_tests.md](data_processing_tests.md) and [regression_testing_examples.md](regression_testing_examples.md)
 - See [contributing.md](contributing.md) for development guidelines
