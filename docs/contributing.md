@@ -4,7 +4,7 @@
 
 1. **Fork and Clone**:
    ```bash
-   git clone https://github.com/yourusername/x-ray_scripting_out.git
+   git clone https://github.com/caraortizmah/x-ray_scripting_out.git
    cd x-ray_scripting_out
    ```
 
