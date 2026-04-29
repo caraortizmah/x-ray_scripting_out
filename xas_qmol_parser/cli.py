@@ -150,10 +150,12 @@ if __name__ == "__main__":
     # For testing CLI entry points
     if len(sys.argv) > 1:
         command = sys.argv[1]
-        if command == "manager":
-            sys.exit(run_manager())
-        elif command == "overall":
-            sys.exit(run_overall())
+        if command == "parser":
+            sys.exit(run_xasqm_parser())
+        elif command == "setup":
+            sys.exit(run_xasqm_parsersetup())
+        elif command == "test":
+            sys.exit(run_xasqm_parsertest())
     
-    print("Usage: manager|overall [args]")
+    print("Usage: xasqm-parser|xasqm-parser-setup|xasqm-parser-test [args]")
     sys.exit(1)
