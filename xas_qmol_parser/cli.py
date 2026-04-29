@@ -110,6 +110,42 @@ def run_xasqm_parsersetup() -> int:
         return 1
 
 
+def run_xasqm_parsertest() -> int:
+    """
+    Entry point for 'xasqm-parser-test' console script.
+    Runs automated tests using tester.sh for both AB_4.0A and AB_5.0A models.
+    """
+    try:
+        print("=" * 60)
+        print("Running x-ray-quantumol-parser test suite...")
+        print("=" * 60)
+        
+        tester_script = _get_script_path("tester.sh", "tests")
+        
+        # Test 1: AB_4.0A (without SOC)
+        print("\n[1/2] Testing AB_4.0A model (no SOC)...")
+        cmd1 = ["bash", str(tester_script), "ab40_test", "AB_4.0A.out", "config.info_examplenosoc"]
+        result1 = subprocess.run(cmd1, check=False)
+        
+        # Test 2: AB_5.0A (with SOC)
+        print("\n[2/2] Testing AB_5.0A model (with SOC)...")
+        cmd2 = ["bash", str(tester_script), "ab50_test", "AB_5.0A.out", "config.info_examplesoc"]
+        result2 = subprocess.run(cmd2, check=False)
+        
+        print("\n" + "=" * 60)
+        if result1.returncode == 0 and result2.returncode == 0:
+            print("All tests passed!")
+        else:
+            print("Some tests failed. Please review the output above.")
+        print("=" * 60)
+        
+        # Return non-zero if any test failed
+        return max(result1.returncode, result2.returncode)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+
 if __name__ == "__main__":
     # For testing CLI entry points
     if len(sys.argv) > 1:
