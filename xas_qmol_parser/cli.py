@@ -78,14 +78,32 @@ RELATED COMMANDS:
         return 1
 
 
-def run_overall() -> int: #test (main one is helper_man.sh)
+def run_xasqm_parsersetup() -> int:
     """
-    Entry point for 'overall' console script.
-    Runs src/overall.sh with command-line arguments.
+    Entry point for 'xasqm-parser-setup' console script.
+    Runs setup.sh followed by check_environment.sh.
     """
     try:
-        script = _get_script_path("overall.sh")
-        result = subprocess.run([str(script)] + sys.argv[1:], check=False)
+        print("=" * 60)
+        print("Setting up x-ray-quantumol-parser environment...")
+        print("=" * 60)
+        
+        # Run setup.sh
+        setup_script = _get_script_path("setup.sh", "bin")
+        print("\n[1/2] Running setup.sh...")
+        result = subprocess.run(["bash", str(setup_script)], check=False)
+        if result.returncode != 0:
+            print(f"Warning: setup.sh exited with code {result.returncode}")
+        
+        # Run check_environment.sh
+        check_script = _get_script_path("check_environment.sh", "bin")
+        print("\n[2/2] Running check_environment.sh...")
+        result = subprocess.run(["bash", str(check_script)], check=False)
+        
+        print("\n" + "=" * 60)
+        print("Setup complete!")
+        print("=" * 60)
+        
         return result.returncode
     except FileNotFoundError as e:
         print(f"Error: {e}", file=sys.stderr)
