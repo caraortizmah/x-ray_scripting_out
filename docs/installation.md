@@ -23,7 +23,8 @@ python3 bin/helper_man.py [options]
 
 Additionally:
 1. Read [examplesrun.md](examplesrun.md) to understand depper how to run
-2. Read [goodtoknow_config.info.md](goodtoknow_config.info.md) to understand the config.info file required (and orca output).
+2. Read [examples/examples_overview.md](examples/examples_overview.md) to a detailed orca output format information
+3. Read [goodtoknow_config.info.md](goodtoknow_config.info.md) to understand the config.info file required (and orca output).
 
 ## Quick Install
 
@@ -220,7 +221,7 @@ pip install shellcheck-py
 pip install build twine
 ```
 
-## Next Steps: Documenation for evelopers
+## Next Steps: Documenation for developers
 
 - Read [quickstart.md](quickstart.md), [examplesrun.md](examplesrun.md) for pipeline usage
 - Check [architecture.md](architecture.md) for system design
@@ -230,10 +231,11 @@ pip install build twine
 
 Please READ the rest of the documentation in `docs/` such as:
 1. [examplesrun.md](examplesrun.md) to understand depper how to run
-2. [data_processing_tests.md](data_processing_tests.md) to understand depper how to run tests and shell scripts
-3. [regression_testing_examples.md](regression_testing_examples.md) to do specific tests and not all of them
-4. Check [architecture.md](architecture.md) for system design
-5. See [contributing.md](contributing.md) for development guidelines
+2. [examples/examples_overview.md](examples/examples_overview.md) to understand in more detail, including orca output format
+3. [data_processing_tests.md](data_processing_tests.md) to understand depper how to run tests and shell scripts
+4. [regression_testing_examples.md](regression_testing_examples.md) to do specific tests and not all of them
+5. Check [architecture.md](architecture.md) for system design
+6. See [contributing.md](contributing.md) for development guidelines
 
 In the future contributing.md and publishing.md
 
