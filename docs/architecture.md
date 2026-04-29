@@ -10,8 +10,11 @@ x-ray_scripting_out/
 │   └── helper_man.py        # Enhanced helper script (Python)
 │
 ├── src/                      # Shell scripts (pipeline steps)
+│   ├── configconfig.sh
 │   ├── manager.sh
 │   ├── helper_man.sh (original)
+│   ├── migrator.sh
+│   ├── overall.sh
 │   └── step*.sh
 │
 ├── xas_qmol_parser/          # Python package (new)
@@ -37,6 +40,7 @@ x-ray_scripting_out/
 │   ├── data_processing_tests.md  # Data test guide
 │   ├── examplesrun.md       # Guidelines of the ORCA files and run
 │   ├── goodtoknow_config.info.md # config.info documentation
+│   ├── installation.md      # Guidelines for package installation version
 │   ├── quickstart_old.md    # How to run (shell version)
 │   ├── quickstart.md    # How to run (+pythonshell version)
 │   └── regression_testing_examples.md # Regression test guideline
