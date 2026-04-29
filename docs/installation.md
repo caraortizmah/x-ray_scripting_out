@@ -196,14 +196,6 @@ pip install shellcheck-py
 pip install build twine
 ```
 
-## Uninstallation
-
-To remove the package (named x-ray-quantumol-parser):
-
-```bash
-pip uninstall x-ray-quantumol-parser
-```
-
 ## Next Steps
 
 - Read [quickstart.md](quickstart.md), [examplesrun.md](examplesrun.md) for pipeline usage
