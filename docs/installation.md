@@ -173,7 +173,15 @@ chmod +x src/*.sh
 chmod +x bin/*.sh
 ```
 
-### Missing Dependencies
+## Uninstallation
+
+To remove the package (named x-ray-quantumol-parser):
+
+```bash
+pip uninstall x-ray-quantumol-parser
+```
+
+### Missing Dependencies when Pipeline is used with no installation
 
 Install specific optional dependencies:
 
