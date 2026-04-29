@@ -1,0 +1,28 @@
+# Include README and license files
+include README.md
+include LICENSE
+include changelog.md
+
+# Include configuration examples
+include config.info
+include examples/config.info_*
+include examples/AB_4.0A.out
+include examples/AB_5.0A.out
+
+# Include documentation
+recursive-include docs *.md
+
+# Include shell scripts
+recursive-include bin *.sh *.py
+recursive-include src *.sh
+
+# Include test fixtures
+recursive-include tests *.py *.sh
+recursive-include tests/fixtures *
+
+# Exclude Python cache files
+global-exclude __pycache__
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .pytest_cache
+global-exclude *.egg-info
