@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "x-ray-quantumol-parser"
-version = "3.0.0"
+version = "3.0.2"
 description = "X-ray Absorption Spectroscopy (XAS) data processing pipeline for ORCA output"
 readme = "README.md"
 requires-python = ">=3.8"
