@@ -46,8 +46,32 @@ def run_xasqm_parser() -> int:
     Provides --help to display usage information.
     """
     try:
-        script = _get_script_path("manager.sh")
-        result = subprocess.run([str(script)] + sys.argv[1:], check=False)
+        # Check for --help flag
+        if len(sys.argv) > 1 and sys.argv[1] in ('--help', '-h', 'help'):
+            help_msg = """
+xas-qmol-parser: X-ray Absorption Spectroscopy Quantum Molecular Parser
+
+USAGE:
+    xasqm-parser [options]
+
+This command calls bin/helper_man.py to run the X-ray spectroscopy pipeline.
+
+For detailed information on usage, examples, and configuration, please see:
+    - README.md: Project overview and quick start
+    - docs/quickstart.md: Step-by-step tutorial
+    - docs/architecture.md: System design and data flow
+    - docs/installation.md: Installation instructions
+
+RELATED COMMANDS:
+    xasqm-parser-setup     Setup environment and dependencies
+    xasqm-parser-test      Run automated tests
+
+"""
+            print(help_msg)
+            return 0
+        
+        script = _get_script_path("helper_man.py", "bin")
+        result = subprocess.run([sys.executable, str(script)] + sys.argv[1:], check=False)
         return result.returncode
     except FileNotFoundError as e:
         print(f"Error: {e}", file=sys.stderr)
