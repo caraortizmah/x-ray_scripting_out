@@ -44,7 +44,8 @@ fi
 
 # Prepare pipeline inputs (orca output and config.info)
 cp examples/${orca_output} input/
-cp examples/${config_info} config.info 
+cp examples/${config_info} config.info
+./src/configconfig.sh config.info ${PWD}/input ${PWD}/output 
 # Run pipeline, e.g. with nosoc toy model (AB_4.0A)
 ./bin/helper_man.py
 # copy or move the csv data 
