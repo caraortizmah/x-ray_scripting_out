@@ -21,6 +21,10 @@ Read [quickstart.md](quickstart.md) to understand how the Pipeline works.
 python3 bin/helper_man.py [options]
 ```
 
+Additionally:
+1. Read [examplesrun.md](examplesrun.md) to understand depper how to run
+2. Read [goodtoknow_config.info.md](goodtoknow_config.info.md) to understand the config.info file required (and orca output).
+
 ## Quick Install
 
 ### From PyPI, mainly for users (not released yet)
