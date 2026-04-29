@@ -66,7 +66,15 @@ To do before running:
 xasqm-parser-setup
 # Test
 xasqm-parser-test
+# Check test
+pytest tests/ -v
 ```
+Before using `xasqm-parser`
+```bash
+# xasqm-parser (alone) calls /bin/helper_man.py
+xasqm-parser
+```
+Please READ [quickstart.md](quickstart.md) to understand how the Pipeline runs.
 
 # Run overall script  it should call helper_manager (not working yet)
 #overall --help
@@ -126,7 +134,7 @@ which manager
 which overall
 ```
 
-### 3. Run Tests (not working yet)
+### 3. Run Tests
 
 ```bash
 pytest tests/ -v
