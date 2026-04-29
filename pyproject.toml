@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "x-ray-quantumol-parser"
+version = "3.0.0"
+description = "X-ray Absorption Spectroscopy (XAS) data processing pipeline for ORCA output"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "GPL-3.0"}
+authors = [
+    {name = "Carlos A. Ortiz-Mahecha", email = "ortizmahecha@proton.me"},
+]
+keywords = [
+    "quantum-chemistry",
+    "xas",
+    "x-ray",
+    "spectroscopy",
+    "excited-state",
+    "charge-transfer",
+    "orca",
+    "molecular-orbitals",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+
+[project.urls]
+Homepage = "https://github.com/caraortizmah/x-ray_scripting_out"
+Repository = "https://github.com/caraortizmah/x-ray_scripting_out.git"
+Documentation = "https://github.com/caraortizmah/x-ray_scripting_out/blob/main/docs"
+Issues = "https://github.com/caraortizmah/x-ray_scripting_out/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "shellcheck-py>=0.9.0",
+]
+test = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[tool.setuptools]
+packages = ["xas_qmol_parser"]
+
+[tool.setuptools.package-data]
+xas_qmol_parser = ["py.typed"]
+
+[project.scripts]
+manager = "xas_qmol_parser.cli:run_manager"
+overall = "xas_qmol_parser.cli:run_overall"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --cov=xas_qmol_parser --cov-report=html"
+
+[tool.coverage.run]
+source = ["xas_qmol_parser"]
+omit = ["*/tests/*", "*/test_*.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
