@@ -1,96 +1,8 @@
 # Installation Guide for x-ray-quantumol-parser
 
-## Quick Install
+In case installation is not intended:
 
-### From PyPI (mainly for users)
-
-```bash
-pip install x-ray-quantumol-parser
-```
-
-Then run:
-```bash
-manager [options]
-# or
-overall [options]
-```
-
-## Development Installation (as a package)
-
-For development and testing:
-
-### 1. Clone repo
-
-```bash
-git clone https://github.com/caraortizmah/x-ray_scripting_out.git
-cd x-ray_scripting_out
-```
-
-### 2. Create Virtual Environment (Recommended)
-
-```bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-### 3. Install Package in Development Mode
-
-```bash
-pip install -e .
-```
-
-### 4. Install Development Dependencies
-
-```bash
-pip install -e ".[dev]"
-```
-
-This installs:
-- pytest and pytest-cov (testing)
-- shellcheck-py (shell script linting)
-
-## Running the Pipeline
-
-### Using Installed Commands
-
-After installation, you can check:
-
-```bash
-# For help
-xasqm-parser --help
-```
-To do before running:
-
-```bash
-# Setup
-xasqm-parser-setup
-# Test
-xasqm-parser-test
-# Check test
-pytest tests/ -v
-```
-Before using `xasqm-parser`
-```bash
-# xasqm-parser (alone) calls /bin/helper_man.py
-xasqm-parser
-```
-Please READ [quickstart.md](quickstart.md) to understand how the Pipeline runs.
-
-# Run overall script  it should call helper_manager (not working yet)
-#overall --help
-```
-xasqm_parser will call `bin/helper_man.py`
-
-1. Please READ [quickstart.md](quickstart.md) to understand how the Pipeline runs.
-2. Then READ [goodtoknow_config.info.md] to understand the config.info file required (and orca output).
-
-Then now you can run:
-```bash
-# Run xas_quantumol_parser package
-xasqm_parser 
-```
-
-### Direct Script Execution (Without Installation or Python)
+### Direct Script Execution (without installation or Python)
 
 Read [quickstart_old.md](quickstart_old.md) to understand how the Pipeline works only in shell.
 
@@ -101,13 +13,144 @@ From the repository root:
 ./src/helper_man.sh [options]
 ```
 
-### Direct Script Execution using Python (Without Installation)
+### Direct Script Execution using Python (without installation)
 
 Read [quickstart.md](quickstart.md) to understand how the Pipeline works.
 
 ```bash
 python3 bin/helper_man.py [options]
 ```
+
+## Quick Install
+
+### From PyPI, mainly for users (not released yet)
+
+```bash
+pip install x-ray-quantumol-parser
+```
+
+Get to know the Pipeline: 
+Read [quickstart.md](quickstart.md) to understand how the Pipeline works.
+Read [quickstart_old.md](quickstart_old.md) to understand how the Pipeline works only in shell.
+
+
+## From repo, mainly for developers (as a package)
+
+For development and testing:
+
+### 1. Clone repo
+
+```bash
+git clone https://github.com/caraortizmah/x-ray_scripting_out.git
+cd x-ray_scripting_out
+```
+
+### 2. Create virtual environment (recommended)
+
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+### 3. Install package in development mode
+
+```bash
+pip install -e .
+```
+
+### 4. Install development dependencies
+
+```bash
+pip install -e ".[dev]"
+```
+
+This installs:
+- pytest and pytest-cov (testing)
+- shellcheck-py (shell script linting)
+- pandas
+
+
+##  Verify installation
+
+### 1. Check package installation
+
+```bash
+python3 -c "import xas_qmol_parser; print(xas_qmol_parser.__version__)"
+```
+
+Expected output: `3.0.2`
+
+### 2. Verify Command Availability
+
+```bash
+which xasqm-parser
+which xasqm-parser-setup
+which xasqm-parser-test
+```
+
+## Setup and check the Pipeline
+
+After installation, you can check it:
+
+```bash
+# For help
+xasqm-parser --help
+```
+To setup and check installation:
+
+```bash
+# Setup
+xasqm-parser-setup
+```
+
+**xasqm-parser-setup does:**
+1. Runs `bin/setup.sh`
+2. Runs `bin/check_environment.sh`
+
+## Automated test to check parser data
+
+```bash
+# Run examples for tests
+xasqm-parser-test
+```
+
+**xasqm-parser-test does:**
+1. Tests AB_4.0A model (no SOC) - `tests/tester.sh ab40_test AB_4.0A.out config.info_examplenosoc`
+2. Tests AB_5.0A model (with SOC) - `tests/tester.sh ab50_test AB_5.0A.out config.info_examplesoc`
+
+Please READ [goodtoknow_config.info.md](goodtoknow_config.info.md) to understand the config.info file required (and orca output).
+
+## Regression test: examples (final pipeline verification)
+
+Run tests without coverage (faster):
+```bash
+pytest tests/ -v
+```
+
+Run tests with coverage (requires pytest-cov, added when installation is done):
+```bash
+pytest tests/ -v --cov=xas_qmol_parser --cov-report=html
+```
+
+Now you can run by your own
+
+## Run Pipeline
+
+```bash
+xasqm-parser
+```
+
+**xasqm-parser does:**
+1. Runs `bin/helper_man.py`
+
+## Documentation for Pipeline usage
+
+Read 
+- 1. [quickstart.md](quickstart.md)
+- 2. [quickstart_old.md](quickstart_old.md)
+- 3. [examplesrun.md](examplesrun.md) for pipeline usage
+- 4. [goodtoknow_config.info.md](goodtoknow_config.info.md) for the config.info
+
 
 ## System Requirements
 
@@ -117,34 +160,11 @@ python3 bin/helper_man.py [options]
 - **ORCA**: Output files from ORCA 4.0 or 5.0
 - **Tools**: Standard Unix utilities (grep, awk, sed, etc.)
 
-## Verifying Installation
-
-### 1. Check Package Installation
-
-```bash
-python3 -c "import xas_qmol_parser; print(xas_qmol_parser.__version__)"
-```
-
-Expected output: `3.0.2`
-
-### 2. Verify Command Availability
-#### to be only /bin/helper_man.py
-```bash
-which manager
-which overall
-```
-
-### 3. Run Tests
-
-```bash
-pytest tests/ -v
-```
-
 ## Troubleshooting
 
 ### Command Not Found
 
-If `manager` or `overall` commands are not found after installation:
+If `xasqm-parser`, `xasqm-parser-setup` or `xasqm-parser-test` commands are not found after installation:
 
 ```bash
 # Verify installation path
@@ -196,9 +216,21 @@ pip install shellcheck-py
 pip install build twine
 ```
 
-## Next Steps
+## Next Steps: Documenation for evelopers
 
 - Read [quickstart.md](quickstart.md), [examplesrun.md](examplesrun.md) for pipeline usage
 - Check [architecture.md](architecture.md) for system design
 - Further reading [data_processing_tests.md](data_processing_tests.md) and [regression_testing_examples.md](regression_testing_examples.md)
 - See [contributing.md](contributing.md) for development guidelines
+
+
+Please READ the rest of the documentation in `docs/` such as:
+1. [examplesrun.md](examplesrun.md) to understand depper how to run
+2. [data_processing_tests.md](data_processing_tests.md) to understand depper how to run tests and shell scripts
+3. [regression_testing_examples.md](regression_testing_examples.md) to do specific tests and not all of them
+4. Check [architecture.md](architecture.md) for system design
+5. See [contributing.md](contributing.md) for development guidelines
+
+In the future contributing.md and publishing.md
+
+Enjoy! :)
