@@ -10,12 +10,13 @@ import subprocess
 from pathlib import Path
 
 
-def _get_script_path(script_name: str) -> Path:
+def _get_script_path(script_name: str, subdir: str = "bin") -> Path:
     """
-    Get the absolute path to a shell script.
+    Get the absolute path to a shell script or Python script.
     
     Args:
-        script_name: Name of the shell script (e.g., 'manager.sh')
+        script_name: Name of the script (e.g., 'helper_man.py', 'setup.sh')
+        subdir: Subdirectory to search ('bin', 'src', 'tests')
         
     Returns:
         Path to the script
@@ -25,17 +26,17 @@ def _get_script_path(script_name: str) -> Path:
     """
     # Try installation location first
     package_dir = Path(__file__).parent.parent
-    script_path = package_dir / "src" / script_name
+    script_path = package_dir / subdir / script_name
     
     if script_path.exists():
         return script_path
     
     # Fallback to current directory
-    cwd_path = Path.cwd() / "src" / script_name
+    cwd_path = Path.cwd() / subdir / script_name
     if cwd_path.exists():
         return cwd_path
     
-    raise FileNotFoundError(f"Script not found: {script_name}")
+    raise FileNotFoundError(f"Script not found: {subdir}/{script_name}")
 
 
 def run_manager() -> int:
