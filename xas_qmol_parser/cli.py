@@ -39,10 +39,11 @@ def _get_script_path(script_name: str, subdir: str = "bin") -> Path:
     raise FileNotFoundError(f"Script not found: {subdir}/{script_name}")
 
 
-def run_manager() -> int:
+def run_xasqm_parser() -> int:
     """
-    Entry point for 'manager' console script.
-    Runs src/manager.sh with command-line arguments.
+    Entry point for 'xasqm-parser' console script.
+    Runs bin/helper_man.py with command-line arguments.
+    Provides --help to display usage information.
     """
     try:
         script = _get_script_path("manager.sh")
