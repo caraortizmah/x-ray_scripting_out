@@ -1,4 +1,4 @@
-# X-ray absorption computation analysis
+# X-ray absorption spectroscopy computation parser for analysis
 
 [comment]: <> (****)
 [comment]: <> (First version: 20.03.23)
