@@ -223,7 +223,7 @@ def test_config_loading():
 
 ### Test Coverage
 
-Aim for >80% coverage (failing on Github Actions):
+Aim for >80% coverage:
 ```bash
 pytest tests/ --cov=xas_qmol_parser --cov-report=html
 ```
