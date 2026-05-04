@@ -132,6 +132,7 @@ Run tests without coverage (faster):
 pytest tests/ -v
 ```
 
+(Optional)
 Run tests with coverage (requires pytest-cov, added when installation is done):
 ```bash
 pytest tests/ -v --cov=xas_qmol_parser --cov-report=html
