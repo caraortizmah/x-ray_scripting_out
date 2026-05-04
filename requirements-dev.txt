@@ -2,6 +2,8 @@
 
 # Testing
 pytest>=7.0
+pytest-conv>=4.0
+pandas>=2.0
 
 # Code quality
 shellcheck-py>=0.9.0
